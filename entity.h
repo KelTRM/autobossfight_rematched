@@ -5,7 +5,7 @@
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
 
-struct Entity {
+typedef struct Entity {
 	const char *Name;
 	Health_t HealthPoints;
 
@@ -17,6 +17,6 @@ struct Entity {
 	Health_t HealingMaximum;
 
 	Energy_t Energy;
-};
+} Entity_t;
 
-typedef struct Entity Entity_t;
+Health_t DamageEntity(Entity_t *Target, Health_t Damage);
