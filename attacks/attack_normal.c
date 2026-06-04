@@ -1,0 +1,45 @@
+#include"attacks.h"
+
+// easy-to-use attack parameters
+#define ATTACK_MINIMUM_ENERGY		5
+#define ATTACK_FIRST_AVAILABLE_ROUND	0
+#define ATTACK_NAME			"Normal Attack"
+
+// Used to identify this attack. Non-unique values may result in undefined behavior
+#define ATTACK_ID			1
+
+extern int Turns;
+
+static int CanDoAttack(Entity_t *Attacker);
+static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
+
+const Attack_t NormalAttack = {
+	.AttackName=ATTACK_NAME,
+
+	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
+	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,
+
+	.Available=CanDoAttack,
+	.Attack=DoAttack
+};
+
+static int CanDoAttack(Entity_t *Attacker) {
+	if (Attacker->Energy < NormalAttack.MinimumEnergy)
+		return 0;
+
+	if (Turns < NormalAttack.FirstAvailableRound)
+		return 0;
+
+	return 1;
+}
+
+static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
+	AttackData_t Result;
+	Result.Attacker = Attacker;
+	Result.Target = Target;
+	Result.Attack = ATTACK_ID;
+	Result.Damage = 0;
+	Result.PriorHealth = Target->HealthPoints;
+
+	if (CanDoAttack(Attacker) == 0) return Result;
+}
