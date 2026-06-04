@@ -8,4 +8,5 @@ target_sources(autobossfight_rematched
 	PRIVATE
 		main.c
 		rng.c
+		player.c
 )
