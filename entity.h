@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include<stdint.h>
 
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
