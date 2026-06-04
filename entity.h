@@ -15,5 +15,5 @@ struct Entity {
 	//Health_t HealingMinimum;
 	//Health_t HealingMaximum;
 
-	//Energy_t Energy;
+	Energy_t Energy;
 };
