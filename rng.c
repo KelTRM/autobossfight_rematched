@@ -3,18 +3,24 @@
 #include<stdint.h>
 
 // TODO: Find good set of parameters.
-const uint64_t RngParam_a = 59;
-const uint64_t RngParam_c = 65;
+const uint64_t RngParam_a = 6364136223846793005llu;
+const uint64_t RngParam_c = 9754186451795953191llu;
 
+int SeedGenerated = 0;
 uint64_t Seed;
 
 uint64_t GetNewSeed() {
-	Seed = clock() * time(NULL);
+	Seed = clock() + time(NULL);
 	return Seed;
 }
 
 uint64_t CurrentSeed;
 uint64_t Generator() {
+	if (SeedGenerated == 0) {
+		Seed = GetNewSeed();
+		SeedGenerated = 1;
+	}
+
 	// m input not needed. the mod is UINT64_MAX
 	uint64_t NewResult = (RngParam_a * Seed) + RngParam_c;
 	Seed = NewResult;
