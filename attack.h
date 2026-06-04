@@ -12,7 +12,7 @@ typedef struct AttackData {
 	Health_t PriorHealth;
 } AttackData_t;
 
-typedef int (*CanAttack)(Entity *p);
+typedef int (*CanAttack)(Entity_t *p);
 typedef AttackData_t (*OnAttack)(Entity_t *Target, Entity_t *Attacker);
 
 typedef struct Attack {
