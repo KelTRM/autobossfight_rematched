@@ -7,4 +7,5 @@ add_executable(autobossfight_rematched)
 target_sources(autobossfight_rematched
 	PRIVATE
 		main.c
+		rng.c
 )
