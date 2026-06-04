@@ -9,4 +9,6 @@ target_sources(autobossfight_rematched
 		main.c
 		rng.c
 		player.c
+		attack_manager.c
+		entity.c
 )
