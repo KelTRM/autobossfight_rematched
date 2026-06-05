@@ -7,7 +7,7 @@ add_executable(autobossfight_rematched)
 if (MSVC)
 	# can't be bother to write these, maybe later
 else()
-	add_compile_options(-Wall -Wpedantic -Werror)
+	add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
 
 target_sources(autobossfight_rematched
