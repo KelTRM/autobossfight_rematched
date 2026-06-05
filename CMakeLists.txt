@@ -5,7 +5,7 @@ project(autobossfight_rematched)
 add_executable(autobossfight_rematched)
 
 if (MSVC)
-	# can't be bother to write these, maybe later
+	add_compile_options(/W4 /WX)
 else()
 	add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
