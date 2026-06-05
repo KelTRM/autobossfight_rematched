@@ -22,7 +22,7 @@ int InitAttackRegistrar() {
 	}
 
 	AttacksSize = AttackBufferSize;
-	memset(Attacks, NULL, AttackBufferSize);
+	memset(Attacks, 0, AttackBufferSize);
 
 	return ATTACK_LIMIT;
 }
@@ -36,6 +36,7 @@ int RegisterAttack(Attack_t *Attack) {
 	else return 0;
 
 	Attacks[AttackCount-1] = Attack;
+	return 1;
 }
 
 Attack_t *GetAttackAtIndex(size_t Index) {

@@ -2,11 +2,13 @@
 
 #include"entity.h"
 
+typedef uint64_t AttackID_t;
+
 typedef struct AttackData {
 	Entity_t *Target;
 	Entity_t *Attacker;
 
-	Health_t Attack;
+	AttackID_t Attack;
 	Health_t Damage;
 	
 	Health_t PriorHealth;

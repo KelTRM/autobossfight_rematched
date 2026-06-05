@@ -8,17 +8,20 @@ const int BotCount = 1;
 
 const int ParticipantCount = PlayerCount + BotCount;
 
+int Turn = 0;
+
 int main() {
 	printf("Starting AutoBossfight: ReMatched\n");
 
 	int Round = 0;
-	int Turn = 0;
 
 	while (IsGameOngoing()) {
 		int CurrentPlayerID = Turn % ParticipantCount;
 		
 		if (CurrentPlayerID == ParticipantCount) {
 			// boss plays
+		} else {
+			
 		}
 	}
 }

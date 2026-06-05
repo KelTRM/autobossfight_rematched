@@ -8,7 +8,7 @@
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			1
 
-extern int Turns;
+extern int Turn;
 
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
@@ -27,7 +27,7 @@ static int CanDoAttack(Entity_t *Attacker) {
 	if (Attacker->Energy < NormalAttack.MinimumEnergy)
 		return 0;
 
-	if (Turns < NormalAttack.FirstAvailableRound)
+	if (Turn < NormalAttack.FirstAvailableRound)
 		return 0;
 
 	return 1;
@@ -42,4 +42,5 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	Result.PriorHealth = Target->HealthPoints;
 
 	if (CanDoAttack(Attacker) == 0) return Result;
+	return Result;
 }
