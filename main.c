@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include"entity.h"
 #include"rng.h"
 
 int IsGameOngoing();
@@ -10,8 +11,16 @@ const int ParticipantCount = PlayerCount + BotCount;
 
 int Turn = 0;
 
+void InitPlayers();
+int InitAttacks();
+
+Entity_t Players;
+
 int main() {
 	printf("Starting AutoBossfight: ReMatched\n");
+
+	int Attacks = InitAttacks();
+	printf("Initialized %d attacks.\n", Attacks);
 
 	int Round = 0;
 
