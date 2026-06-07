@@ -11,8 +11,10 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 	if (Buffers[b].BufferID != b || Buffers[b].Buffer == NULL)
 		b = ActiveBuffer;
 
-	if (b == INVALID_BUFFER_HANDLE)
-		return 0;
+	// can only trigger if ActiveBuffer = INVALID_BUFFER_HANDLE
+	if (b == INVALID_BUFFER_HANDLE) {
+		ActiveBuffer
+	}
 
 	if (StrLen == 0)
 		StrLen = strlen(str);
