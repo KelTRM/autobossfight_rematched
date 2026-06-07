@@ -22,4 +22,5 @@ target_sources(autobossfight_rematched
 		attacks/attack_normal.c
 
 		ui/ask_attack.c
+		ui/console_manager/create_buffer.c
 )

@@ -6,3 +6,4 @@
 
 typedef uint64_t BUFHANDLE;
 
+int bprintf(BUFHANDLE b, const char *format, ...);
