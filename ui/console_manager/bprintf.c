@@ -28,6 +28,11 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 
 	memcpy(Buffer+OldBufferSize, str, StrLen);
 
+	if (b == ActiveBuffer)
+		printf("%.*s", (int)StrLen, str);
+	fflush(stdout);
+//	printf("recieved string of length %zu\n", StrLen);
+
 	return StrLen;
 }
 
@@ -36,7 +41,7 @@ int bprintf(BUFHANDLE b, const char *format, ...) {
 	va_start(args, format);
 
 	int n = vsnprintf(NULL, 0, format, args);
-	char *str = malloc(n);
+	char *str = malloc(n+1);
 
 	if (str == NULL)
 		return 0;
@@ -44,7 +49,7 @@ int bprintf(BUFHANDLE b, const char *format, ...) {
 	va_end(args);
 	va_start(args, format);
 
-	n = vsnprintf(str, n, format, args);
+	n = vsnprintf(str, n+1, format, args);
 
 	va_end(args);
 

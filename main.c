@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include"entity.h"
 #include"rng.h"
+#include"ui/console_manager/buffer.h"
+//#include"ui/console_manager/console.h"
 
 int IsGameOngoing();
 
@@ -21,6 +23,12 @@ int main() {
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
+
+	BUFHANDLE Buffer = CreateBuffer();
+
+	ActiveBuffer = Buffer;
+
+	bprintf(Buffer, "Test");
 
 	int Round = 0;
 

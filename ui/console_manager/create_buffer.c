@@ -1,9 +1,7 @@
 #include"buffer.h"
 #include<stdlib.h>
 
-size_t BufferCount = INVALID_BUFFER_HANDLE;
-
-extern BUFHANDLE ActiveBuffer;
+BUFHANDLE ActiveBuffer = INVALID_BUFFER_HANDLE;
 uint8_t ActiveBuffers[ACTIVE_BUFFER_ARRAY_SIZE];	// maybe for later
 struct Buffer Buffers[MAXIMUM_BUFFER_COUNT] = { 0 };
 
