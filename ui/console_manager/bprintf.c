@@ -5,15 +5,12 @@
 #include"buffer.h"
 
 int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
-	if (b == INVALID_BUFFER_HANDLE)
+	if (ValidateBuffer(b) == 0) {
 		b = ActiveBuffer;
-
-	if (Buffers[b].BufferID != b || Buffers[b].Buffer == NULL)
-		b = ActiveBuffer;
-
-	// can only trigger if ActiveBuffer = INVALID_BUFFER_HANDLE
-	if (b == INVALID_BUFFER_HANDLE) {
-		ActiveBuffer
+		if (ValidateBuffer(b) == 0) {
+			ActiveBuffer = CreateBuffer();
+			b = ActiveBuffer;
+		}
 	}
 
 	if (StrLen == 0)
