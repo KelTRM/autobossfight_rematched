@@ -8,8 +8,9 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 	if (ValidateBuffer(b) == 0) {
 		b = ActiveBuffer;
 		if (ValidateBuffer(b) == 0) {
-			ActiveBuffer = CreateBuffer();
-			b = ActiveBuffer;
+			return 0;
+//			ActiveBuffer = CreateBuffer();
+//			b = ActiveBuffer;
 		}
 	}
 
