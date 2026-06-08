@@ -31,6 +31,8 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 	if (b == ActiveBuffer)
 		printf("%.*s", (int)StrLen, str);
 	fflush(stdout);
+
+	Buffers[b].BufferLength = NewBufferSize;
 //	printf("recieved string of length %zu\n", StrLen);
 
 	return StrLen;

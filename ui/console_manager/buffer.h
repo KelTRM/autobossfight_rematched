@@ -21,5 +21,4 @@ struct Buffer {
 extern uint8_t ActiveBuffers[ACTIVE_BUFFER_ARRAY_SIZE];
 extern struct Buffer Buffers[MAXIMUM_BUFFER_COUNT];
 
-BUFHANDLE CreateBuffer();
 int ValidateBuffer(BUFHANDLE b);
