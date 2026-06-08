@@ -3,8 +3,8 @@
 
 void RefreshScreen() {
 	printf("\x1b[H");
-
-	char ch = *Buffers[ActiveBuffer].Buffer;
+	
+//	char ch = *Buffers[ActiveBuffer].Buffer;
 
 	for (size_t i = 0; i < Buffers[ActiveBuffer].BufferLength; i++) {
 		char ch = Buffers[ActiveBuffer].Buffer[i];

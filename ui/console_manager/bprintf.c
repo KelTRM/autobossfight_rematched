@@ -18,7 +18,7 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 		StrLen = strlen(str);
 
 
-	size_t OldBufferSize = Buffers[b].BufferID;
+	size_t OldBufferSize = Buffers[b].BufferLength;
 	
 	size_t NewBufferSize = OldBufferSize + StrLen;
 	char *Buffer = realloc((void*)Buffers[b].Buffer, NewBufferSize);
