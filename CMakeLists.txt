@@ -26,4 +26,5 @@ target_sources(autobossfight_rematched
 		ui/console_manager/bprintf.c
 		ui/console_manager/validate_buffer.c
 		ui/console_manager/switch_buffer.c
+		ui/console_manager/clear_screen.c
 )

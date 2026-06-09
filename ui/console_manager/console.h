@@ -9,3 +9,4 @@ typedef uint64_t BUFHANDLE;
 int bprintf(BUFHANDLE b, const char *format, ...);
 BUFHANDLE CreateBuffer();
 int SwitchBuffer(BUFHANDLE Buffer);
+void ClearScreen();

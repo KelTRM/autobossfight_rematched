@@ -23,6 +23,10 @@ int InitAttacks();
 extern Entity_t Players[3];
 
 int main() {
+	// i seriously hope this works...
+	// OH MY FUCKING GOD IT WORKS
+	printf("▅");
+
 	printf("Starting AutoBossfight: ReMatched\n");
 
 	int Attacks = InitAttacks();
