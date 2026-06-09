@@ -21,7 +21,7 @@ found_empty_buffer:;
 
 	b->BufferID = i;
 	b->BufferLength = 0;
-	b->Buffer = malloc(0);
+	b->Buffer = malloc(1);
 
 	return i;
 }

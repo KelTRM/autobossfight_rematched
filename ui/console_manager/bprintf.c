@@ -26,6 +26,8 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 	if (Buffer == NULL)
 		return 0;
 
+	Buffers[b].Buffer = Buffer;
+
 	memcpy(Buffer+OldBufferSize, str, StrLen);
 
 	if (b == ActiveBuffer)
