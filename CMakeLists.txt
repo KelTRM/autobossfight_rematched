@@ -15,6 +15,7 @@ target_sources(autobossfight_rematched
 		main.c
 		rng.c
 		player.c
+		players.c
 		attack_manager.c
 		entity.c
 		register_attacks.c
@@ -22,9 +23,14 @@ target_sources(autobossfight_rematched
 		attacks/attack_normal.c
 
 		ui/ask_attack.c
+		ui/scoreboard.c
 		ui/console_manager/create_buffer.c
 		ui/console_manager/bprintf.c
 		ui/console_manager/validate_buffer.c
 		ui/console_manager/switch_buffer.c
 		ui/console_manager/clear_screen.c
 )
+
+if (UNIX)
+	target_link_libraries(autobossfight_rematched PUBLIC m)
+endif(UNIX)

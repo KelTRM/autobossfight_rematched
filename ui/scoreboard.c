@@ -1,6 +1,7 @@
 #include<stdlib.h>
 #include<stddef.h>
 #include<string.h>
+#include<math.h>
 #include"console_manager/console.h"
 #include"../entity.h"
 
@@ -9,9 +10,23 @@
 
 #define max(x, y)	((x)>(y)?(x):(y))
 
-Entity_t Players[3];
+extern Entity_t Players[3];
 
-char *PadRight(char *str, size_t n, char ch) {
+char *PadLeft(const char *str, size_t n, char ch) {
+	size_t Length = strlen(str);
+	size_t NewLength = max(n, Length);
+	// add 1 for null terminator
+	char *NewStr = malloc(NewLength+1);
+
+	size_t StrOffset = NewLength - Length;
+	memset(NewStr+StrOffset, Length, ch);
+	memcpy(NewStr, str, Length);
+
+	NewStr[NewLength] = '\0';
+	return NewStr;
+}
+
+char *PadRight(const char *str, size_t n, char ch) {
 	size_t Length = strlen(str);
 	size_t NewLength = max(n, Length);
 	// add 1 for null terminator
@@ -20,6 +35,21 @@ char *PadRight(char *str, size_t n, char ch) {
 	memcpy(NewStr, str, Length);
 
 	NewStr[NewLength] = '\0';
+	return NewStr;
+}
+
+char *IntToStr(uint64_t n) {
+	size_t RequiredDigits = floor(max(log10(n)+1, 1));
+
+	char *StringifiedNumber = malloc(RequiredDigits);
+	size_t Index = RequiredDigits-1;
+
+	while (n > 0) {
+		StringifiedNumber[Index--] = n % 10;
+		n /= 10;
+	}
+
+	return StringifiedNumber;
 }
 
 int RefreshScoreboard(int PreserveCursorPosition) {
@@ -33,6 +63,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	for (size_t i = 0; i < sizeof(Players) / sizeof(*Players); i++) {
 		Entity_t *t = &Players[i];
 
+		printf("i = %p\n", t->Name);
 		const char *Name = t->Name;
 		size_t NameLength = strlen(Name);
 
@@ -46,10 +77,12 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	for (size_t i = 0; i < sizeof(Players) / sizeof(*Players); i++) {
 		printf("\x1b[2K");
 
-		char *Name = malloc(MaximumNameLength+1);
-		memset(Name, ' ', MaximumNameLength);
-		Name[MaximumNameLength] = '\0';
+		char *namestr = PadRight(Players[i].Name, MaximumNameLength, ' ');
+		char *hpstr = IntToStr(Players[i].HealthPoints);
+		printf("%s has %s hp\n", namestr, hpstr);
 
-		memcpy(Name, Players[i].Name, strlen(Players[i].Name));
+		free(namestr);
+		free(hpstr);
 	}
+	return 0;
 }

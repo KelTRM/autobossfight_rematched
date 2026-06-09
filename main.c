@@ -22,7 +22,10 @@ int InitAttacks();
 
 extern Entity_t Players[3];
 
+int AskAttack(Entity_t CurrentPlayer, uint64_t Round);
+
 int main() {
+	InitPlayers();
 	// i seriously hope this works...
 	// OH MY FUCKING GOD IT WORKS
 	printf("▅");
@@ -33,13 +36,16 @@ int main() {
 	printf("Initialized %d attacks.\n", Attacks);
 	int Round = 0;
 
+	BUFHANDLE b = CreateBuffer();
+	SwitchBuffer(b);
+
 	while (IsGameOngoing()) {
 		int CurrentPlayerID = Turn % ParticipantCount;
 		
 		if (CurrentPlayerID == ParticipantCount) {
 			// boss plays
 		} else {
-			
+			AskAttack(Players[0], 0);
 		}
 	}
 }
