@@ -14,6 +14,7 @@ void RefreshScreen() {
 	}
 
 	printf("\x1b[0J");
+	fflush(stdout);
 }
 
 int SwitchBuffer(BUFHANDLE Buffer) {
