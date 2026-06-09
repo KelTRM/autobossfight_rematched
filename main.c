@@ -20,7 +20,7 @@ int Turn = 0;
 void InitPlayers();
 int InitAttacks();
 
-Entity_t Players;
+extern Entity_t Players[3];
 
 int main() {
 	printf("Starting AutoBossfight: ReMatched\n");
