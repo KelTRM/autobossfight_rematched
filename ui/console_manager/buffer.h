@@ -1,5 +1,7 @@
 #pragma once
 
+#define PRESERVE_PRINTF
+
 #include<stddef.h>
 #include"console.h"
 

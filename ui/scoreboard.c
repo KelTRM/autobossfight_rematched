@@ -7,7 +7,7 @@
 #include"../entity.h"
 
 // for simplicity sake
-#define printf(...)	bprintf(INVALID_BUFFER_HANDLE, __VA_ARGS__)
+//#define printf(...)	bprintf(INVALID_BUFFER_HANDLE, __VA_ARGS__)
 
 #define max(x, y)	((x)>(y)?(x):(y))
 
