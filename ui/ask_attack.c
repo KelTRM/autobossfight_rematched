@@ -16,7 +16,12 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	printf("\n");
 
 	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
-		printf("To use a %s, use %zu\n", CurrentAttack->AttackName, AttackIndex);
+		printf("To use a %s, use %zu", CurrentAttack->AttackName, AttackIndex);
+
+		// separate printf as to allow an if statement in the future
+		printf(" (Available round %d+)", CurrentAttack->FirstAvailableRound);
+
+		printf("\n");
 
 //		++AttackIndex;
 	}
