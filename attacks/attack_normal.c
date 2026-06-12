@@ -20,7 +20,9 @@ const Attack_t NormalAttack = {
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,
 
 	.Available=CanDoAttack,
-	.Attack=DoAttack
+	.Attack=DoAttack,
+
+	.Announcer=DefaultAnnouncer
 };
 
 static int CanDoAttack(Entity_t *Attacker) {
@@ -44,3 +46,5 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
 }
+
+

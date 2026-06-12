@@ -16,6 +16,7 @@ typedef struct AttackData {
 
 typedef int (*CanAttack)(Entity_t *Attacker);
 typedef AttackData_t (*OnAttack)(Entity_t *Target, Entity_t *Attacker);
+typedef void (*AttackAnnouncer)(AttackData_t *Attack);
 
 typedef struct Attack {
 	const char *AttackName;
@@ -25,4 +26,6 @@ typedef struct Attack {
 
 	CanAttack Available;
 	OnAttack Attack;
+
+	AttackAnnouncer Announcer;
 } Attack_t;

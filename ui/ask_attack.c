@@ -3,6 +3,9 @@
 #include"console_manager/console.h"
 #include"../utils/sleep.h"
 #include"../attack_manager.h"
+#include"color/color.h"
+
+#define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
 
 int RefreshScoreboard(int PreserveCursorPosition);
 
@@ -16,16 +19,28 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	printf("\n");
 
 	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
-		printf("To use a %s, use %zu", CurrentAttack->AttackName, AttackIndex);
+//		printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
 
 		if (CurrentAttack->FirstAvailableRound > 0) {
-			printf(" (Available round %d+)", CurrentAttack->FirstAvailableRound);
+			GetTerminalForegroundColorStr(100, 100, 100);
+			printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
+					CurrentAttack->AttackName, AttackIndex,
+					CurrentAttack->FirstAvailableRound);
+			ResetTerminalForegroundColorStr();
+		} else {
+			printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
 		}
 
 		printf("\n");
 	}
 
-	sleep(2500);
+	AttackID_t ChosenAttack = (AttackID_t)-1;
+
+	while (true) {
+
+	}
+
+	//sleep(2500);
 	//printf("Not implemented.\n");
 	return 0;
 }
