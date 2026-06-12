@@ -19,13 +19,10 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 		printf("To use a %s, use %zu", CurrentAttack->AttackName, AttackIndex);
 
 		if (CurrentAttack->FirstAvailableRound > 0) {
-			// separate printf as to allow an if statement in the future
 			printf(" (Available round %d+)", CurrentAttack->FirstAvailableRound);
 		}
 
 		printf("\n");
-
-//		++AttackIndex;
 	}
 
 	sleep(2500);
