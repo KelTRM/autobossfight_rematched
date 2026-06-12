@@ -7,7 +7,7 @@ const char *GetTerminalForegroundColorStr(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 const char *ResetTerminalForegroundColorStr() {
-	printf("\x1b[39;49m");
+	printf("\x1b[39m");
 	return "";
 }
 
