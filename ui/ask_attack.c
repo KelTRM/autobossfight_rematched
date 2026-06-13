@@ -36,8 +36,9 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 
 	AttackID_t ChosenAttack = (AttackID_t)-1;
 
-	while (true) {
-
+	while (1) {
+		BUFHANDLE b = CreateBuffer();
+		CopyBuffer(INVALID_BUFFER_HANDLE, b);
 	}
 
 	//sleep(2500);

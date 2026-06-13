@@ -3,7 +3,7 @@
 #include"buffer.h"
 
 int CopyBuffer(BUFHANDLE From, BUFHANDLE To) {
-	if (ValidateBuffer(From) == 0) return 0;
+	if (ValidateBuffer(From) == 0) From = ActiveBuffer;
 	if (ValidateBuffer(To) == 0) return 0;
 
 	// source buffer to be copied
