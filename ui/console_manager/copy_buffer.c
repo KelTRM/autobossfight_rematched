@@ -4,7 +4,10 @@
 
 int CopyBuffer(BUFHANDLE From, BUFHANDLE To) {
 	if (ValidateBuffer(From) == 0) From = ActiveBuffer;
-	if (ValidateBuffer(To) == 0) return 0;
+	if (ValidateBuffer(To) == 0) To = ActiveBuffer;
+
+	if (From == To)
+		return 1;
 
 	// source buffer to be copied
 	const char *SourceText = Buffers[From].Buffer;

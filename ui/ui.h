@@ -5,4 +5,4 @@
 
 int AskAttack(Entity_t CurrentPlayer, uint64_t Round);
 int RefreshScoreboard(int PreserveCursorPosition);
-void Prompt(char **Result, int EchoToBuffer);
+void Prompt(const char *Prompt, char **Result, int EchoToBuffer);

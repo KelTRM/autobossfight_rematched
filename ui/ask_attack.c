@@ -1,9 +1,13 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include"../entity.h"
 #include"../utils/sleep.h"
 #include"../attack_manager.h"
 #include"color/color.h"
+#include "console_manager/console.h"
 #include"ui.h"
+
+extern int Turn;
 
 #define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
 
@@ -32,14 +36,42 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 		printf("\n");
 	}
 
-	AttackID_t ChosenAttack = (AttackID_t)-1;
+	printf("\nCurrent round: %d\n\n"
+		"It's currently %s's turn.\n",
+		Turn, CurrentPlayer.Name);
 
-	while (1) {
+	AttackID_t ChosenAttack = (AttackID_t)-1;	
+
+	while (ChosenAttack == (AttackID_t)-1) {
 		BUFHANDLE b = CreateBuffer();
 		CopyBuffer(INVALID_BUFFER_HANDLE, b);
+
+		char *Result;
+		Prompt("Which attack are you gonna use?", &Result, 0);
+
+		CopyBuffer(b, INVALID_BUFFER_HANDLE);
+		//RefreshScreen();
+
+		DeleteBuffer(b);
+
+		if (Result == NULL) {
+			printf("[ERROR] Failed to prompt.\n");
+			break;
+		}
+
+		AttackID_t AttackID = atoi(Result);
+//		printf("AttackID - %d\n", AttackID);
+		if (GetAttackAtIndex(AttackID-1) == NULL || AttackID == 0) {
+			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
+			sleep(1000);
+		
+			continue;
+		}
+
+		ChosenAttack = AttackID-1;
 	}
 
-	//sleep(2500);
+	// sleep(2500);
 	//printf("Not implemented.\n");
 	return 0;
 }

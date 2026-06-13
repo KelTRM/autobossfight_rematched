@@ -5,19 +5,23 @@
 // Prompts user for input.
 // Result - String of user input of arbitrary length. Must be freed
 // EchoToBuffer - Echos result to buffer if true.
-void Prompt(char **Result, int EchoToBuffer) {
+void Prompt(const char *Prompt, char **Result, int EchoToBuffer) {
 	size_t Length = 0;
 	char *CurrentBuffer = malloc(Length+1);
 
 	if (CurrentBuffer == NULL)
 		goto nullbuffer;
 
+	//fflush(stdin);
+	
+	printf("%s ", Prompt);
+
 	CurrentBuffer[0] = 0;
 
 	char ch;
 	do {
 		ch = getchar();
-		if (ch == '\r') continue;
+		if (ch == '\r' || ch == '\n') continue;
 
 		Length++;
 		char *NewBuffer = realloc(CurrentBuffer, Length+1);
@@ -31,6 +35,7 @@ void Prompt(char **Result, int EchoToBuffer) {
 		CurrentBuffer = NewBuffer;
 	} while (ch != '\n');
 
+
 	if (EchoToBuffer != 0) {
 		RefreshScreen();
 		printf(CurrentBuffer);
@@ -41,6 +46,7 @@ void Prompt(char **Result, int EchoToBuffer) {
 	return;
 
 nullbuffer:
+//	printf("Recieved null on Prompt.");
 	if (CurrentBuffer != NULL)
 		free(CurrentBuffer);
 	*Result = NULL;

@@ -10,9 +10,13 @@
 
 typedef uint64_t BUFHANDLE;
 
-int bprintf(BUFHANDLE b, const char *format, ...);
 BUFHANDLE CreateBuffer();
+int DeleteBuffer(BUFHANDLE b);
+
 int SwitchBuffer(BUFHANDLE Buffer);
-void ClearScreen();
 int CopyBuffer(BUFHANDLE From, BUFHANDLE To);
+void ClearScreen();
 void RefreshScreen();
+
+int bprintf(BUFHANDLE b, const char *format, ...);
+
