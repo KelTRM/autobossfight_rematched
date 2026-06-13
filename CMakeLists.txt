@@ -21,6 +21,7 @@ target_sources(autobossfight_rematched
 		register_attacks.c
 
 		attacks/attack_normal.c
+		attacks/default_attack.c
 
 		ui/ask_attack.c
 		ui/scoreboard.c
@@ -30,6 +31,7 @@ target_sources(autobossfight_rematched
 		ui/console_manager/validate_buffer.c
 		ui/console_manager/switch_buffer.c
 		ui/console_manager/clear_screen.c
+		ui/console_manager/copy_buffer.c
 		
 		ui/color/background.c
 		ui/color/foreground.c

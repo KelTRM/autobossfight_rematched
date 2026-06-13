@@ -14,3 +14,4 @@ int bprintf(BUFHANDLE b, const char *format, ...);
 BUFHANDLE CreateBuffer();
 int SwitchBuffer(BUFHANDLE Buffer);
 void ClearScreen();
+int CopyBuffer(BUFHANDLE From, BUFHANDLE To);
