@@ -2,7 +2,7 @@
 #include"entity.h"
 #include"rng.h"
 //#include"ui/console_manager/buffer.h"
-#include"ui/console_manager/console.h"
+#include"ui/ui.h"
 
 //#ifdef __linux__
 //#include<unistd.h>
@@ -21,8 +21,6 @@ void InitPlayers();
 int InitAttacks();
 
 extern Entity_t Players[3];
-
-int AskAttack(Entity_t CurrentPlayer, uint64_t Round);
 
 int main() {
 	InitPlayers();

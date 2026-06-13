@@ -1,13 +1,11 @@
 #include<stdio.h>
 #include"../entity.h"
-#include"console_manager/console.h"
 #include"../utils/sleep.h"
 #include"../attack_manager.h"
 #include"color/color.h"
+#include"ui.h"
 
 #define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
-
-int RefreshScoreboard(int PreserveCursorPosition);
 
 int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	ClearScreen();
