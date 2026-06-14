@@ -15,7 +15,7 @@ const int BotCount = 1;
 
 const int ParticipantCount = PlayerCount + BotCount;
 
-int Turn = 0;
+int Round = 0;
 
 void InitPlayers();
 int InitAttacks();
@@ -24,27 +24,26 @@ extern Entity_t Players[3];
 
 int main() {
 	InitPlayers();
-	// i seriously hope this works...
-	// OH MY FUCKING GOD IT WORKS
-	printf("▅");
 
-	printf("Starting AutoBossfight: ReMatched\n");
+	//printf("Starting AutoBossfight: ReMatched\n");
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
-	int Round = 0;
+	int Turn = 0;
 
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
 	while (IsGameOngoing()) {
-		int CurrentPlayerID = Turn % ParticipantCount;
+		int CurrentPlayerID = Turn % PlayerCount;//ParticipantCount;
 		
 		if (CurrentPlayerID == ParticipantCount) {
 			// boss plays
 		} else {
-			AskAttack(Players[0], 0);
+			AskAttack(Players[CurrentPlayerID], 0);
 		}
+
+		Turn++;
 	}
 }
 
