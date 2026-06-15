@@ -1,9 +1,10 @@
 #include"attacks.h"
+#include"../ui/ui.h"
 
 // easy-to-use attack parameters
-#define ATTACK_MINIMUM_ENERGY		5
+#define ATTACK_MINIMUM_ENERGY		0
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
-#define ATTACK_NAME			"Normal Attack"
+#define ATTACK_NAME			"Boost energy"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			1
@@ -13,7 +14,7 @@ extern int Round;
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
 
-const Attack_t NormalAttack = {
+const Attack_t NothingAttack = {
 	.AttackName=ATTACK_NAME,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
@@ -43,8 +44,13 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 
+	Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
+
 	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
 }
 
-
+static void Announcer(AttackData_t *d) {
+	printf("%s did nothing.\n",
+			d->Attacker->Name);
+}

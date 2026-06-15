@@ -7,9 +7,11 @@
 #include "console_manager/console.h"
 #include"ui.h"
 
-extern int Turn;
+extern int Round;
 
 #define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
+
+void PrintAttack(Attack_t *Attack, AttackID_t AttackID);
 
 int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	ClearScreen();
@@ -23,22 +25,23 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
 //		printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
 
-		if (CurrentAttack->FirstAvailableRound > 0) {
-			GetTerminalForegroundColorStr(100, 100, 100);
-			printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-					CurrentAttack->AttackName, AttackIndex,
-					CurrentAttack->FirstAvailableRound);
-			ResetTerminalForegroundColorStr();
-		} else {
-			printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
-		}
+		PrintAttack(CurrentAttack, AttackIndex);
+//		if (CurrentAttack->FirstAvailableRound > 0) {
+//			GetTerminalForegroundColorStr(100, 100, 100);
+//			printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
+//					CurrentAttack->AttackName, AttackIndex,
+//					CurrentAttack->FirstAvailableRound);
+//			ResetTerminalForegroundColorStr();
+//		} else {
+//			printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
+//		}
 
-		printf("\n");
+//		printf("\n");
 	}
 
 	printf("\nCurrent round: %d\n\n"
 		"It's currently %s's turn.\n",
-		Turn, CurrentPlayer.Name);
+		Round, CurrentPlayer.Name);
 
 	AttackID_t ChosenAttack = (AttackID_t)-1;	
 
@@ -74,4 +77,18 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 	// sleep(2500);
 	//printf("Not implemented.\n");
 	return 0;
+}
+
+void PrintAttack(Attack_t *Attack, AttackID_t AttackID) {
+	if (Attack->FirstAvailableRound > 0) {
+		GetTerminalForegroundColorStr(100, 100, 100);
+		printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
+				Attack->AttackName, AttackID,
+				Attack->FirstAvailableRound);
+		ResetTerminalForegroundColorStr();
+	} else {
+		printf(ATTACK_DISPLAY_FORMAT, Attack->AttackName, AttackID);
+	}
+
+	printf("\n");
 }

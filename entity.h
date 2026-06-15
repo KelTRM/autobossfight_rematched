@@ -2,6 +2,8 @@
 
 #include<stdint.h>
 
+#define ENERGY_GAIN_PER_ROUND		3
+
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
 

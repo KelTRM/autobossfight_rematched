@@ -3,7 +3,8 @@
 #include<stddef.h>
 
 const Attack_t *AttacksToRegister[] = {
-	&NormalAttack
+	&NormalAttack,
+	&NothingAttack
 };
 
 int InitAttacks() {
