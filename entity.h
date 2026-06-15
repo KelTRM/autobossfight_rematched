@@ -2,7 +2,8 @@
 
 #include<stdint.h>
 
-#define ENERGY_GAIN_PER_ROUND		3
+#define MAX_ENERGY			100		// Maximum energy an entity can possess
+#define ENERGY_GAIN_PER_ROUND		3		// The amount of energy an entity may gain in a round.
 
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;

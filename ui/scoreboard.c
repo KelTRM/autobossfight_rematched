@@ -5,9 +5,13 @@
 #include<math.h>
 #include"ui.h"
 #include"../entity.h"
+#include"color/color.h"
 
 // for simplicity sake
 //#define printf(...)	bprintf(INVALID_BUFFER_HANDLE, __VA_ARGS__)
+
+#define BOX_CHAR		"▅"
+#define ENERGY_DISP_PRECISION	20
 
 #define max(x, y)	((x)>(y)?(x):(y))
 
@@ -87,7 +91,16 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 
 		char *namestr = PadRight(Players[i].Name, MaximumNameLength, ' ');
 		char *hpstr = IntToStr(Players[i].HealthPoints);
-		printf("%s has %s hp\n", namestr, hpstr);
+		
+		printf("%s has %s hp [", namestr, hpstr);
+		
+		GetTerminalForegroundColorStr(0, 100, 255);
+		for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
+			if (Players[i].Energy > j)	printf("%s", BOX_CHAR);
+			else				printf(" ");
+		}
+		ResetTerminalForegroundColorStr();
+		printf("] (%d%)\n", Players[i].Energy);
 
 		free(namestr);
 		free(hpstr);
