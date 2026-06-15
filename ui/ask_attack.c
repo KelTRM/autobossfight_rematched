@@ -87,7 +87,7 @@ void PrintAttack(Attack_t *Attack, AttackID_t AttackID) {
 				Attack->FirstAvailableRound);
 		ResetTerminalForegroundColorStr();
 	} else {
-		printf(ATTACK_DISPLAY_FORMAT, Attack->AttackName, AttackID);
+		printf(ATTACK_DISPLAY_FORMAT " (Requires at least %d%% energy)", Attack->AttackName, AttackID, Attack->MinimumEnergy);
 	}
 
 	printf("\n");
