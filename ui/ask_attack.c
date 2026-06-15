@@ -13,7 +13,7 @@ extern int Round;
 
 void PrintAttack(Attack_t *Attack, AttackID_t AttackID);
 
-int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
+int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	ClearScreen();
 	RefreshScoreboard(0);
 
@@ -41,7 +41,7 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 
 	printf("\nCurrent round: %d\n\n"
 		"It's currently %s's turn.\n",
-		Round, CurrentPlayer.Name);
+		Round, CurrentPlayer->Name);
 
 	AttackID_t ChosenAttack = (AttackID_t)-1;	
 
@@ -70,9 +70,12 @@ int AskAttack(Entity_t CurrentPlayer, uint64_t Round) {
 		
 			continue;
 		}
-
 		ChosenAttack = AttackID-1;
+		//ChosenAttack = AttackID-1;
 	}
+
+	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
+	AttackData_t Result = TargetAttack->Attack(CurrentPlayer, CurrentPlayer);
 
 	// sleep(2500);
 	//printf("Not implemented.\n");

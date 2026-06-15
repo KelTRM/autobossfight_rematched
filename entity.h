@@ -23,3 +23,4 @@ typedef struct Entity {
 } Entity_t;
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage);
+Energy_t RemoveEnergy(Entity_t *Target, Energy_t Draw);

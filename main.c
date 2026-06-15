@@ -40,7 +40,7 @@ int main() {
 		if (CurrentPlayerID == ParticipantCount) {
 			// boss plays
 		} else {
-			AskAttack(Players[CurrentPlayerID], 0);
+			AskAttack(&Players[CurrentPlayerID], 0);
 		}
 
 		Turn++;
