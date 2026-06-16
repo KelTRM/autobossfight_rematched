@@ -17,3 +17,10 @@ Energy_t RemoveEnergy(Entity_t *Target, Energy_t Draw) {
 	Target->Energy -= Draw;
 	return Draw;
 }
+
+Energy_t EnergizeEntity(Entity_t *Target, Energy_t Energy) {
+	if (Target->Energy + Energy > 100)
+		Energy = 100 - Target->Energy;
+	Target->Energy += Energy;
+	return Energy;
+}
