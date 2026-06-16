@@ -14,6 +14,8 @@ extern int Round;
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
 
+static void Announcer(AttackData_t *Attack);
+
 const Attack_t NothingAttack = {
 	.AttackName=ATTACK_NAME,
 
@@ -23,7 +25,7 @@ const Attack_t NothingAttack = {
 	.Available=CanDoAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer
+	.Announcer=Announcer
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

@@ -3,5 +3,5 @@
 
 void DefaultAnnouncer(AttackData_t *Attack) {
 	printf("%s dealt %llu damage to %s\n",
-			Attack->Attacker->Name, Attack->Attacker->Attack, Attack->Target->Name);
+			Attack->Attacker->Name, Attack->Damage, Attack->Target->Name);
 }
