@@ -30,4 +30,4 @@ typedef struct Attack {
 	AttackAnnouncer Announcer;
 } Attack_t;
 
-void DoAttack(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker);
+AttackData_t AttackEntity(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker);

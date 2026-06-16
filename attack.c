@@ -1,5 +1,5 @@
 #include "attack.h"
 
-void DoAttack(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker) {
+AttackData_t AttackEntity(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker) {
 
 }
