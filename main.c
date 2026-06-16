@@ -3,6 +3,7 @@
 #include"rng.h"
 //#include"ui/console_manager/buffer.h"
 #include"ui/ui.h"
+#include"utils/sleep.h"
 
 //#ifdef __linux__
 //#include<unistd.h>
@@ -44,6 +45,8 @@ int main() {
 		}
 
 		Turn++;
+
+		sleep(1500);
 	}
 }
 

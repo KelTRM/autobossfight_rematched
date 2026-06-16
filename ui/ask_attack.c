@@ -77,6 +77,8 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
 	AttackData_t Result = TargetAttack->Attack(CurrentPlayer, CurrentPlayer);
 
+	TargetAttack->Announcer(&Result);
+
 	// sleep(2500);
 	//printf("Not implemented.\n");
 	return 0;
