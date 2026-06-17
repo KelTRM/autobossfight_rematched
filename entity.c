@@ -12,6 +12,14 @@ Health_t DamageEntity(Entity_t *Target, Health_t Damage) {
 	return DamageDealt;
 }
 
+Health_t HealEntity(Entity_t *Target, Health_t Health) {
+	if (Target->HealthPoints == 0)
+		return 0;
+
+	Target->HealthPoints += Health;
+	return Health;
+}
+
 Energy_t RemoveEnergy(Entity_t *Target, Energy_t Draw) {
 	if (Target->Energy < Draw)
 		Draw = Target->Energy;

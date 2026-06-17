@@ -38,6 +38,7 @@ struct Entity {
 };
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage);
+Health_t HealEntity(Entity_t *Target, Health_t Health);
 Energy_t RemoveEnergy(Entity_t *Target, Energy_t Draw);
 Energy_t EnergizeEntity(Entity_t *Target, Energy_t Energy);
 

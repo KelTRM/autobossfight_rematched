@@ -58,7 +58,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		Prompt("Which attack are you gonna use?", &Result, 0);
 
 		CopyBuffer(b, INVALID_BUFFER_HANDLE);
-		//RefreshScreen();
+		RefreshScreen();
 
 		DeleteBuffer(b);
 
@@ -68,6 +68,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		}
 
 		AttackID_t AttackID = atoi(Result);
+		free(Result);
 //		printf("AttackID - %d\n", AttackID);
 		if (GetAttackAtIndex(AttackID-1) == NULL || AttackID == 0) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
@@ -75,7 +76,32 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		
 			continue;
 		}
-		ChosenAttack = AttackID-1;
+
+		printf("You have chosen attack '%s'.\n", GetAttackAtIndex(AttackID-1)->AttackName);
+
+		while (1) {
+			b = CreateBuffer();
+			CopyBuffer(INVALID_BUFFER_HANDLE, b);
+
+			//char *Result;
+			Prompt("Are you sure you want to use this attack?", &Result, 0);
+
+			CopyBuffer(b, INVALID_BUFFER_HANDLE);
+			RefreshScreen();
+
+			DeleteBuffer(b);
+
+			if (Result[0] == 'y') {
+				ChosenAttack = AttackID-1;
+				break;
+			} else if (Result[0] == 'n') {
+				break;
+			} else continue;
+		}
+
+
+
+		//ChosenAttack = AttackID-1;
 		//ChosenAttack = AttackID-1;
 	}
 

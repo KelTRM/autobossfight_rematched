@@ -6,7 +6,8 @@ const Attack_t *AttacksToRegister[] = {
 	&NormalAttack,
 	&NothingAttack,
 	&FullPowerAttack,
-	&ComboAttack
+	&ComboAttack,
+	&HealAttack
 };
 
 int InitAttacks() {

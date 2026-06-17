@@ -28,6 +28,7 @@ target_sources(autobossfight_rematched
 		attacks/attack_full_power.c
 		attacks/attack_combo.c
 		attacks/attack_nothing.c
+		attacks/attack_heal.c
 		attacks/default_attack.c
 
 		ui/ask_attack.c
