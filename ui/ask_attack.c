@@ -39,7 +39,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 //		printf("\n");
 	}
 
-	printf("CurrentPlayer = %p, CurrentPlayer.Name = %s", CurrentPlayer, CurrentPlayer->Name);
+//	printf("CurrentPlayer = %p, CurrentPlayer.Name = %s", CurrentPlayer, CurrentPlayer->Name);
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
 
 	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {

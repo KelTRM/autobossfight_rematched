@@ -26,8 +26,8 @@ char *PadLeft(const char *str, size_t n, char ch) {
 	char *NewStr = malloc(NewLength+1);
 
 	size_t StrOffset = NewLength - Length;
-	memset(NewStr+StrOffset, Length, ch);
-	memcpy(NewStr, str, Length);
+	memset(NewStr, ch, NewLength);
+	memcpy(NewStr+StrOffset, str, Length);
 
 	NewStr[NewLength] = '\0';
 	return NewStr;
@@ -45,8 +45,12 @@ char *PadRight(const char *str, size_t n, char ch) {
 	return NewStr;
 }
 
+size_t CalculateDigitsInNumber(uint64_t n) {
+	return floor(max(log10(n)+1, 1));
+}
+
 char *IntToStr(uint64_t n) {
-	size_t RequiredDigits = floor(max(log10(n)+1, 1));
+	size_t RequiredDigits = CalculateDigitsInNumber(n);//floor(max(log10(n)+1, 1));
 
 //	printf("[debug] RequiredDigits for value %llu - %zu\n", n, RequiredDigits);
 //	return NULL;
@@ -88,13 +92,19 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 			MaximumHealth = t->HealthPoints;
 	}
 
-	for (size_t i = 0; i < EntityCount; i++) {
-		printf("\x1b[2K");
+	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
+//	printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
 
-		char *namestr = PadRight(Entities[i].Name, MaximumNameLength, ' ');
-		char *hpstr = IntToStr(Entities[i].HealthPoints);
+	for (size_t i = 0; i < EntityCount; i++) {
+		//printf("\x1b[2K");
+
+		char *NameStr = PadRight(Entities[i].Name, MaximumNameLength, ' ');
+		char *HpStr = IntToStr(Entities[i].HealthPoints);
+
+		char *HealthStr = PadLeft(HpStr, MaximumHealthDigits, ' ');
+		free(HpStr);
 		
-		printf("%s has %s hp [", namestr, hpstr);
+		printf("%s has %s hp [", NameStr, HealthStr);
 		
 		GetTerminalForegroundColorStr(0, 100, 255);
 		for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
@@ -104,8 +114,8 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		ResetTerminalForegroundColorStr();
 		printf("] (%d%%)\n", Entities[i].Energy);
 
-		free(namestr);
-		free(hpstr);
+		free(NameStr);
+		free(HealthStr);
 	}
 	return 0;
 }
