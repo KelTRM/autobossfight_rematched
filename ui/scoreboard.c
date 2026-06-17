@@ -70,12 +70,6 @@ char *IntToStr(uint64_t n) {
 		
 		if (Index == 0) break;
 
-		//if (Index > RequiredDigits) {
-		//	printf("breaking\n");
-		//	break;
-		//}
-			//break;	
-	
 		DigitCount++;
 		if (DigitCount % 3 == 0) {
 			StringifiedNumber[--Index] = ',';
