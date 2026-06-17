@@ -3,11 +3,11 @@
 #include<stddef.h>
 
 const Attack_t *AttacksToRegister[] = {
-	&NormalAttack,
 	&NothingAttack,
-	&FullPowerAttack,
+	&NormalAttack,
+	&HealAttack,
 	&ComboAttack,
-	&HealAttack
+	&FullPowerAttack,
 };
 
 int InitAttacks() {

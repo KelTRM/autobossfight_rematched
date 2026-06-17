@@ -23,6 +23,8 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Boss.TakeTurn = BossTurn;
 	Boss.AI_RechargeEnergy = 0;
 
+	Boss.Type = ENTITY_TYPE_BOSS;
+
 	return Boss;
 }
 

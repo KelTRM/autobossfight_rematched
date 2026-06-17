@@ -110,7 +110,14 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
 	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
 
+	EntityCategory_t EntityType = ENTITY_TYPE_NONE;
+
 	for (size_t i = 0; i < EntityCount; i++) {
+		if (EntityType != Entities[i].Type && EntityType != ENTITY_TYPE_NONE) {
+			printf("\n");
+		}
+		EntityType = Entities[i].Type;
+
 		//printf("\x1b[2K");
 
 		char *NameStr = PadRight(Entities[i].Name, MaximumNameLength, ' ');

@@ -17,6 +17,12 @@ typedef int (*EntityTurnHandler)(Entity_t *Self, uint64_t CurrentRound);
 #include"player.h"
 #include"boss.h"
 
+typedef enum EntityCategory {
+	ENTITY_TYPE_PLAYER,
+	ENTITY_TYPE_BOSS,
+	ENTITY_TYPE_NONE
+} EntityCategory_t;
+
 struct Entity {
 	const char *Name;
 	Health_t HealthPoints;
@@ -33,6 +39,8 @@ struct Entity {
 	struct Entity **Enemies;
 	size_t EnemyCount;
 	EntityTurnHandler TakeTurn;
+
+	EntityCategory_t Type;
 
 	int AI_RechargeEnergy;
 };

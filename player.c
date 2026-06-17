@@ -17,13 +17,12 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.HealingMaximum = MaxHeal;
 
 	e.Name = Name;
-
-	// NULL if enemy doesn't exist yet
 	e.Enemies = NULL;
-
 	e.TakeTurn = AskAttack;
 
 	e.AI_RechargeEnergy = 0;
+
+	e.Type = ENTITY_TYPE_PLAYER;
 
 	return e;
 }
