@@ -47,6 +47,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 
 	if (GetRandomIntBetween(0, 5) < 2) {
 		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
+		return NothingAttack.Attack(Target, Attacker);
 	}
 
 	Health_t PriorHealth = Target->HealthPoints;

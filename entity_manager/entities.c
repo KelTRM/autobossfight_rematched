@@ -46,5 +46,9 @@ void InitEntities() {
 	for (int i = 0; i < BossCount; i++) {
 		struct BossDefinition *Boss = &BossDefinitions[i];
 		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP);
+
+		for (int j = 0; j < PlayerCount; j++) {
+			AddEntityEnemy(&Entities[j], &Entities[PlayerCount+i]);
+		}
 	}
 }
