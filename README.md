@@ -1,3 +1,3 @@
-# Autobossfight: Rematched
-Autobossfight is a successor to KelTRM/automated-boss-fight, which was a typescript project that would give a boss fight.
-As it went on, it became very clear that TypeScript wasn't the way to go, giving way to this C rewrite.
+# Auto Bossfight - Rematched
+A game in which a group of people go up against a boss.
+Basically a very generic turn-based PvE game
