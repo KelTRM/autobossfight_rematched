@@ -33,6 +33,8 @@ struct Entity {
 	struct Entity **Enemies;
 	size_t EnemyCount;
 	EntityTurnHandler TakeTurn;
+
+	int AI_RechargeEnergy;
 };
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage);

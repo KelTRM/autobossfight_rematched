@@ -23,5 +23,7 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 
 	e.TakeTurn = AskAttack;
 
+	e.AI_RechargeEnergy = 0;
+
 	return e;
 }

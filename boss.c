@@ -1,5 +1,5 @@
 #include"boss.h"
-#include "attack.h"
+#include"attacks/attacks.h"
 #include"attack_manager.h"
 
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
@@ -19,11 +19,28 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Boss.Attack = 10000;
 
 	Boss.TakeTurn = BossTurn;
+	Boss.AI_RechargeEnergy = 0;
 
 	return Boss;
 }
 
+#define BOSS_ENERGY_RECHARGE_THRESHOLD	90
+#define BOSS_ENERGY_RECHARGE_TO		95
+
+const Attack_t *BossAI(Entity_t *Boss) {
+	if (Boss->Energy < BOSS_ENERGY_RECHARGE_THRESHOLD)
+		Boss->AI_RechargeEnergy = BOSS_ENERGY_RECHARGE_TO;
+
+	if (Boss->Energy < Boss->AI_RechargeEnergy) {
+		return &NothingAttack;
+	}
+
+	return &NormalAttack;
+}
+
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
-	Attack_t *ChosenAttack = GetAttackAtIndex(1);
-	AttackEntity(ChosenAttack, CurrentPlayer, CurrentPlayer);
+	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
+	//Attack_t *ChosenAttack = GetAttackAtIndex(1);
+	AttackEntity((Attack_t*)ChosenAttack, CurrentPlayer, CurrentPlayer);
+	return 0;
 }
