@@ -36,6 +36,8 @@ uint32_t GetRandomInt32() {
 }
 
 uint64_t GetRandomIntBetween(uint64_t Min, uint64_t Max) {
+	if (Min == Max) return Min;
+
 	int Difference = Max - Min;
 	uint64_t n = Generator() - Min;
 	n %= Difference;

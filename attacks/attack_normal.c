@@ -45,7 +45,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 
 	Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
 
-	if (GetRandomIntBetween(0, 5) < 2) {
+	if (GetRandomIntBetween(1, 5) < 2) {
 		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
 		return NothingAttack.Attack(Target, Attacker);
 	}

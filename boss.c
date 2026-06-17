@@ -1,6 +1,8 @@
 #include"boss.h"
 #include"attacks/attacks.h"
 #include"attack_manager.h"
+#include "entity.h"
+#include"rng.h"
 
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
 
@@ -40,7 +42,8 @@ const Attack_t *BossAI(Entity_t *Boss) {
 
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
-	//Attack_t *ChosenAttack = GetAttackAtIndex(1);
-	AttackEntity((Attack_t*)ChosenAttack, CurrentPlayer, CurrentPlayer);
+
+	int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
+	AttackEntity((Attack_t*)ChosenAttack, GetEnemyAtIndex(CurrentPlayer, EntityToAttack), CurrentPlayer);
 	return 0;
 }

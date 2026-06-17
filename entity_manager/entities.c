@@ -49,6 +49,7 @@ void InitEntities() {
 
 		for (int j = 0; j < PlayerCount; j++) {
 			AddEntityEnemy(&Entities[j], &Entities[PlayerCount+i]);
+			AddEntityEnemy(&Entities[PlayerCount+i], &Entities[j]);
 		}
 	}
 }
