@@ -1,7 +1,7 @@
 #pragma once
 
-#ifdef __WIN32
-#include<Windows.h>
+#ifdef _WIN32
+#include<windows.h>
 #define sleep(ms)	Sleep(ms);
 #else
 #include<unistd.h>

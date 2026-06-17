@@ -12,6 +12,7 @@ endif()
 
 target_sources(autobossfight_rematched
 	PRIVATE
+		init.c
 		main.c
 		rng.c
 		player.c

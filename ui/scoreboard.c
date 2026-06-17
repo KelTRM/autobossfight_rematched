@@ -102,7 +102,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 			else				printf(" ");
 		}
 		ResetTerminalForegroundColorStr();
-		printf("] (%d%)\n", Entities[i].Energy);
+		printf("] (%d%%)\n", Entities[i].Energy);
 
 		free(namestr);
 		free(hpstr);
