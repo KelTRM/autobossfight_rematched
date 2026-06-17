@@ -46,7 +46,8 @@ char *PadRight(const char *str, size_t n, char ch) {
 }
 
 size_t CalculateDigitsInNumber(uint64_t n) {
-	return floor(max(log10(n)+1, 1));
+	size_t f = floor(max(log10(n)+1, 1));
+	return f + ((f-1) / 3);//floor(max(log10(n)+1, 1));
 }
 
 char *IntToStr(uint64_t n) {
@@ -59,10 +60,30 @@ char *IntToStr(uint64_t n) {
 //	printf("recieved pointer %p\n", StringifiedNumber);
 	size_t Index = RequiredDigits;
 
+	size_t DigitCount = 0;
 	do {
-//		printf("n = %llu; Index = %zu\n", n, Index);
+		//printf("n = %llu; Index = %zu\n", n, Index);
 		StringifiedNumber[--Index] = n % 10 + '0';
 		n /= 10;
+
+		//printf("n = %llu\n", n);
+		
+		if (Index == 0) break;
+
+		//if (Index > RequiredDigits) {
+		//	printf("breaking\n");
+		//	break;
+		//}
+			//break;	
+	
+		DigitCount++;
+		if (DigitCount % 3 == 0) {
+			StringifiedNumber[--Index] = ',';
+			//DigitCount++;
+		}
+
+		if (Index > RequiredDigits)
+			break;
 	} while (Index > 0);
 
 	StringifiedNumber[RequiredDigits] = '\0';
@@ -93,7 +114,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	}
 
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
-//	printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
+	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
 
 	for (size_t i = 0; i < EntityCount; i++) {
 		//printf("\x1b[2K");
