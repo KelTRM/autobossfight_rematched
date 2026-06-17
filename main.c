@@ -21,6 +21,11 @@ int Round = 0;
 void InitPlayers();
 int InitAttacks();
 
+void InitEntities();
+
+extern Entity_t *Entities;
+extern size_t EntityCount;
+
 extern Entity_t Players[3];
 
 int main() {

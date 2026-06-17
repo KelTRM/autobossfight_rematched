@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include"entity.h"
 #include<stdint.h>
+#include"ui/ui.h"
 
 const Health_t PlayerAttack = 20000;
 const Energy_t StartingEnergy = 100;
@@ -16,6 +17,11 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.HealingMaximum = MaxHeal;
 
 	e.Name = Name;
+
+	// NULL if enemy doesn't exist yet
+	e.Enemy = NULL;
+
+	e.TakeTurn = AskAttack;
 
 	return e;
 }

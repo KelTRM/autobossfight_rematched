@@ -8,6 +8,10 @@
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
 
+struct Entity;
+
+typedef int (*EntityTurnHandler)(struct Entity *Self, uint64_t CurrentRound);
+
 typedef struct Entity {
 	const char *Name;
 	Health_t HealthPoints;
@@ -20,6 +24,9 @@ typedef struct Entity {
 	Health_t HealingMaximum;
 
 	Energy_t Energy;
+
+	struct Entity *Enemy;
+	EntityTurnHandler TakeTurn;
 } Entity_t;
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage);

@@ -1,4 +1,6 @@
+#include"../ui/ui.h"
 #include"attacks.h"
+#include"../rng.h"
 
 // easy-to-use attack parameters
 #define ATTACK_MINIMUM_ENERGY		5
@@ -36,14 +38,27 @@ static int CanDoAttack(Entity_t *Attacker) {
 }
 
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
+	if (CanDoAttack(Attacker) == 0)
+		return NothingAttack.Attack(Target, Attacker);
+
+	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
+
+	Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
+
+	if (GetRandomIntBetween(0, 5) < 2) {
+		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
+	}
+
+	Health_t PriorHealth = Target->HealthPoints;
+	Damage = DamageEntity(Target, Damage);
+
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
 	Result.Attack = ATTACK_ID;
-	Result.Damage = 0;
-	Result.PriorHealth = Target->HealthPoints;
+	Result.Damage = Damage;
+	Result.PriorHealth = PriorHealth;
 
-	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
 }
 
