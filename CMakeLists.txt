@@ -15,10 +15,13 @@ target_sources(autobossfight_rematched
 		main.c
 		rng.c
 		player.c
-		players.c
+		boss.c
+		attack.c
 		attack_manager.c
 		entity.c
 		register_attacks.c
+
+		entity_manager/entities.c
 
 		attacks/attack_normal.c
 		attacks/attack_nothing.c

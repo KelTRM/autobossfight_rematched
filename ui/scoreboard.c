@@ -15,7 +15,9 @@
 
 #define max(x, y)	((x)>(y)?(x):(y))
 
-extern Entity_t Players[3];
+extern Entity_t *Entities;
+extern size_t EntityCount;
+//extern Entity_t Players[3];
 
 char *PadLeft(const char *str, size_t n, char ch) {
 	size_t Length = strlen(str);
@@ -72,8 +74,8 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	size_t MaximumNameLength = 0;
 	Health_t MaximumHealth = 0;
 
-	for (size_t i = 0; i < sizeof(Players) / sizeof(*Players); i++) {
-		Entity_t *t = &Players[i];
+	for (size_t i = 0; i < EntityCount; i++) {
+		Entity_t *t = &Entities[i];
 
 //		printf("i = %p\n", t->Name);
 		const char *Name = t->Name;
@@ -86,21 +88,21 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 			MaximumHealth = t->HealthPoints;
 	}
 
-	for (size_t i = 0; i < sizeof(Players) / sizeof(*Players); i++) {
+	for (size_t i = 0; i < EntityCount; i++) {
 		printf("\x1b[2K");
 
-		char *namestr = PadRight(Players[i].Name, MaximumNameLength, ' ');
-		char *hpstr = IntToStr(Players[i].HealthPoints);
+		char *namestr = PadRight(Entities[i].Name, MaximumNameLength, ' ');
+		char *hpstr = IntToStr(Entities[i].HealthPoints);
 		
 		printf("%s has %s hp [", namestr, hpstr);
 		
 		GetTerminalForegroundColorStr(0, 100, 255);
 		for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
-			if (Players[i].Energy > j)	printf("%s", BOX_CHAR);
+			if (Entities[i].Energy > j)	printf("%s", BOX_CHAR);
 			else				printf(" ");
 		}
 		ResetTerminalForegroundColorStr();
-		printf("] (%d%)\n", Players[i].Energy);
+		printf("] (%d%)\n", Entities[i].Energy);
 
 		free(namestr);
 		free(hpstr);

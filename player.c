@@ -19,7 +19,7 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.Name = Name;
 
 	// NULL if enemy doesn't exist yet
-	e.Enemy = NULL;
+	e.Enemies = NULL;
 
 	e.TakeTurn = AskAttack;
 

@@ -1,3 +1,4 @@
+#include<stdlib.h>
 #include"entity.h"
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage) {
@@ -23,4 +24,37 @@ Energy_t EnergizeEntity(Entity_t *Target, Energy_t Energy) {
 		Energy = 100 - Target->Energy;
 	Target->Energy += Energy;
 	return Energy;
+}
+
+size_t AddEntityEnemy(Entity_t *To, Entity_t *Enemy) {
+	if (Enemy == NULL)
+		return To->EnemyCount;
+
+	if (To->Enemies == NULL) {
+		To->Enemies = malloc(sizeof(Entity_t*));
+		To->EnemyCount = 0;
+
+		if (To->Enemies == NULL)
+			return 0;
+	} else {
+		Entity_t **newptr = realloc(To->Enemies, (To->EnemyCount+1) * sizeof(Entity_t*));
+		if (newptr == NULL)
+			return To->EnemyCount;
+
+		To->Enemies = newptr;
+	}
+
+	To->Enemies[To->EnemyCount++] = Enemy;
+	return To->EnemyCount;
+}
+
+Entity_t *GetEnemyAtIndex(Entity_t *From, size_t Index) {
+	// safety first
+	if (From->Enemies == NULL)
+		return NULL;
+
+	if (From->EnemyCount <= Index)
+		return NULL;
+
+	return From->Enemies[Index];
 }

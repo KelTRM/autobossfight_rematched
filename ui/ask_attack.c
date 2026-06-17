@@ -43,7 +43,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		"It's currently %s's turn.\n",
 		Round, CurrentPlayer->Name);
 
-	if (CurrentPlayer->Enemy == NULL) {
+	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {
 		// easter egg
 		printf("%s is a pacifist.\n", CurrentPlayer->Name);
 		return 0;
