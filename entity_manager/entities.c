@@ -30,7 +30,7 @@ struct BossDefinition {
 	// no healing because boss bad
 } BossDefinitions[] = {
 	// boss(es) go here
-	{ .Name="Corneliu😀",	.HP=325000 }
+	{ .Name="Cornelius",	.HP=325000 }
 };
 
 void InitEntities() {

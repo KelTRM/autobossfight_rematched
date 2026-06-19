@@ -85,7 +85,7 @@ static int BossDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding)
 //		else				PrintedChars += printf(" ");
 //	}
 	ResetTerminalForegroundColorStr();
-//	PrintedChars += printf("] (%d%%) [BOSS]\n", Self->Energy);
+	PrintedChars += printf(" (%d%%) [BOSS]\n", Self->Energy);
 
 	free(NameStr);
 	free(HealthStr);
