@@ -1,10 +1,22 @@
+#include<stdlib.h>
+
 #include"boss.h"
 #include"attacks/attacks.h"
 #include"attack_manager.h"
-#include "entity.h"
+#include"entity.h"
 #include"rng.h"
 
+#include"ui/console_manager/console.h"
+#include"ui/color/color.h"
+#include"ui/strings.h"
+#include"ui/ui.h"
+
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
+
+extern Entity_t *Entities;
+extern size_t EntityCount;
+
+static int BossDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding);
 
 Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Entity_t Boss;
@@ -21,7 +33,7 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Boss.Attack = 10000;
 
 	Boss.TakeTurn = BossTurn;
-	Boss.DisplayEntity = NULL;
+	Boss.DisplayEntity = BossDisplay;
 
 	Boss.AI_RechargeEnergy = 0;
 
@@ -50,4 +62,31 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
 	AttackEntity((Attack_t*)ChosenAttack, GetEnemyAtIndex(CurrentPlayer, EntityToAttack), CurrentPlayer);
 	return 0;
+}
+
+
+
+static int BossDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding) {
+	size_t PrintedChars = 0;
+
+	char *NameStr = PadRight(Self->Name, NamePadding, ' ');
+	char *HpStr = IntToStr(Self->HealthPoints);
+
+	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
+	free(HpStr);
+
+	PrintedChars += printf("%s has %s hp [", NameStr, HealthStr);
+
+	GetTerminalForegroundColorStr(0, 100, 255);
+	for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
+		if (Self->Energy > j)		PrintedChars += printf("%s", BOX_CHAR);
+		else				PrintedChars += printf(" ");
+	}
+	ResetTerminalForegroundColorStr();
+	PrintedChars += printf("] (%d%%) [BOSS]\n", Self->Energy);
+
+	free(NameStr);
+	free(HealthStr);
+
+	return PrintedChars;
 }
