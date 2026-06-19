@@ -18,6 +18,7 @@ struct PlayerDefinition {
 	const Health_t Heal_Min;	// minimum amount the player may heal another by
 	const Health_t Heal_Max;	// maximum amount the player may heal another by
 } PlayerDefinitions[] = {
+	// players go here
 	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 },
 	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 },
 	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 }
@@ -28,6 +29,7 @@ struct BossDefinition {
 	const Health_t HP;
 	// no healing because boss bad
 } BossDefinitions[] = {
+	// boss(es) go here
 	{ .Name="Cornelius",	.HP=325000 }
 };
 

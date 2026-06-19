@@ -12,7 +12,8 @@ typedef struct Entity Entity_t;
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
 
-typedef int (*EntityTurnHandler)(Entity_t *Self, uint64_t CurrentRound);
+typedef int (*EntityTurnHandler_t)(Entity_t *Self, uint64_t CurrentRound);
+typedef int (*EntityDisplayHandler_t)(Entity_t *Self, size_t HealthPadding, size_t NamePadding);
 
 #include"player.h"
 #include"boss.h"
@@ -38,9 +39,10 @@ struct Entity {
 
 	struct Entity **Enemies;
 	size_t EnemyCount;
-	EntityTurnHandler TakeTurn;
-
 	EntityCategory_t Type;
+
+	EntityTurnHandler_t TakeTurn;
+	EntityDisplayHandler_t DisplayEntity;
 
 	int AI_RechargeEnergy;
 };
