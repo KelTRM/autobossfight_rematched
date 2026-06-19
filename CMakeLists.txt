@@ -36,7 +36,8 @@ target_sources(autobossfight_rematched
 		ui/prompt.c
 		ui/strings.c
 		ui/progress_bar.c
-		
+		ui/unicode_strlen.c
+
 		ui/console_manager/create_buffer.c
 		ui/console_manager/bprintf.c
 		ui/console_manager/validate_buffer.c
@@ -44,7 +45,7 @@ target_sources(autobossfight_rematched
 		ui/console_manager/clear_screen.c
 		ui/console_manager/copy_buffer.c
 		ui/console_manager/delete_buffer.c
-		
+
 		ui/color/background.c
 		ui/color/foreground.c
 		ui/color/color.c

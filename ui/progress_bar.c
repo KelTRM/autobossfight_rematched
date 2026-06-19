@@ -1,4 +1,6 @@
-#include <stdlib.h>
+#define USE_STD_STRLEN
+
+#include<stdlib.h>
 #include<string.h>
 #include"console_manager/console.h"
 #include"color/color.h"
