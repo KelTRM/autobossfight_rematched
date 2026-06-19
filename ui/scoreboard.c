@@ -57,31 +57,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 			continue;
 		}
 
-		if (EntityType != Entities[i].Type && EntityType != ENTITY_TYPE_NONE) {
-			printf("\n");
-		}
-		EntityType = Entities[i].Type;
-
-		//printf("\x1b[2K");
-
-		char *NameStr = PadRight(Entities[i].Name, MaximumNameLength, ' ');
-		char *HpStr = IntToStr(Entities[i].HealthPoints);
-
-		char *HealthStr = PadLeft(HpStr, MaximumHealthDigits, ' ');
-		free(HpStr);
-		
-		printf("%s has %s hp [", NameStr, HealthStr);
-		
-		GetTerminalForegroundColorStr(0, 100, 255);
-		for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
-			if (Entities[i].Energy > j)	printf("%s", BOX_CHAR);
-			else				printf(" ");
-		}
-		ResetTerminalForegroundColorStr();
-		printf("] (%d%%)\n", Entities[i].Energy);
-
-		free(NameStr);
-		free(HealthStr);
+		printf("Entity of name %s has no known renderer.", Entities[i].Name);
 	}
 	return 0;
 }
