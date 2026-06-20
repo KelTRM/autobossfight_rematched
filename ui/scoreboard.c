@@ -50,7 +50,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	for (size_t i = 0; i < EntityCount; i++) {
 		if (Entities[i].DisplayEntity != NULL) {
 			Entities[i].DisplayEntity(
-					&Entities[i],
+					&Entities[i], 1,
 					MaximumHealthDigits,
 					MaximumNameLength
 			);

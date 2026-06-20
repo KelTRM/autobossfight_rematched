@@ -12,7 +12,7 @@ const Energy_t StartingEnergy = 100;
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-static int PlayerDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding) {
+static int PlayerDisplay(Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding) {
 	size_t PrintedChars = 0;
 
 	char *NameColoredStr = GetEntityNameStr(Self);
@@ -36,13 +36,15 @@ static int PlayerDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePaddin
 		.b=255
 	});
 
-	PrintedChars += printf("%s has %s hp %s (%d%%) [PLAYER]\n",
-			NameStr,
-			HealthStr,
-			progressbar,
-			Self->Energy);
-//	PrintedChars += printf(" (%d%%) [BOSS]\n", Self->Energy);
+	PrintedChars += printf("%s has %s hp",
+				NameStr,
+				HealthStr);
 
+	if (ShowEnergy)
+		PrintedChars += printf(" %s (%d%%)", progressbar, Self->Energy);
+
+	PrintedChars += printf(" [PLAYER]\n");
+	
 	free(progressbar);
 	free(NameStr);
 	free(HealthStr);
