@@ -49,6 +49,7 @@ target_sources(autobossfight_rematched
 		ui/color/background.c
 		ui/color/foreground.c
 		ui/color/color.c
+		ui/color/get_color_str.c
 )
 
 if (UNIX)
