@@ -22,3 +22,4 @@ const char *GetTerminalBackgroundColorStr(uint8_t r, uint8_t g, uint8_t b);	// G
 const char *ResetTerminalBackgroundColorStr();					// Get string to reset background terminal color
 
 const char *ModifyTerminalColor(enum TerminalColor Mode, Color_t clr);		// Generic terminal color function.
+Color_t GetColorFromHex(uint32_t Color);

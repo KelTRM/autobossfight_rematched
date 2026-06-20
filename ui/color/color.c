@@ -1,6 +1,14 @@
 #include"color.h"
 #include"../console_manager/console.h"
 
+Color_t GetColorFromHex(uint32_t Color) {
+	Color_t c;
+	c.b = (Color >> 0)  & 0xFF;
+	c.g = (Color >> 8)  & 0xFF;
+	c.r = (Color >> 16) & 0xFF;
+	return c;
+}
+
 const char *ResetTerminalColor(enum TerminalColor Mode) {
 	int Foreground = 0;
 	int Background = 0;
