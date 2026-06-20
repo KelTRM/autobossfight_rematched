@@ -80,18 +80,14 @@ static int BossDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding)
 		.b=255
 	});
 
-	PrintedChars += printf("%s has %s hp %s", NameStr, HealthStr, progressbar);
+	PrintedChars += printf("%s has %s hp %s (%d%%) [BOSS]\n",
+			NameStr,
+			HealthStr,
+			progressbar,
+			Self->Energy);
+//	PrintedChars += printf(" (%d%%) [BOSS]\n", Self->Energy);
 
 	free(progressbar);
-
-	//GetTerminalForegroundColorStr(0, 100, 255);
-//	for (int j = 0; j < MAX_ENERGY; j += MAX_ENERGY / ENERGY_DISP_PRECISION) {
-//		if (Self->Energy > j)		PrintedChars += printf("%s", BOX_CHAR);
-//		else				PrintedChars += printf(" ");
-//	}
-	//ResetTerminalForegroundColorStr();
-	PrintedChars += printf(" (%d%%) [BOSS]\n", Self->Energy);
-
 	free(NameStr);
 	free(HealthStr);
 
