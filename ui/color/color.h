@@ -23,3 +23,7 @@ const char *ResetTerminalBackgroundColorStr();					// Get string to reset backgr
 
 const char *ModifyTerminalColor(enum TerminalColor Mode, Color_t clr);		// Generic terminal color function.
 Color_t GetColorFromHex(uint32_t Color);
+
+// Returns the actual escape sequence. Must be freed
+char *GetColor(uint8_t Mode, Color_t clr);
+char *GetClearColorStr();	// doesn't need to be freed, though

@@ -62,7 +62,12 @@ char *ProgressBar(uint8_t Percentage, uint64_t Precision, Color_t ProgressBarCol
 	str[0] = 0;
 	size_t len = 0;
 
+	char *ColorStr = GetColor(38, ProgressBarColor);
+
 	len = AppendStrings(str, "[", &str, len);
+	len = AppendStrings(str, ColorStr, &str, len);
+
+	free(ColorStr);
 
 	uint64_t ProgressPerCell = 100 / Precision;
 
@@ -76,6 +81,9 @@ char *ProgressBar(uint8_t Percentage, uint64_t Precision, Color_t ProgressBarCol
 
 		Progress += ProgressPerCell;
 	}
+
+	ColorStr = GetClearColorStr();
+	len = AppendStrings(str, ColorStr, &str, len);
 
 	len = AppendStrings(str, "]", &str, len);
 	return str;

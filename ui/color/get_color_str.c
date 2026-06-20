@@ -18,3 +18,8 @@ char *GetColor(uint8_t Mode, Color_t clr) {
 	str[Length] = 0;
 	return str;
 }
+
+// doesn't need to be freed.
+char *GetClearColorStr() {
+	return "\x1b[39m";
+}
