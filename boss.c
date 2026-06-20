@@ -64,8 +64,6 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
-
-
 static int BossDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding) {
 	size_t PrintedChars = 0;
 
