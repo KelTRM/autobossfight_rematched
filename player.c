@@ -37,7 +37,7 @@ static int PlayerDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePaddin
 	return PrintedChars;
 }
 
-Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal) {
+Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal, Color_t PlayerColor) {
 	Entity_t e = { };
 
 	e.Attack = PlayerAttack;
@@ -56,6 +56,7 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.AI_RechargeEnergy = 0;
 
 	e.Type = ENTITY_TYPE_PLAYER;
+	e.EntityColor = PlayerColor;
 
 	return e;
 }

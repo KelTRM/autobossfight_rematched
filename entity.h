@@ -3,6 +3,8 @@
 #include<stdint.h>
 #include<stddef.h>
 
+#include"ui/color/color.h"
+
 #define MAX_ENERGY			100		// Maximum energy an entity can possess
 #define ENERGY_GAIN_PER_ROUND		3		// The amount of energy an entity may gain in a round.
 
@@ -43,6 +45,8 @@ struct Entity {
 
 	EntityTurnHandler_t TakeTurn;
 	EntityDisplayHandler_t DisplayEntity;
+
+	Color_t EntityColor;
 
 	int AI_RechargeEnergy;
 };

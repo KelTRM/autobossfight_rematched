@@ -2,8 +2,6 @@
 #include<stddef.h>
 #include"../entity.h"
 
-Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal);
-
 extern const int PlayerCount;
 extern const int BotCount;
 
@@ -17,11 +15,13 @@ struct PlayerDefinition {
 	const Health_t HP;		// health of the player
 	const Health_t Heal_Min;	// minimum amount the player may heal another by
 	const Health_t Heal_Max;	// maximum amount the player may heal another by
+	
+	const uint32_t Color;
 } PlayerDefinitions[] = {
 	// players go here
-	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 },
-	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 },
-	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500 }
+	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF6400 },
+	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF0000 },
+	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0x00FFFF }
 };
 
 struct BossDefinition {
@@ -42,7 +42,13 @@ void InitEntities() {
 
 	for (int i = 0; i < PlayerCount; i++) {
 		struct PlayerDefinition *Player = &PlayerDefinitions[i];
-		Entities[i] = CreatePlayer(Player->Name, Player->HP, Player->Heal_Min, Player->Heal_Max);
+		Entities[i] = CreatePlayer(
+				Player->Name,
+				Player->HP,
+				Player->Heal_Min,
+				Player->Heal_Max,
+				GetColorFromHex(Player->Color)
+		);
 	}
 
 	for (int i = 0; i < BossCount; i++) {

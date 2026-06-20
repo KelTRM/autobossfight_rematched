@@ -38,6 +38,7 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Boss.AI_RechargeEnergy = 0;
 
 	Boss.Type = ENTITY_TYPE_BOSS;
+	Boss.EntityColor = GetColorFromHex(0x646464);
 
 	return Boss;
 }
