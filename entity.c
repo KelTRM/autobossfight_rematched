@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include<stdlib.h>
 #include"entity.h"
 
@@ -65,4 +66,20 @@ Entity_t *GetEnemyAtIndex(Entity_t *From, size_t Index) {
 		return NULL;
 
 	return From->Enemies[Index];
+}
+
+char *GetEntityNameStr(Entity_t *Entity) {
+	char *EntityColor = GetColor(38, Entity->EntityColor);
+	char *ClearColor = GetClearColorStr();
+
+	const char *Format = "%s%s%s";
+
+	size_t Length = snprintf(NULL, 0, Format, EntityColor, Entity->Name, ClearColor);
+
+	char *str = malloc(Length+1);
+	snprintf(str, Length+1, Format, EntityColor, Entity->Name, ClearColor);
+
+	free(EntityColor);
+
+	return str;
 }

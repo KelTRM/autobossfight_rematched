@@ -58,3 +58,5 @@ Energy_t EnergizeEntity(Entity_t *Target, Energy_t Energy);
 
 size_t AddEntityEnemy(Entity_t *To, Entity_t *Enemy);
 Entity_t *GetEnemyAtIndex(Entity_t *From, size_t Index);
+
+char *GetEntityNameStr(Entity_t *Entity);

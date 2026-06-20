@@ -15,8 +15,17 @@ extern size_t EntityCount;
 static int PlayerDisplay(Entity_t *Self, size_t HealthPadding, size_t NamePadding) {
 	size_t PrintedChars = 0;
 
-	char *NameStr = PadRight(Self->Name, NamePadding, ' ');
+	char *NameColoredStr = GetEntityNameStr(Self);
+	
+	size_t ColoredLen = strlen(NameColoredStr);
+	size_t NormalLen = strlen(Self->Name);
+
+	size_t ColoredAdditionalChars = ColoredLen - NormalLen;
+
+	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
+
+	free(NameColoredStr);
 
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
