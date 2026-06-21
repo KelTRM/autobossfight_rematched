@@ -26,7 +26,10 @@ const Attack_t ComboAttack = {
 	.Available=CanDoAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer
+	.Announcer=DefaultAnnouncer,
+
+	.AppliesToAllies=0,
+	.AppliesToEnemies=1
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

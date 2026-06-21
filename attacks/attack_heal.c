@@ -26,7 +26,10 @@ const Attack_t HealAttack = {
 	.Available=CanDoAttack,
 	.Attack=DoAttack,
 
-	.Announcer=Announcer
+	.Announcer=Announcer,
+
+	.AppliesToAllies=1,
+	.AppliesToEnemies=0
 };
 
 static int CanDoAttack(Entity_t *Attacker) {
