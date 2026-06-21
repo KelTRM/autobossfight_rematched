@@ -4,8 +4,9 @@
 #include"../utils/sleep.h"
 #include"../attack_manager.h"
 #include"color/color.h"
-#include "console_manager/console.h"
+#include"console_manager/console.h"
 #include"ui.h"
+
 
 extern int Round;
 
@@ -23,23 +24,9 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	printf("\n");
 
 	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
-//		printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
-
 		PrintAttack(CurrentAttack, AttackIndex);
-//		if (CurrentAttack->FirstAvailableRound > 0) {
-//			GetTerminalForegroundColorStr(100, 100, 100);
-//			printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-//					CurrentAttack->AttackName, AttackIndex,
-//					CurrentAttack->FirstAvailableRound);
-//			ResetTerminalForegroundColorStr();
-//		} else {
-//			printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
-//		}
-
-//		printf("\n");
 	}
 
-//	printf("CurrentPlayer = %p, CurrentPlayer.Name = %s", CurrentPlayer, CurrentPlayer->Name);
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
 
 	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {
@@ -69,15 +56,32 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 		AttackID_t AttackID = atoi(Result);
 		free(Result);
-//		printf("AttackID - %d\n", AttackID);
-		if (GetAttackAtIndex(AttackID-1) == NULL || AttackID == 0) {
+
+		Attack_t *Attack = GetAttackAtIndex(AttackID-1);
+
+		if (Attack == NULL || AttackID == 0) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
 			sleep(1000);
 		
 			continue;
 		}
 
-		printf("You have chosen attack '%s'.\n", GetAttackAtIndex(AttackID-1)->AttackName);
+		printf("You have chosen attack '%s'.\n", Attack->AttackName);
+
+		size_t AttackeeCount;
+		Entity_t **Attackees = GetApplicableEntities(
+				Attack,
+				CurrentPlayer,
+				&AttackeeCount
+		);
+
+		Entity_t *Target;
+
+		if (AttackeeCount > 1) {
+			Target = SelectEntity(Attackees);
+		} else {
+			Target = Attackees[0];
+		}
 
 		while (1) {
 			b = CreateBuffer();

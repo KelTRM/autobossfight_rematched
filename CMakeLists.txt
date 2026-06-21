@@ -38,6 +38,7 @@ target_sources(autobossfight_rematched
 		ui/strings.c
 		ui/progress_bar.c
 		ui/unicode_strlen.c
+		ui/entity_select_menu.c
 
 		ui/console_manager/create_buffer.c
 		ui/console_manager/bprintf.c
