@@ -34,5 +34,5 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 		}
 	}
 
-	return NULL;
+	return ApplicableEntities;
 }
