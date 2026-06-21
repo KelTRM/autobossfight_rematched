@@ -28,6 +28,9 @@ typedef struct Attack {
 	OnAttack Attack;
 
 	AttackAnnouncer Announcer;
+
+	int AppliesToAllies;
+	int AppliesToEnemies;
 } Attack_t;
 
 AttackData_t AttackEntity(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker);
