@@ -32,10 +32,7 @@ extern size_t EntityCount;
 
 int main() {
 	Init();
-//	InitPlayers();
 	InitEntities();
-
-	//printf("Starting AutoBossfight: ReMatched\n");
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
@@ -47,13 +44,8 @@ int main() {
 
 	while (IsGameOngoing()) {
 		Round = (Turn / PlayerCount) + 1;
-		int CurrentPlayerID = Turn % EntityCount;//ParticipantCount;
-		
-//		if (CurrentPlayerID == ParticipantCount) {
-			// boss plays
-//		} else {
-//			AskAttack(&Entities[CurrentPlayerID], 0);
-//		}
+		int CurrentPlayerID = Turn % EntityCount;
+
 		Entities[CurrentPlayerID].TakeTurn(&Entities[CurrentPlayerID], Round);
 
 		Turn++;
