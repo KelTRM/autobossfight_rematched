@@ -30,7 +30,8 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 			if (NewPtr == NULL)
 				return ApplicableEntities;
 
-
+			NewPtr[++(*ApplicableCount)] = CurrentOption;
+			ApplicableEntities = NewPtr;
 		}
 	}
 
