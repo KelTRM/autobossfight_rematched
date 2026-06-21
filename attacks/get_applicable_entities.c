@@ -1,8 +1,8 @@
 #include<stdlib.h>
 #include"attacks.h"
 
-Entity_t *Entities;
-size_t EntityCount;
+extern Entity_t *Entities;
+extern size_t EntityCount;
 
 // genuinely peak names
 int IsEnemy(Entity_t *Of, Entity_t *Whom) {

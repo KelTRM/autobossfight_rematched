@@ -24,7 +24,7 @@ target_sources(autobossfight_rematched
 
 		entity_manager/entities.c
 
-		attacks/get_applicable_entries.c
+		attacks/get_applicable_entities.c
 		attacks/attack_normal.c
 		attacks/attack_full_power.c
 		attacks/attack_combo.c
