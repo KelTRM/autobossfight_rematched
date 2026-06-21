@@ -26,11 +26,12 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 
 		if ((AttemptingAttack->AppliesToEnemies && OptionIsEnemy) ||
 		    (AttemptingAttack->AppliesToAllies && !OptionIsEnemy)) {
-			Entity_t **NewPtr = realloc(ApplicableEntities, (*ApplicableCount+1) * sizeof(Entity_t*));
+			*ApplicableCount++;
+			Entity_t **NewPtr = realloc(ApplicableEntities, *ApplicableCount * sizeof(Entity_t*));
 			if (NewPtr == NULL)
 				return ApplicableEntities;
 
-			NewPtr[++(*ApplicableCount)] = CurrentOption;
+			NewPtr[*ApplicableCount - 1] = CurrentOption;
 			ApplicableEntities = NewPtr;
 		}
 	}
