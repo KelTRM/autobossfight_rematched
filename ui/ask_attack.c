@@ -4,8 +4,9 @@
 #include"../utils/sleep.h"
 #include"../attack_manager.h"
 #include"color/color.h"
-#include "console_manager/console.h"
+#include"console_manager/console.h"
 #include"ui.h"
+
 
 extern int Round;
 
@@ -23,23 +24,9 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	printf("\n");
 
 	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
-//		printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
-
 		PrintAttack(CurrentAttack, AttackIndex);
-//		if (CurrentAttack->FirstAvailableRound > 0) {
-//			GetTerminalForegroundColorStr(100, 100, 100);
-//			printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-//					CurrentAttack->AttackName, AttackIndex,
-//					CurrentAttack->FirstAvailableRound);
-//			ResetTerminalForegroundColorStr();
-//		} else {
-//			printf(ATTACK_DISPLAY_FORMAT, CurrentAttack->AttackName, AttackIndex);
-//		}
-
-//		printf("\n");
 	}
 
-//	printf("CurrentPlayer = %p, CurrentPlayer.Name = %s", CurrentPlayer, CurrentPlayer->Name);
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
 
 	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {
@@ -49,6 +36,9 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	}
 
 	AttackID_t ChosenAttack = (AttackID_t)-1;	
+	Entity_t *Target = NULL;
+
+	Attack_t *Attack = NULL;
 
 	while (ChosenAttack == (AttackID_t)-1) {
 		BUFHANDLE b = CreateBuffer();
@@ -69,16 +59,17 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 		AttackID_t AttackID = atoi(Result);
 		free(Result);
-//		printf("AttackID - %d\n", AttackID);
-		if (GetAttackAtIndex(AttackID-1) == NULL || AttackID == 0) {
+
+		Attack = GetAttackAtIndex(AttackID-1);
+
+		if (Attack == NULL || AttackID == 0) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
 			sleep(1000);
 		
 			continue;
 		}
 
-		printf("You have chosen attack '%s'.\n", GetAttackAtIndex(AttackID-1)->AttackName);
-
+		printf("You have chosen attack '%s'.\n", Attack->AttackName);
 		while (1) {
 			b = CreateBuffer();
 			CopyBuffer(INVALID_BUFFER_HANDLE, b);
@@ -98,22 +89,30 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 				break;
 			} else continue;
 		}
-
-
-
-		//ChosenAttack = AttackID-1;
-		//ChosenAttack = AttackID-1;
 	}
 
-	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
+	size_t AttackeeCount;
+	Entity_t **Attackees = GetApplicableEntities(
+		Attack,
+		CurrentPlayer,
+		&AttackeeCount
+	);
 
-	AttackData_t Attack = AttackEntity(TargetAttack, GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
-//	AttackData_t Result = TargetAttack->Attack(GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
+	Target = NULL;
 
-//	TargetAttack->Announcer(&);
+	if (AttackeeCount > 1) {
+		Target = SelectEntity(Attackees, AttackeeCount);
+		if (Target == NULL) {
+			printf("Failed to read target for '%s'. Defaulting to self\n");
+			Target = CurrentPlayer;
+		}
+	} else {
+		Target = Attackees[0];
+	}
 
-	// sleep(2500);
-	//printf("Not implemented.\n");
+	free(Attackees);
+
+	AttackData_t Result = AttackEntity(Attack, Target, CurrentPlayer);
 	return 0;
 }
 

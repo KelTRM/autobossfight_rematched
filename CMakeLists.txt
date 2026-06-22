@@ -24,6 +24,7 @@ target_sources(autobossfight_rematched
 
 		entity_manager/entities.c
 
+		attacks/get_applicable_entities.c
 		attacks/attack_normal.c
 		attacks/attack_full_power.c
 		attacks/attack_combo.c
@@ -37,6 +38,7 @@ target_sources(autobossfight_rematched
 		ui/strings.c
 		ui/progress_bar.c
 		ui/unicode_strlen.c
+		ui/entity_select_menu.c
 
 		ui/console_manager/create_buffer.c
 		ui/console_manager/bprintf.c

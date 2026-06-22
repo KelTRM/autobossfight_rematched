@@ -3,8 +3,6 @@
 #include<stdint.h>
 #include<stddef.h>
 
-#include"ui/color/color.h"
-
 #define MAX_ENERGY			100		// Maximum energy an entity can possess
 #define ENERGY_GAIN_PER_ROUND		3		// The amount of energy an entity may gain in a round.
 
@@ -14,8 +12,10 @@ typedef struct Entity Entity_t;
 typedef uint64_t Energy_t;
 typedef uint64_t Health_t;
 
+#include"ui/ui.h"
+
 typedef int (*EntityTurnHandler_t)(Entity_t *Self, uint64_t CurrentRound);
-typedef int (*EntityDisplayHandler_t)(Entity_t *Self, size_t HealthPadding, size_t NamePadding);
+typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding);
 
 #include"player.h"
 #include"boss.h"
