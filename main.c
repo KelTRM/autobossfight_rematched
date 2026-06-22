@@ -63,4 +63,6 @@ int IsGameOngoing() {
 		if (HasLivingEnemies(Entity))
 			return 1;
 	}
+
+	return 0;
 }
