@@ -44,11 +44,14 @@ int main() {
 		Round = (Turn / PlayerCount) + 1;
 		int CurrentPlayerID = Turn % EntityCount;
 
-		Entities[CurrentPlayerID].TakeTurn(&Entities[CurrentPlayerID], Round);
+		Entity_t *CurrentPlayer = &Entities[CurrentPlayerID];
+
+		if (IsEntityAlive(CurrentPlayer)) {
+			CurrentPlayer->TakeTurn(CurrentPlayer, Round);
+			sleep(1500);
+		}
 
 		Turn++;
-
-		sleep(1500);
 	}
 
 	printf("Game over.\n");
