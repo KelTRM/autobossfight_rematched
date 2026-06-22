@@ -6,6 +6,9 @@
 #define MAX_ENERGY			100		// Maximum energy an entity can possess
 #define ENERGY_GAIN_PER_ROUND		3		// The amount of energy an entity may gain in a round.
 
+#define ATTACK_MULTIPLIER_BASE		10		// equivalent to 1x damage
+#define ATTACK_MULTIPLIER_MAX		100		// equivalent to 10x damage
+
 struct Entity;
 typedef struct Entity Entity_t;
 
@@ -49,6 +52,9 @@ struct Entity {
 	Color_t EntityColor;
 
 	int AI_RechargeEnergy;
+
+	// fixed point (63.1) multiplier for attack damage
+	uint64_t AttackMultiplier;
 };
 
 Health_t DamageEntity(Entity_t *Target, Health_t Damage);

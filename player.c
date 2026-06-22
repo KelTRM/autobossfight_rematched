@@ -73,5 +73,7 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.Type = ENTITY_TYPE_PLAYER;
 	e.EntityColor = PlayerColor;
 
+	e.AttackMultiplier = ATTACK_MULTIPLIER_BASE;
+
 	return e;
 }

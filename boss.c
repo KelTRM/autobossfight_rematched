@@ -11,6 +11,9 @@
 #include"ui/strings.h"
 #include"ui/ui.h"
 
+#define AttackMultiplierPercent(multiplier)	\
+	multiplier / (ATTACK_MULTIPLIER_MAX / 100)
+
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
 
 extern Entity_t *Entities;
@@ -39,6 +42,8 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 
 	Boss.Type = ENTITY_TYPE_BOSS;
 	Boss.EntityColor = GetColorFromHex(0x646464);
+
+	Boss.AttackMultiplier = ATTACK_MULTIPLIER_BASE;
 
 	return Boss;
 }
@@ -71,7 +76,11 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 			continue;
 		Target = CurrentOption;
 	}
+
 	AttackEntity((Attack_t*)ChosenAttack, Target, CurrentPlayer);
+
+	// +20% attack multiplier
+	CurrentPlayer->AttackMultiplier += ATTACK_MULTIPLIER_BASE / 5;
 	return 0;
 }
 
@@ -93,18 +102,32 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t H
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
 
-	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
-		.r=0,
-		.g=100,
-		.b=255
-	});
+	char *progressbar = ProgressBar(
+		AttackMultiplierPercent(Self->AttackMultiplier),
+		ENERGY_DISP_PRECISION,
+		(Color_t){
+			.r=150,
+			.g=0,
+			.b=0
+		}
+	);
 
-	PrintedChars += bprintf(Where, "%s has %s hp",
-				NameStr,
-				HealthStr);
+	PrintedChars += bprintf(
+		Where,
+		"%s has %s hp",
+		NameStr,
+		HealthStr
+	);
 
 	if (ShowEnergy)
-		PrintedChars += bprintf(Where, " %s (%d%%)", progressbar, Self->Energy);
+		PrintedChars += bprintf(
+			Where,
+			" %s (%llu.%dx)",
+			progressbar,
+			Self->AttackMultiplier / ATTACK_MULTIPLIER_BASE,
+			Self->AttackMultiplier % ATTACK_MULTIPLIER_BASE
+			//Self->AttackMultiplier / (ATTACK_MULTIPLIER_BASE / 100)
+		);
 
 	bprintf(Where, " [BOSS]\n");
 
