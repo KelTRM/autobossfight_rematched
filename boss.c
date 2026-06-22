@@ -47,11 +47,13 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 #define BOSS_ENERGY_RECHARGE_TO		95
 
 const Attack_t *BossAI(Entity_t *Boss) {
-	if (Boss->Energy < BOSS_ENERGY_RECHARGE_THRESHOLD)
-		Boss->AI_RechargeEnergy = BOSS_ENERGY_RECHARGE_TO;
-
-	if (Boss->Energy < Boss->AI_RechargeEnergy) {
+	if (Boss->Energy < Boss->AI_RechargeEnergy)
 		return &NothingAttack;
+
+	Boss->AI_RechargeEnergy = 0;
+
+	if (Boss->Energy < BOSS_ENERGY_RECHARGE_THRESHOLD) {
+		Boss->AI_RechargeEnergy = BOSS_ENERGY_RECHARGE_TO;
 	}
 
 	return &NormalAttack;
