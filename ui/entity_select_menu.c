@@ -18,8 +18,6 @@ Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount) {
 		);
 	}
 
-
-
 	SwitchBuffer(SelectionMenu);
 
 	Entity_t *ChosenEntity = NULL;
