@@ -58,7 +58,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	Health_t HealingAmount = GetRandomIntBetween(Attacker->HealingMinimum, Attacker->HealingMaximum);
 
 	Health_t PriorHealth = Target->HealthPoints;
-	HealingAmount = HealEntity(Attacker, HealingAmount);
+	HealingAmount = HealEntity(Target, HealingAmount);
 
 	AttackData_t Result;
 	Result.Attacker = Attacker;
@@ -71,6 +71,6 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 }
 
 static void Announcer(AttackData_t *Attack) {
-	printf("%s gained %llu health.\n",
-			Attack->Attacker->Name, Attack->Damage);
+	printf("%s healed %s by %llu health.\n",
+			Attack->Attacker->Name, Attack->Target->Name, Attack->Damage);
 }

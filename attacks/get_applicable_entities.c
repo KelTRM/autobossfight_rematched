@@ -1,4 +1,5 @@
 #include<stdlib.h>
+#include"../ui/ui.h"
 #include"attacks.h"
 
 extern Entity_t *Entities;
@@ -26,7 +27,7 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 
 		if ((AttemptingAttack->AppliesToEnemies && OptionIsEnemy) ||
 		    (AttemptingAttack->AppliesToAllies && !OptionIsEnemy)) {
-			*ApplicableCount++;
+			(*ApplicableCount)++;
 			Entity_t **NewPtr = realloc(ApplicableEntities, *ApplicableCount * sizeof(Entity_t*));
 			if (NewPtr == NULL)
 				return ApplicableEntities;

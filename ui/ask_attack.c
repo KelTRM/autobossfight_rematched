@@ -36,6 +36,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	}
 
 	AttackID_t ChosenAttack = (AttackID_t)-1;	
+	Entity_t *Target = NULL;
 
 	while (ChosenAttack == (AttackID_t)-1) {
 		BUFHANDLE b = CreateBuffer();
@@ -75,10 +76,12 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 				&AttackeeCount
 		);
 
-		Entity_t *Target;
+		Target = NULL;
 
 		if (AttackeeCount > 1) {
 			Target = SelectEntity(Attackees);
+			if (Target == NULL)
+				Target = Attackees[0];
 		} else {
 			Target = Attackees[0];
 		}
@@ -111,7 +114,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
 
-	AttackData_t Attack = AttackEntity(TargetAttack, GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
+	AttackData_t Attack = AttackEntity(TargetAttack, Target, CurrentPlayer);
 //	AttackData_t Result = TargetAttack->Attack(GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
 
 //	TargetAttack->Announcer(&);
