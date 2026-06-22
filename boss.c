@@ -62,8 +62,16 @@ const Attack_t *BossAI(Entity_t *Boss) {
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
 
-	int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
-	AttackEntity((Attack_t*)ChosenAttack, GetEnemyAtIndex(CurrentPlayer, EntityToAttack), CurrentPlayer);
+	Entity_t *Target = NULL;
+	while (Target == NULL) {
+		int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
+		Entity_t *CurrentOption = GetEnemyAtIndex(CurrentPlayer, EntityToAttack);
+
+		if (!IsEntityAlive(CurrentOption))
+			continue;
+		Target = CurrentOption;
+	}
+	AttackEntity((Attack_t*)ChosenAttack, Target, CurrentPlayer);
 	return 0;
 }
 
