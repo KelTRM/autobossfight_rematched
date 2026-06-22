@@ -50,6 +50,8 @@ int main() {
 
 		sleep(1500);
 	}
+
+	printf("Game over.\n");
 }
 
 // temporary implementation
