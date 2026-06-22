@@ -13,10 +13,10 @@ int Init();
 
 int IsGameOngoing();
 
-const int PlayerCount = 3;
-const int BotCount = 1;
+extern const int PlayerCount;
+extern const int BossCount;
 
-const int ParticipantCount = PlayerCount + BotCount;
+// const int ParticipantCount = PlayerCount + BotCount;
 
 int Round = 0;
 

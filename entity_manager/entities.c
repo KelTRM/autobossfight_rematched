@@ -2,8 +2,8 @@
 #include<stddef.h>
 #include"../entity.h"
 
-extern const int PlayerCount;
-extern const int BotCount;
+size_t PlayerCount = 0;
+size_t BossCount = 0;
 
 Entity_t *Entities;
 size_t EntityCount;
@@ -35,8 +35,8 @@ struct BossDefinition {
 };
 
 void InitEntities() {
-	size_t PlayerCount = ArrayLength(PlayerDefinitions);
-	size_t BossCount = ArrayLength(BossDefinitions);
+	PlayerCount = ArrayLength(PlayerDefinitions);
+	BossCount = ArrayLength(BossDefinitions);
 
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));
