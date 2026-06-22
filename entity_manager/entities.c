@@ -21,7 +21,7 @@ struct PlayerDefinition {
 	// players go here
 	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF6400 },
 	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF0000 },
-	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0x00FFFF }
+	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0x00FFFF },
 };
 
 struct BossDefinition {

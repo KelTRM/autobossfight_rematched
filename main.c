@@ -41,7 +41,13 @@ int main() {
 	SwitchBuffer(b);
 
 	while (IsGameOngoing()) {
+		int PriorRound = Round;
 		Round = (Turn / PlayerCount) + 1;
+
+		if (Round != PriorRound) {
+			EnergizeEntities();
+		}
+
 		int CurrentPlayerID = Turn % EntityCount;
 
 		Entity_t *CurrentPlayer = &Entities[CurrentPlayerID];

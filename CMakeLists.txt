@@ -21,6 +21,7 @@ target_sources(autobossfight_rematched
 		attack_manager.c
 		entity.c
 		register_attacks.c
+		energize_entities.c
 
 		entity_manager/entities.c
 
