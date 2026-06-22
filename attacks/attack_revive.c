@@ -63,7 +63,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 
 	Health_t PriorHealth = Target->HealthPoints;
 
-	HealingAmount = HealEntity(Target, HealingAmount);
+	HealingAmount = HealEntity(Target, HealingAmount, 1);
 	HealthDrained = DamageEntity(Attacker, Attacker, HealthDrained);
 
 	AttackData_t Result;

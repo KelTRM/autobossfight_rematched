@@ -13,8 +13,8 @@ Health_t DamageEntity(Entity_t *From, Entity_t *Target, Health_t Damage) {
 	return DamageDealt;
 }
 
-Health_t HealEntity(Entity_t *Target, Health_t Health) {
-	if (Target->HealthPoints == 0)
+Health_t HealEntity(Entity_t *Target, Health_t Health, int PermitNecromancy) {
+	if (!IsEntityAlive(Target) && !PermitNecromancy)
 		return 0;
 
 	Target->HealthPoints += Health;

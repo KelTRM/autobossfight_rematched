@@ -58,7 +58,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	Health_t HealingAmount = GetRandomIntBetween(Attacker->HealingMinimum, Attacker->HealingMaximum);
 
 	Health_t PriorHealth = Target->HealthPoints;
-	HealingAmount = HealEntity(Target, HealingAmount);
+	HealingAmount = HealEntity(Target, HealingAmount, 0);
 
 	AttackData_t Result;
 	Result.Attacker = Attacker;
