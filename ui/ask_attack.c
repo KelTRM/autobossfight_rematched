@@ -38,6 +38,8 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	AttackID_t ChosenAttack = (AttackID_t)-1;	
 	Entity_t *Target = NULL;
 
+	Attack_t *Attack = NULL;
+
 	while (ChosenAttack == (AttackID_t)-1) {
 		BUFHANDLE b = CreateBuffer();
 		CopyBuffer(INVALID_BUFFER_HANDLE, b);
@@ -58,7 +60,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		AttackID_t AttackID = atoi(Result);
 		free(Result);
 
-		Attack_t *Attack = GetAttackAtIndex(AttackID-1);
+		Attack = GetAttackAtIndex(AttackID-1);
 
 		if (Attack == NULL || AttackID == 0) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
@@ -68,28 +70,6 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		}
 
 		printf("You have chosen attack '%s'.\n", Attack->AttackName);
-
-		size_t AttackeeCount;
-		Entity_t **Attackees = GetApplicableEntities(
-				Attack,
-				CurrentPlayer,
-				&AttackeeCount
-		);
-
-		Target = NULL;
-
-		if (AttackeeCount > 1) {
-			Target = SelectEntity(Attackees, AttackeeCount);
-			if (Target == NULL) {
-				printf("Failed to read target for '%s'. Defaulting to self\n");
-				Target = CurrentPlayer;
-			}
-		} else {
-			Target = Attackees[0];
-		}
-
-		free(Attackees);
-
 		while (1) {
 			b = CreateBuffer();
 			CopyBuffer(INVALID_BUFFER_HANDLE, b);
@@ -111,9 +91,32 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		}
 	}
 
-	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
+	size_t AttackeeCount;
+	Entity_t **Attackees = GetApplicableEntities(
+		Attack,
+		CurrentPlayer,
+		&AttackeeCount
+	);
 
-	AttackData_t Attack = AttackEntity(TargetAttack, Target, CurrentPlayer);
+	Target = NULL;
+
+	if (AttackeeCount > 1) {
+		Target = SelectEntity(Attackees, AttackeeCount);
+		if (Target == NULL) {
+			printf("Failed to read target for '%s'. Defaulting to self\n");
+			Target = CurrentPlayer;
+		}
+	} else {
+		Target = Attackees[0];
+	}
+
+	free(Attackees);
+
+
+
+	//Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
+
+	AttackData_t Result = AttackEntity(Attack, Target, CurrentPlayer);
 //	AttackData_t Result = TargetAttack->Attack(GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
 
 //	TargetAttack->Announcer(&);
