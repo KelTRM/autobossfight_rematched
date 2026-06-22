@@ -112,17 +112,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	free(Attackees);
 
-
-
-	//Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);
-
 	AttackData_t Result = AttackEntity(Attack, Target, CurrentPlayer);
-//	AttackData_t Result = TargetAttack->Attack(GetEnemyAtIndex(CurrentPlayer, 0), CurrentPlayer);
-
-//	TargetAttack->Announcer(&);
-
-	// sleep(2500);
-	//printf("Not implemented.\n");
 	return 0;
 }
 
