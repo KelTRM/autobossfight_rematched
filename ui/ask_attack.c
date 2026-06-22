@@ -79,9 +79,11 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		Target = NULL;
 
 		if (AttackeeCount > 1) {
-			Target = SelectEntity(Attackees);
-			if (Target == NULL)
-				Target = Attackees[0];
+			Target = SelectEntity(Attackees, AttackeeCount);
+			if (Target == NULL) {
+				printf("Failed to read target for '%s'. Defaulting to self\n");
+				Target = CurrentPlayer;
+			}
 		} else {
 			Target = Attackees[0];
 		}
@@ -107,9 +109,6 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 				break;
 			} else continue;
 		}
-
-		//ChosenAttack = AttackID-1;
-		//ChosenAttack = AttackID-1;
 	}
 
 	Attack_t *TargetAttack = GetAttackAtIndex(ChosenAttack);

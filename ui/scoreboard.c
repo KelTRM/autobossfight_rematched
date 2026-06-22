@@ -3,6 +3,7 @@
 #include<stddef.h>
 #include<string.h>
 #include<math.h>
+#include "console_manager/console.h"
 #include"ui.h"
 #include"../entity.h"
 #include"color/color.h"
@@ -50,6 +51,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	for (size_t i = 0; i < EntityCount; i++) {
 		if (Entities[i].DisplayEntity != NULL) {
 			Entities[i].DisplayEntity(
+					INVALID_BUFFER_HANDLE,
 					&Entities[i], 1,
 					MaximumHealthDigits,
 					MaximumNameLength

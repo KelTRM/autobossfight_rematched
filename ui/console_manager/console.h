@@ -10,6 +10,8 @@
 
 typedef uint64_t BUFHANDLE;
 
+extern BUFHANDLE ActiveBuffer;
+
 BUFHANDLE CreateBuffer();
 int DeleteBuffer(BUFHANDLE b);
 

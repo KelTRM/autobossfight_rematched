@@ -16,4 +16,4 @@ int RefreshScoreboard(int PreserveCursorPosition);
 void Prompt(const char *Prompt, char **Result, int EchoToBuffer);
 char *ProgressBar(uint8_t Percentage, uint64_t Precision, Color_t ProgressBarColor);
 size_t UTF8_Strlen(const char *str);
-Entity_t *SelectEntity(Entity_t **Entities);
+Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount);
