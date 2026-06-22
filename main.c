@@ -54,5 +54,13 @@ int main() {
 
 // temporary implementation
 int IsGameOngoing() {
-	return 1;
+	for (size_t i = 0; i < EntityCount; i++) {
+		Entity_t *Entity = &Entities[i];
+
+		if (!IsEntityAlive(Entity))
+			continue;
+
+		if (HasLivingEnemies(Entity))
+			return 1;
+	}
 }

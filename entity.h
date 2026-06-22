@@ -60,3 +60,6 @@ size_t AddEntityEnemy(Entity_t *To, Entity_t *Enemy);
 Entity_t *GetEnemyAtIndex(Entity_t *From, size_t Index);
 
 char *GetEntityNameStr(Entity_t *Entity);
+
+int IsEntityAlive(Entity_t *Entity);
+int HasLivingEnemies(Entity_t *Entity);

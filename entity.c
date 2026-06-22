@@ -83,3 +83,23 @@ char *GetEntityNameStr(Entity_t *Entity) {
 
 	return str;
 }
+
+int IsEntityAlive(Entity_t *Entity) {
+	if (Entity->HealthPoints > 0) {
+		return 1;
+	}
+
+	return 0;
+}
+
+int HasLivingEnemies(Entity_t *Entity) {
+	for (size_t i = 0; i < Entity->EnemyCount; i++) {
+		Entity_t *Enemy = GetEnemyAtIndex(Entity, i);
+		if (Enemy == NULL) continue;
+
+		if (IsEntityAlive(Enemy))
+			return 1;
+	}
+
+	return 0;
+}
