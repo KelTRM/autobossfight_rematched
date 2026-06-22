@@ -31,7 +31,7 @@ struct BossDefinition {
 } BossDefinitions[] = {
 	// boss(es) go here
 	{ .Name="Cornelius",	.HP=325000 },
-	{ .Name="Cornelius Jr.",	.HP=100000 }
+//	{ .Name="Cornelius Jr.",	.HP=100000 }
 };
 
 void InitEntities() {
