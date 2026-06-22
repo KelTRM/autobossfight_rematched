@@ -21,6 +21,11 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 	*ApplicableCount = 0;
 	Entity_t **ApplicableEntities = calloc(1, sizeof(*Entities));
 
+	if (AttemptingAttack->AppliesToAllies == 0 && AttemptingAttack->AppliesToEnemies == 0) {
+		ApplicableEntities[0] = Attacker;
+		return ApplicableEntities;
+	}
+
 	for (size_t i = 0; i < EntityCount; i++) {
 		Entity_t *CurrentOption = &Entities[i];
 		int OptionIsEnemy = IsEnemy(Attacker, CurrentOption);
