@@ -86,6 +86,8 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			Target = Attackees[0];
 		}
 
+		free(Attackees);
+
 		while (1) {
 			b = CreateBuffer();
 			CopyBuffer(INVALID_BUFFER_HANDLE, b);
@@ -105,8 +107,6 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 				break;
 			} else continue;
 		}
-
-
 
 		//ChosenAttack = AttackID-1;
 		//ChosenAttack = AttackID-1;
