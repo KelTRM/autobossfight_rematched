@@ -2,8 +2,8 @@
 #include<stdlib.h>
 #include"entity.h"
 
-Health_t DamageEntity(Entity_t *Target, Health_t Damage) {
-	Health_t DamageDealt = (Damage * Target->AttackMultiplier) / ATTACK_MULTIPLIER_BASE;
+Health_t DamageEntity(Entity_t *From, Entity_t *Target, Health_t Damage) {
+	Health_t DamageDealt = (Damage * From->AttackMultiplier) / ATTACK_MULTIPLIER_BASE;
 
 	if (Target->HealthPoints <= Damage) {
 		DamageDealt = Target->HealthPoints;

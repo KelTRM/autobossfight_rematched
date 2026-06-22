@@ -64,7 +64,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	printf("Attacked %zu times.\n", Attacks);
 
 	Health_t PriorHealth = Target->HealthPoints;
-	Damage = DamageEntity(Target, Damage);
+	Damage = DamageEntity(Attacker, Target, Damage);
 
 	AttackData_t Result;
 	Result.Attacker = Attacker;
