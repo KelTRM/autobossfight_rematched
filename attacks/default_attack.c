@@ -1,7 +1,10 @@
+#include<stdlib.h>
 #include"../attack.h"
-#include"../ui/console_manager/console.h"
+#include"../ui/strings.h"
 
 void DefaultAnnouncer(AttackData_t *Attack) {
-	printf("%s dealt %llu damage to %s\n",
-			Attack->Attacker->Name, Attack->Damage, Attack->Target->Name);
+	char *str = IntToStr(Attack->Damage);
+	printf("%s dealt %s damage to %s\n",
+			Attack->Attacker->Name, str, Attack->Target->Name);
+	free(str);
 }
