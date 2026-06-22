@@ -26,7 +26,7 @@ Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount) {
 	char *Response;
 
 	while (ChosenEntity == NULL) {
-		Prompt("\nWho would you like to heal?", &Response, 1);
+		Prompt("\nPlease select a target", &Response, 1);
 
 		if (Response == NULL) {
 			break;
