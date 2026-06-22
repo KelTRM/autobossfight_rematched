@@ -42,7 +42,7 @@ int main() {
 
 	while (IsGameOngoing()) {
 		int PriorRound = Round;
-		Round = (Turn / PlayerCount) + 1;
+		Round = (Turn / EntityCount) + 1;
 
 		if (Round != PriorRound) {
 			EnergizeEntities();
