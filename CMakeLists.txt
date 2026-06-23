@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 4.0.0)
 
 project(autobossfight_rematched)
 
-add_executable(autobossfight_rematched)
-
 if (MSVC)
 	add_compile_options(/W4 /WX)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+add_executable(autobossfight_rematched)
 
 target_sources(autobossfight_rematched
 	PRIVATE
@@ -34,28 +34,30 @@ target_sources(autobossfight_rematched
 		attacks/attack_revive.c
 		attacks/default_attack.c
 
-		ui/ask_attack.c
-		ui/scoreboard.c
-		ui/prompt.c
-		ui/strings.c
-		ui/progress_bar.c
-		ui/unicode_strlen.c
-		ui/entity_select_menu.c
+		#ui/ask_attack.c
+		#ui/scoreboard.c
+		#ui/prompt.c
+		#ui/strings.c
+		#ui/progress_bar.c
+		#ui/unicode_strlen.c
+		#ui/entity_select_menu.c
 
-		ui/console_manager/create_buffer.c
-		ui/console_manager/bprintf.c
-		ui/console_manager/validate_buffer.c
-		ui/console_manager/switch_buffer.c
-		ui/console_manager/clear_screen.c
-		ui/console_manager/copy_buffer.c
-		ui/console_manager/delete_buffer.c
+		#ui/console_manager/create_buffer.c
+		#ui/console_manager/bprintf.c
+		#ui/console_manager/validate_buffer.c
+		#ui/console_manager/switch_buffer.c
+		#ui/console_manager/clear_screen.c
+		#ui/console_manager/copy_buffer.c
+		#ui/console_manager/delete_buffer.c
 
-		ui/color/background.c
-		ui/color/foreground.c
-		ui/color/color.c
-		ui/color/get_color_str.c
+		#ui/color/background.c
+		#ui/color/foreground.c
+		#ui/color/color.c
+		#ui/color/get_color_str.c
 )
 
-if (UNIX)
-	target_link_libraries(autobossfight_rematched PUBLIC m)
-endif(UNIX)
+add_subdirectory(ui)
+
+#if (UNIX)
+target_link_libraries(autobossfight_rematched PUBLIC autobossfight_ui_manager)
+#endif(UNIX)
