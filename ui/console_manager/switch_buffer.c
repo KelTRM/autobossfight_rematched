@@ -4,7 +4,8 @@
 void RefreshScreen() {
 	printf("\x1b[H");
 	
-//	char ch = *Buffers[ActiveBuffer].Buffer;
+	// disable automatic flushing
+	setvbuf(stdout, NULL, _IOFBF, 0);
 
 	for (size_t i = 0; i < Buffers[ActiveBuffer].BufferLength; i++) {
 		char ch = Buffers[ActiveBuffer].Buffer[i];
@@ -15,6 +16,8 @@ void RefreshScreen() {
 
 	printf("\x1b[0J");
 	fflush(stdout);
+
+	setvbuf(stdout, NULL, _IOLBF, 0);
 }
 
 int SwitchBuffer(BUFHANDLE Buffer) {
