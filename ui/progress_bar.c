@@ -71,7 +71,7 @@ char *ProgressBar(uint8_t Percentage, uint64_t Precision, Color_t ProgressBarCol
 
 	uint64_t ProgressPerCell = 100 / Precision;
 
-	size_t CharsTyped = 0;
+	//size_t CharsTyped = 0;
 	uint8_t Progress = 0;
 	while (Progress < 100) {
 		if (Progress < Percentage)

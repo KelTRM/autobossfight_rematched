@@ -46,7 +46,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
 	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
 
-	EntityCategory_t EntityType = ENTITY_TYPE_NONE;
+	//EntityCategory_t EntityType = ENTITY_TYPE_NONE;
 
 	for (size_t i = 0; i < EntityCount; i++) {
 		if (Entities[i].DisplayEntity != NULL) {

@@ -41,7 +41,7 @@ void InitEntities() {
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));
 
-	for (int i = 0; i < PlayerCount; i++) {
+	for (size_t i = 0; i < PlayerCount; i++) {
 		struct PlayerDefinition *Player = &PlayerDefinitions[i];
 		Entities[i] = CreatePlayer(
 				Player->Name,
@@ -52,11 +52,11 @@ void InitEntities() {
 		);
 	}
 
-	for (int i = 0; i < BossCount; i++) {
+	for (size_t i = 0; i < BossCount; i++) {
 		struct BossDefinition *Boss = &BossDefinitions[i];
 		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP);
 
-		for (int j = 0; j < PlayerCount; j++) {
+		for (size_t j = 0; j < PlayerCount; j++) {
 			AddEntityEnemy(&Entities[j], &Entities[PlayerCount+i]);
 			AddEntityEnemy(&Entities[PlayerCount+i], &Entities[j]);
 		}

@@ -18,7 +18,7 @@ extern const int BossCount;
 
 // const int ParticipantCount = PlayerCount + BotCount;
 
-int Round = 0;
+uint64_t Round = 0;
 
 void InitPlayers();
 int InitAttacks();
@@ -41,7 +41,7 @@ int main() {
 	SwitchBuffer(b);
 
 	while (IsGameOngoing()) {
-		int PriorRound = Round;
+		uint64_t PriorRound = Round;
 		Round = (Turn / EntityCount) + 1;
 
 		if (Round != PriorRound) {

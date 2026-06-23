@@ -112,7 +112,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	free(Attackees);
 
-	AttackData_t Result = AttackEntity(Attack, Target, CurrentPlayer);
+	/*AttackData_t Result = */AttackEntity(Attack, Target, CurrentPlayer);
 	return 0;
 }
 

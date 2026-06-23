@@ -65,6 +65,8 @@ const Attack_t *BossAI(Entity_t *Boss) {
 }
 
 int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
+	(void)Round; // get rid of unused parameter error, as it's a function pointer parameter used in another instance
+
 	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
 
 	Entity_t *Target = NULL;

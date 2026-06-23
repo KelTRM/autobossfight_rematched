@@ -51,7 +51,7 @@ struct Entity {
 
 	Color_t EntityColor;
 
-	int AI_RechargeEnergy;
+	Energy_t AI_RechargeEnergy;
 
 	// fixed point (63.1) multiplier for attack damage
 	uint64_t AttackMultiplier;

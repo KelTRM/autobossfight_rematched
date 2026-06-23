@@ -11,7 +11,7 @@ const Attack_t *AttacksToRegister[] = {
 	&FullPowerAttack,
 };
 
-int InitAttacks() {
+size_t InitAttacks() {
 	InitAttackRegistrar();
 
 	size_t AttackCount = sizeof(AttacksToRegister) / sizeof(*AttacksToRegister);
@@ -20,5 +20,5 @@ int InitAttacks() {
 		RegisteredAttacks += RegisterAttack((Attack_t*)AttacksToRegister[i]);
 	}
 
-	return AttackCount;
+	return RegisteredAttacks;
 }

@@ -12,7 +12,7 @@
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			4
 
-extern int Round;
+extern uint64_t Round;
 
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
