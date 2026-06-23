@@ -2,16 +2,16 @@
 #include"entity.h"
 #include"rng.h"
 //#include"ui/console_manager/buffer.h"
-#include"ui/ui.h"
+#include<ui.h>
 #include"utils/sleep.h"
 
 //#ifdef __linux__
 //#include<unistd.h>
 //#endif
 
-int Init();
+int Init(void);
 
-int IsGameOngoing();
+int IsGameOngoing(void);
 
 extern const int PlayerCount;
 extern const int BossCount;
@@ -20,15 +20,15 @@ extern const int BossCount;
 
 uint64_t Round = 0;
 
-void InitPlayers();
-int InitAttacks();
+void InitPlayers(void);
+int InitAttacks(void);
 
-void InitEntities();
+void InitEntities(void);
 
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-int main() {
+int main(void) {
 	Init();
 	InitEntities();
 
@@ -64,7 +64,7 @@ int main() {
 }
 
 // temporary implementation
-int IsGameOngoing() {
+int IsGameOngoing(void) {
 	for (size_t i = 0; i < EntityCount; i++) {
 		Entity_t *Entity = &Entities[i];
 

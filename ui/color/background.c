@@ -6,7 +6,7 @@ const char *GetTerminalBackgroundColorStr(uint8_t r, uint8_t g, uint8_t b) {
 	return "";
 }
 
-const char *ResetTerminalBackgroundColorStr() {
+const char *ResetTerminalBackgroundColorStr(void) {
 	printf("\x1b[49m");
 	return "";
 }

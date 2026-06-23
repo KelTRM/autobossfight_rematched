@@ -12,13 +12,13 @@ typedef uint64_t BUFHANDLE;
 
 extern BUFHANDLE ActiveBuffer;
 
-BUFHANDLE CreateBuffer();
+BUFHANDLE CreateBuffer(void);
 int DeleteBuffer(BUFHANDLE b);
 
 int SwitchBuffer(BUFHANDLE Buffer);
 int CopyBuffer(BUFHANDLE From, BUFHANDLE To);
-void ClearScreen();
-void RefreshScreen();
+void ClearScreen(void);
+void RefreshScreen(void);
 
 int bprintf(BUFHANDLE b, const char *format, ...);
 

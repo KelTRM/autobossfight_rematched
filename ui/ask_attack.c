@@ -7,9 +7,6 @@
 #include"console_manager/console.h"
 #include"ui.h"
 
-
-extern int Round;
-
 #define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
 
 void PrintAttack(Attack_t *Attack, AttackID_t AttackID);

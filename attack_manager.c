@@ -10,7 +10,7 @@ Attack_t **Attacks = NULL;
 size_t AttackCount = 0;
 size_t AttacksSize = 0;
 
-int InitAttackRegistrar() {
+int InitAttackRegistrar(void) {
 	size_t AttackBufferSize = sizeof(Attack_t*) * ATTACK_LIMIT;
 
 	if (Attacks != NULL)

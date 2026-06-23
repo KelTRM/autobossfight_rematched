@@ -8,7 +8,7 @@ void ClearBuffer(BUFHANDLE Buffer) {
 	Buffers[Buffer].Buffer = malloc(1);
 }
 
-void ClearScreen() {
+void ClearScreen(void) {
 	ClearBuffer(ActiveBuffer);
 	RefreshScreen();
 }

@@ -34,7 +34,7 @@ struct BossDefinition {
 //	{ .Name="Cornelius Jr.",	.HP=100000 }
 };
 
-void InitEntities() {
+void InitEntities(void) {
 	PlayerCount = ArrayLength(PlayerDefinitions);
 	BossCount = ArrayLength(BossDefinitions);
 

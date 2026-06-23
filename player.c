@@ -53,7 +53,7 @@ static int PlayerDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t
 }
 
 Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal, Color_t PlayerColor) {
-	Entity_t e = { };
+	Entity_t e = { 0 };
 
 	e.Attack = PlayerAttack;
 	e.Energy = StartingEnergy;

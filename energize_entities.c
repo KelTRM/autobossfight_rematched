@@ -3,7 +3,7 @@
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-void EnergizeEntities() {
+void EnergizeEntities(void) {
 	for (size_t i = 0; i < EntityCount; i++) {
 		Entity_t *e = &Entities[i];
 

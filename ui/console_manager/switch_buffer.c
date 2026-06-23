@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include"buffer.h"
 
-void RefreshScreen() {
+void RefreshScreen(void) {
 	printf("\x1b[H");
 	
 	// disable automatic flushing

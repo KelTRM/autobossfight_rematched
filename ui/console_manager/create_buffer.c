@@ -5,7 +5,7 @@ BUFHANDLE ActiveBuffer = INVALID_BUFFER_HANDLE;
 uint8_t ActiveBuffers[ACTIVE_BUFFER_ARRAY_SIZE];	// maybe for later
 struct Buffer Buffers[MAXIMUM_BUFFER_COUNT] = { 0 };
 
-BUFHANDLE CreateBuffer() {
+BUFHANDLE CreateBuffer(void) {
 	BUFHANDLE i;
 
 	for (i = 0; i < MAXIMUM_BUFFER_COUNT; i++) {

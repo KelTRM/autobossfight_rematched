@@ -4,7 +4,7 @@
 
 #include<stdio.h>
 
-int Init() {
+int Init(void) {
 	#ifdef _WIN32
 	SetConsoleCP(CP_UTF8);
 	SetConsoleOutputCP(CP_UTF8);

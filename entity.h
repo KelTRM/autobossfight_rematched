@@ -69,4 +69,4 @@ char *GetEntityNameStr(Entity_t *Entity);
 
 int IsEntityAlive(Entity_t *Entity);
 int HasLivingEnemies(Entity_t *Entity);
-void EnergizeEntities();
+void EnergizeEntities(void);
