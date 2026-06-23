@@ -1,6 +1,11 @@
 #include<stdio.h>
 #include"buffer.h"
 
+#ifdef _MSC_VER
+// disable setvbuf as it seems to have problems with the parameters on msvc
+#define setvbuf(...)
+#endif
+
 void RefreshScreen(void) {
 	printf("\x1b[H");
 	
