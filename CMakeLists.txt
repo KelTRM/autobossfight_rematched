@@ -25,7 +25,7 @@ target_sources(autobossfight_rematched
 		register_attacks.c
 		energize_entities.c
 
-		entity_manager/entities.c
+		entity/entities.c
 
 		#attacks/get_applicable_entities.c
 		#attacks/attack_normal.c
