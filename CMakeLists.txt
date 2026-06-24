@@ -35,10 +35,8 @@ target_link_libraries(autobossfight_attack_mgr
 		autobossfight_ui_manager
 )
 
-#if (UNIX)
 target_link_libraries(autobossfight_rematched
 	PUBLIC
 		autobossfight_ui_manager
 		autobossfight_attack_mgr
 )
-#endif(UNIX)
