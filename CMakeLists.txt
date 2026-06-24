@@ -20,42 +20,11 @@ target_sources(autobossfight_rematched
 		player.c
 		boss.c
 		attack.c
-		#attack_manager.c
 		entity.c
 		register_attacks.c
 		energize_entities.c
 
 		entity/entities.c
-
-		#attacks/get_applicable_entities.c
-		#attacks/attack_normal.c
-		#attacks/attack_full_power.c
-		#attacks/attack_combo.c
-		#attacks/attack_nothing.c
-		#attacks/attack_heal.c
-		#attacks/attack_revive.c
-		#attacks/default_attack.c
-
-		#ui/ask_attack.c
-		#ui/scoreboard.c
-		#ui/prompt.c
-		#ui/strings.c
-		#ui/progress_bar.c
-		#ui/unicode_strlen.c
-		#ui/entity_select_menu.c
-
-		#ui/console_manager/create_buffer.c
-		#ui/console_manager/bprintf.c
-		#ui/console_manager/validate_buffer.c
-		#ui/console_manager/switch_buffer.c
-		#ui/console_manager/clear_screen.c
-		#ui/console_manager/copy_buffer.c
-		#ui/console_manager/delete_buffer.c
-
-		#ui/color/background.c
-		#ui/color/foreground.c
-		#ui/color/color.c
-		#ui/color/get_color_str.c
 )
 
 add_subdirectory(ui)
