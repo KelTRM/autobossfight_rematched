@@ -20,21 +20,21 @@ target_sources(autobossfight_rematched
 		player.c
 		boss.c
 		attack.c
-		attack_manager.c
+		#attack_manager.c
 		entity.c
 		register_attacks.c
 		energize_entities.c
 
 		entity_manager/entities.c
 
-		attacks/get_applicable_entities.c
-		attacks/attack_normal.c
-		attacks/attack_full_power.c
-		attacks/attack_combo.c
-		attacks/attack_nothing.c
-		attacks/attack_heal.c
-		attacks/attack_revive.c
-		attacks/default_attack.c
+		#attacks/get_applicable_entities.c
+		#attacks/attack_normal.c
+		#attacks/attack_full_power.c
+		#attacks/attack_combo.c
+		#attacks/attack_nothing.c
+		#attacks/attack_heal.c
+		#attacks/attack_revive.c
+		#attacks/default_attack.c
 
 		#ui/ask_attack.c
 		#ui/scoreboard.c
@@ -59,7 +59,17 @@ target_sources(autobossfight_rematched
 )
 
 add_subdirectory(ui)
+add_subdirectory(attacks)
+
+target_link_libraries(autobossfight_attack_mgr
+	PUBLIC
+		autobossfight_ui_manager
+)
 
 #if (UNIX)
-target_link_libraries(autobossfight_rematched PUBLIC autobossfight_ui_manager)
+target_link_libraries(autobossfight_rematched
+	PUBLIC
+		autobossfight_ui_manager
+		autobossfight_attack_mgr
+)
 #endif(UNIX)

@@ -3,7 +3,7 @@
 
 #ifdef _MSC_VER
 // disable setvbuf as it seems to have problems with the parameters on msvc
-#define setvbuf(...)
+#define setvbuf(...)		0
 #endif
 
 void RefreshScreen(void) {

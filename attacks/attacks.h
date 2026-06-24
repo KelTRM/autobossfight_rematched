@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../attack.h"
+#include"attack.h"
 
 extern const Attack_t NormalAttack;
 extern const Attack_t NothingAttack;

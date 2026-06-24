@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"../entity.h"
 #include"../utils/sleep.h"
-#include"../attack_manager.h"
+#include"../attacks/attack_manager.h"
 #include"color/color.h"
 #include"console_manager/console.h"
 #include"ui.h"

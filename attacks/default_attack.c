@@ -1,5 +1,5 @@
 #include<stdlib.h>
-#include"../attack.h"
+#include"attack.h"
 #include"../ui/strings.h"
 
 void DefaultAnnouncer(AttackData_t *Attack) {

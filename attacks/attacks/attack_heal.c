@@ -1,23 +1,23 @@
-#include"../ui/ui.h"
-#include"attacks.h"
+#include<ui.h>
+#include"../attacks.h"
 #include"../rng.h"
 
 // easy-to-use attack parameters
-#define ATTACK_MINIMUM_ENERGY		25
+#define ATTACK_MINIMUM_ENERGY		10
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
-#define ATTACK_NAME			"Combo Attack"
-
-#define ADDITIONAL_ATTACK_CHANCE	55
+#define ATTACK_NAME			"Heal"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			4
+#define ATTACK_ID			5
 
 extern uint64_t Round;
 
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
 
-const Attack_t ComboAttack = {
+static void Announcer(AttackData_t *Attack);
+
+const Attack_t HealAttack = {
 	.AttackName=ATTACK_NAME,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
@@ -26,10 +26,10 @@ const Attack_t ComboAttack = {
 	.Available=CanDoAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer,
+	.Announcer=Announcer,
 
-	.AppliesToAllies=0,
-	.AppliesToEnemies=1
+	.AppliesToAllies=1,
+	.AppliesToEnemies=0
 };
 
 static int CanDoAttack(Entity_t *Attacker) {
@@ -48,32 +48,29 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 
 	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
 
-	if (GetRandomIntBetween(1, 5) < 2) {
-		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
-		return NothingAttack.Attack(Target, Attacker);
-	}
+	//Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
 
-	Health_t Damage = GetRandomIntBetween(0, Attacker->Attack * 2);
-	size_t Attacks = 2;
+	//if (GetRandomIntBetween(1, 5) < 2) {
+	//	printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
+	//	return NothingAttack.Attack(Target, Attacker);
+	//}
 
-	while (ADDITIONAL_ATTACK_CHANCE >= GetRandomIntBetween(0, 100)) {
-		Damage += GetRandomIntBetween(0, Attacker->Attack);
-		Attacks++;
-	}
-
-	printf("Attacked %zu times.\n", Attacks);
+	Health_t HealingAmount = GetRandomIntBetween(Attacker->HealingMinimum, Attacker->HealingMaximum);
 
 	Health_t PriorHealth = Target->HealthPoints;
-	Damage = DamageEntity(Attacker, Target, Damage);
+	HealingAmount = HealEntity(Target, HealingAmount, 0);
 
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
 	Result.Attack = ATTACK_ID;
-	Result.Damage = Damage;
+	Result.Damage = HealingAmount;
 	Result.PriorHealth = PriorHealth;
 
 	return Result;
 }
 
-
+static void Announcer(AttackData_t *Attack) {
+	printf("%s healed %s by %llu health.\n",
+			Attack->Attacker->Name, Attack->Target->Name, Attack->Damage);
+}

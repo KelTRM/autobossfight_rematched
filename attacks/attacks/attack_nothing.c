@@ -1,11 +1,10 @@
-#include"../ui/ui.h"
-#include"attacks.h"
-#include"../rng.h"
+#include"../attacks.h"
+#include<ui.h>
 
 // easy-to-use attack parameters
-#define ATTACK_MINIMUM_ENERGY		5
+#define ATTACK_MINIMUM_ENERGY		0
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
-#define ATTACK_NAME			"Normal Attack"
+#define ATTACK_NAME			"Boost energy"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			1
@@ -15,7 +14,9 @@ extern uint64_t Round;
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
 
-const Attack_t NormalAttack = {
+static void Announcer(AttackData_t *Attack);
+
+const Attack_t NothingAttack = {
 	.AttackName=ATTACK_NAME,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
@@ -24,10 +25,10 @@ const Attack_t NormalAttack = {
 	.Available=CanDoAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer,
+	.Announcer=Announcer,
 
 	.AppliesToAllies=0,
-	.AppliesToEnemies=1
+	.AppliesToEnemies=0
 };
 
 static int CanDoAttack(Entity_t *Attacker) {
@@ -41,29 +42,21 @@ static int CanDoAttack(Entity_t *Attacker) {
 }
 
 static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
-	if (CanDoAttack(Attacker) == 0)
-		return NothingAttack.Attack(Target, Attacker);
-
-	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
-
-	Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
-
-	if (GetRandomIntBetween(1, 5) < 2) {
-		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
-		return NothingAttack.Attack(Target, Attacker);
-	}
-
-	Health_t PriorHealth = Target->HealthPoints;
-	Damage = DamageEntity(Attacker, Target, Damage);
-
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
 	Result.Attack = ATTACK_ID;
-	Result.Damage = Damage;
-	Result.PriorHealth = PriorHealth;
+	Result.Damage = 0;
+	Result.PriorHealth = Target->HealthPoints;
 
+	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
+	//Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
+
+	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
 }
 
-
+static void Announcer(AttackData_t *d) {
+	printf("%s did nothing.\n",
+			d->Attacker->Name);
+}
