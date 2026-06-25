@@ -29,13 +29,18 @@ int InitAttackRegistrar(void) {
 
 int RegisterAttack(Attack_t *Attack) {
 	if (Attack == NULL) return 0;	// Don't add an attack if it's NULL
-	
-	// Check if the attack count would exceed the maximum
-	if (AttackCount < ATTACK_LIMIT)
-		AttackCount++;
-	else return 0;
 
-	Attacks[AttackCount-1] = Attack;
+	AttackID_t ID = Attack->ID;
+
+	// Don't add the attack if it conflicts with another of the same ID
+	if (Attacks[ID] != NULL)
+		return 0;
+
+	// Check if the attack's ID is out of bounds
+	if (ID >= ATTACK_LIMIT)
+		return 0;
+
+	Attacks[ID] = Attack;
 	return 1;
 }
 
