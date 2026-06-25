@@ -61,7 +61,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
-	Result.Attack = ATTACK_ID;
+	Result.Attack = NormalAttack.ID;
 	Result.Damage = Damage;
 	Result.PriorHealth = PriorHealth;
 
