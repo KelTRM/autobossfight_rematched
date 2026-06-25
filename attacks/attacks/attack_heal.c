@@ -13,7 +13,7 @@
 extern uint64_t Round;
 
 static int CanDoAttack(Entity_t *Attacker);
-static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
+static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 
 static void Announcer(AttackData_t *Attack);
 
@@ -44,18 +44,11 @@ static int CanDoAttack(Entity_t *Attacker) {
 	return 1;
 }
 
-static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
+static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	if (CanDoAttack(Attacker) == 0)
-		return NothingAttack.Attack(Target, Attacker);
+		return NothingAttack.Attack(Self, Target, Attacker);
 
 	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
-
-	//Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
-
-	//if (GetRandomIntBetween(1, 5) < 2) {
-	//	printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
-	//	return NothingAttack.Attack(Target, Attacker);
-	//}
 
 	Health_t HealingAmount = GetRandomIntBetween(Attacker->HealingMinimum, Attacker->HealingMaximum);
 

@@ -12,7 +12,7 @@
 extern uint64_t Round;
 
 static int CanDoAttack(Entity_t *Attacker);
-static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker);
+static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 
 static void Announcer(AttackData_t *Attack);
 
@@ -43,11 +43,11 @@ static int CanDoAttack(Entity_t *Attacker) {
 	return 1;
 }
 
-static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
+static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
-	Result.Attack = ReviveAttack.ID;
+	Result.Attack = Self->ID;
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 

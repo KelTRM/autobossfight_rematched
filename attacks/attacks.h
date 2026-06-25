@@ -10,3 +10,5 @@ extern const Attack_t HealAttack;
 extern const Attack_t ReviveAttack;
 
 void DefaultAnnouncer(AttackData_t *Attack);
+AttackData_t *MissedAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
+
