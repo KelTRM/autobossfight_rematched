@@ -117,11 +117,11 @@ void PrintAttack(Attack_t *Attack, AttackID_t AttackID) {
 	if (Attack->FirstAvailableRound > 0) {
 		GetTerminalForegroundColorStr(100, 100, 100);
 		printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-				Attack->AttackName, AttackID,
+				Attack->AttackName, Attack->ID,
 				Attack->FirstAvailableRound);
 		ResetTerminalForegroundColorStr();
 	} else {
-		printf(ATTACK_DISPLAY_FORMAT " (Requires at least %d%% energy)", Attack->AttackName, AttackID, Attack->MinimumEnergy);
+		printf(ATTACK_DISPLAY_FORMAT " (Requires at least %d%% energy)", Attack->AttackName, Attack->ID, Attack->MinimumEnergy);
 	}
 
 	printf("\n");

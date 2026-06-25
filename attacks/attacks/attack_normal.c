@@ -8,7 +8,7 @@
 #define ATTACK_NAME			"Normal Attack"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			1
+#define ATTACK_ID			2
 
 extern uint64_t Round;
 
@@ -27,7 +27,9 @@ const Attack_t NormalAttack = {
 	.Announcer=DefaultAnnouncer,
 
 	.AppliesToAllies=0,
-	.AppliesToEnemies=1
+	.AppliesToEnemies=1,
+
+	.ID=ATTACK_ID
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

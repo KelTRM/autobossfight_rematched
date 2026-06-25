@@ -8,7 +8,7 @@
 #define ATTACK_NAME			"Heal"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			5
+#define ATTACK_ID			3
 
 extern uint64_t Round;
 
@@ -29,7 +29,9 @@ const Attack_t HealAttack = {
 	.Announcer=Announcer,
 
 	.AppliesToAllies=1,
-	.AppliesToEnemies=0
+	.AppliesToEnemies=0,
+
+	.ID=ATTACK_ID
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

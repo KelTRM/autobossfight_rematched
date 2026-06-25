@@ -29,7 +29,9 @@ const Attack_t ComboAttack = {
 	.Announcer=DefaultAnnouncer,
 
 	.AppliesToAllies=0,
-	.AppliesToEnemies=1
+	.AppliesToEnemies=1,
+
+	.ID=ATTACK_ID
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

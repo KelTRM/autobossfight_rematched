@@ -28,7 +28,9 @@ const Attack_t NothingAttack = {
 	.Announcer=Announcer,
 
 	.AppliesToAllies=0,
-	.AppliesToEnemies=0
+	.AppliesToEnemies=0,
+
+	.ID=ATTACK_ID
 };
 
 static int CanDoAttack(Entity_t *Attacker) {

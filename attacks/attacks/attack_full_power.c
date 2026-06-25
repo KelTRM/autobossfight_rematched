@@ -8,7 +8,7 @@
 #define ATTACK_NAME			"Full power attack"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			3
+#define ATTACK_ID			6
 
 extern uint64_t Round;
 
@@ -27,7 +27,9 @@ const Attack_t FullPowerAttack = {
 	.Announcer=DefaultAnnouncer,
 
 	.AppliesToAllies=0,
-	.AppliesToEnemies=1
+	.AppliesToEnemies=1,
+
+	.ID=ATTACK_ID
 };
 
 static int CanDoAttack(Entity_t *Attacker) {
@@ -62,7 +64,7 @@ static AttackData_t DoAttack(Entity_t *Target, Entity_t *Attacker) {
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
-	Result.Attack = ATTACK_ID;
+	Result.Attack = FullPowerAttack.ID;
 	Result.Damage = Damage;
 	Result.PriorHealth = PriorHealth;
 
