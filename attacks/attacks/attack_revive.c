@@ -8,7 +8,7 @@
 #define ATTACK_NAME			"Revive"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			5
+#define ATTACK_ID			11
 
 extern uint64_t Round;
 

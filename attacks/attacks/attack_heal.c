@@ -8,7 +8,7 @@
 #define ATTACK_NAME			"Heal"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			3
+#define ATTACK_ID			10
 
 extern uint64_t Round;
 
@@ -49,6 +49,13 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 		return NothingAttack.Attack(Self, Target, Attacker);
 
 	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
+
+	//Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
+
+	//if (GetRandomIntBetween(1, 5) < 2) {
+	//	printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
+	//	return NothingAttack.Attack(Target, Attacker);
+	//}
 
 	Health_t HealingAmount = GetRandomIntBetween(Attacker->HealingMinimum, Attacker->HealingMaximum);
 
