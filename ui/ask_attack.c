@@ -20,7 +20,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	printf("\n");
 
-	while ((CurrentAttack = GetAttackAtIndex(AttackIndex++)) != NULL) {
+	while ((CurrentAttack = GetAttackAtIndex(++AttackIndex)) != NULL) {
 		PrintAttack(CurrentAttack, AttackIndex);
 	}
 
@@ -57,7 +57,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		AttackID_t AttackID = atoi(Result);
 		free(Result);
 
-		Attack = GetAttackAtIndex(AttackID-1);
+		Attack = GetAttackAtIndex(AttackID);
 
 		if (Attack == NULL || AttackID == 0) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);

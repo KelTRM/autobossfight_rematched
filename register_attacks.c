@@ -1,5 +1,6 @@
 #include"attacks/attacks.h"
 #include"attack_manager.h"
+#include "utils/sleep.h"
 #include<stddef.h>
 
 const Attack_t *AttacksToRegister[] = {
@@ -16,6 +17,7 @@ size_t InitAttacks(void) {
 
 	size_t AttackCount = sizeof(AttacksToRegister) / sizeof(*AttacksToRegister);
 	size_t RegisteredAttacks = 0;
+
 	for (size_t i = 0; i < AttackCount; i++) {
 		RegisteredAttacks += RegisterAttack((Attack_t*)AttacksToRegister[i]);
 	}

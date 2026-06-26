@@ -32,13 +32,12 @@ int main(void) {
 	Init();
 	InitEntities();
 
+	BUFHANDLE b = CreateBuffer();
+	SwitchBuffer(b);
+
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
 	int Turn = 0;
-
-
-	BUFHANDLE b = CreateBuffer();
-	SwitchBuffer(b);
 
 	while (IsGameOngoing()) {
 		uint64_t PriorRound = Round;
