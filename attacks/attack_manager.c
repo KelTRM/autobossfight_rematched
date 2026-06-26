@@ -64,8 +64,9 @@ size_t BuildAttackList(void) {
 			continue;
 
 		*Node = malloc(sizeof(struct List));
+		memset(*Node, 0, sizeof(struct List));
 
-		(*Node)->Value = &Attacks[ID];
+		(*Node)->Value = (void*)Attacks[ID];
 		Node = &(*Node)->Next;
 
 		AttacksFound++;
@@ -79,7 +80,7 @@ AttackIter_t OpenAttackIterator(void) {
 }
 
 Attack_t *StepAttackIterator(AttackIter_t *Iterator) {
-	Linked_t Node = *(Linked_t*)Iterator;
+	Linked_t Node = *((Linked_t*)Iterator);
 	Attack_t *CurrentAttack = (Attack_t*)Node->Value;
 
 	*Iterator = Node->Next;

@@ -18,6 +18,8 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	Attack_t *CurrentAttack;
 	AttackIter_t Iterator = OpenAttackIterator();
 
+	printf("\n");
+
 	while (Iterator != NULL) {
 		CurrentAttack = StepAttackIterator(&Iterator);
 		PrintAttack(CurrentAttack);
