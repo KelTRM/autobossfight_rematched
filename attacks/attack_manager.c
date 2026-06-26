@@ -77,11 +77,15 @@ size_t BuildAttackList(void) {
 }
 
 AttackIter_t OpenAttackIterator(void) {
-	
+	return (AttackIter_t)AttackList;
 }
 
 Attack_t *StepAttackIterator(AttackIter_t *Iterator) {
-	(void)Iterator;
+	Linked_t Node = *(Linked_t*)Iterator;
+	Attack_t *CurrentAttack = (Attack_t*)Node->Value;
+
+	*Iterator = Node->Next;
+	return CurrentAttack;
 }
 
 Attack_t *GetAttackAtIndex(size_t Index) {
