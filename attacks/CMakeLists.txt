@@ -19,6 +19,7 @@ target_sources(autobossfight_attack_mgr
 		attacks/attack_normal.c
 		attacks/attack_nothing.c
 		attacks/attack_revive.c
+		attacks/attack_transform.c
 		
 		#list
 		linked_list/list.c
