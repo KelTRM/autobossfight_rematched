@@ -21,5 +21,7 @@ size_t InitAttacks(void) {
 		RegisteredAttacks += RegisterAttack((Attack_t*)AttacksToRegister[i]);
 	}
 
+	BuildAttackList();
+
 	return RegisteredAttacks;
 }

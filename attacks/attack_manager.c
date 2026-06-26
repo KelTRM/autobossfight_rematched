@@ -5,8 +5,6 @@
 #include<string.h>
 #include<ui.h>
 
-typedef void	*AttackIter_t;
-
 // How many attacks can be registered at once
 #define ATTACK_LIMIT	256
 

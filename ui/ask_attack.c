@@ -9,20 +9,26 @@
 
 #define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
 
-void PrintAttack(Attack_t *Attack, AttackID_t AttackID);
+void PrintAttack(Attack_t *Attack);
 
 int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	ClearScreen();
 	RefreshScoreboard(0);
 
 	Attack_t *CurrentAttack;
-	size_t AttackIndex = 0;
+	AttackIter_t Iterator = OpenAttackIterator();
 
-	printf("\n");
-
-	while ((CurrentAttack = GetAttackAtIndex(++AttackIndex)) != NULL) {
-		PrintAttack(CurrentAttack, AttackIndex);
+	while (Iterator != NULL) {
+		CurrentAttack = StepAttackIterator(&Iterator);
+		PrintAttack(CurrentAttack);
 	}
+//	size_t AttackIndex = 0;
+
+//	printf("\n");
+
+//	while ((CurrentAttack = GetAttackAtIndex(++AttackIndex)) != NULL) {
+//		PrintAttack(CurrentAttack, AttackIndex);
+//	}
 
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
 
@@ -113,7 +119,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
-void PrintAttack(Attack_t *Attack, AttackID_t AttackID) {
+void PrintAttack(Attack_t *Attack) {
 	if (Attack->FirstAvailableRound > 0) {
 		GetTerminalForegroundColorStr(100, 100, 100);
 		printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
