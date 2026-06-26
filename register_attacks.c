@@ -1,6 +1,5 @@
 #include"attacks/attacks.h"
 #include"attack_manager.h"
-#include "utils/sleep.h"
 #include<stddef.h>
 
 const Attack_t *AttacksToRegister[] = {
