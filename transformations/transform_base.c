@@ -13,12 +13,13 @@
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
 const Transformation_t BaseTransformation = {
-	.Name="Base",
-	.Cost=0,
-	.Upkeep=0,
+	.Name=TRANSFORMATION_NAME,
+	.Cost=TRANSFORMATION_COST,
+	.Upkeep=TRANSFORMATION_UPKEEP,
 	.TransformationMultiplier=TRANSFORMATION_MULTIPLIER,
 
 	.GetDamage=GetDamage,
+	.MaintainTransformation=MaintainTransformation,
 };
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage) {
