@@ -51,8 +51,8 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 
-	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
-	//Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
+//	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
+//	Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
 
 	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
