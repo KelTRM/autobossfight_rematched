@@ -1,5 +1,9 @@
 #pragma once
 
+#include<stdint.h>
+
+typedef uint64_t TransformationID_t;
+
 typedef struct Transformation Transformation_t;
 
 #include"../entity.h"
