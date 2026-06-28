@@ -22,7 +22,7 @@ target_sources(autobossfight_attack_mgr
 		attacks/attack_transform.c
 		
 		#list
-		linked_list/list.c
+#		linked_list/list.c
 )
 
 #add_subdirectory(../ui)

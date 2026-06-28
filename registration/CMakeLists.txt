@@ -7,7 +7,7 @@ add_library(autobossfight_registration_manager)
 target_sources(autobossfight_registration_manager
 	PRIVATE
 		registration.c	
-#		linked_list/list.c
+		linked_list/list.c
 )
 
 target_include_directories(autobossfight_registration_manager
