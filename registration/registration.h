@@ -20,3 +20,4 @@ int RegistrarAdd(Registrar_t *Registrar, void *Registree, RegistreeID_t Registre
 size_t BuildRegistrationList(Registrar_t *Registrar);
 RegistrationIter_t OpenRegistrationIterator(Registrar_t *Registrar);
 void *StepRegistrationIterator(RegistrationIter_t *Iterator);
+void *GetRegistrationFromID(Registrar_t *Registrar, size_t Index);

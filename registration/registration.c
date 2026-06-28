@@ -98,8 +98,7 @@ void *StepRegistrationIterator(RegistrationIter_t *Iterator) {
 	return CurrentRegistration;
 }
 
-// obsolete carryover from attack registrar
-//Attack_t *GetAttackAtIndex(size_t Index) {
-//	if (Index > ATTACK_LIMIT) return NULL;
-//	return Attacks[Index];
-//}
+void *GetRegistrationFromID(Registrar_t *Registrar, size_t Index) {
+	if (Index > Registrar->MaxRegistrations) return NULL;
+	return Registrar->RegistrationMap[Index];
+}
