@@ -51,6 +51,8 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 
+	printf("Not implemented.\n");
+
 //	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
 //	Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
 
