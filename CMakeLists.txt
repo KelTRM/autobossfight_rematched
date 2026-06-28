@@ -40,6 +40,7 @@ target_link_libraries(autobossfight_transformations
 target_link_libraries(autobossfight_attack_mgr
 	PUBLIC
 		autobossfight_ui_manager
+		autobossfight_registration_manager
 )
 
 target_link_libraries(autobossfight_rematched
