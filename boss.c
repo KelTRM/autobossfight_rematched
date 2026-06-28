@@ -45,6 +45,8 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 
 	Boss.AttackMultiplier = ATTACK_MULTIPLIER_BASE;
 
+	Boss.EntityTransformation = &BossTransformation;
+
 	return Boss;
 }
 

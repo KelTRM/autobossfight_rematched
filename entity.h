@@ -23,6 +23,8 @@ typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where, Entity_t *Self, int ShowE
 #include"player.h"
 #include"boss.h"
 
+#include"transformations/transformation.h"
+
 typedef enum EntityCategory {
 	ENTITY_TYPE_PLAYER,
 	ENTITY_TYPE_BOSS,
@@ -55,6 +57,8 @@ struct Entity {
 
 	// fixed point (63.1) multiplier for attack damage
 	uint64_t AttackMultiplier;
+
+	Transformation_t *EntityTransformation;
 };
 
 Health_t DamageEntity(Entity_t *From, Entity_t *Target, Health_t Damage);
