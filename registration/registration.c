@@ -69,7 +69,7 @@ size_t BuildRegistrationList(Registrar_t *Registrar) {
 	size_t RegistrationsFound = 0;
 
 	Linked_t *Node = &Registrar->RegistrationList;
-	for (RegistreeID_t ID = 0; ID < Registrar->RegistrationCount; ID++) {
+	for (RegistreeID_t ID = 0; ID < Registrar->MaxRegistrations; ID++) {
 		void *Registration = Registrar->RegistrationMap[ID];
 		if (Registration == NULL)
 			continue;
