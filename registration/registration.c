@@ -98,7 +98,7 @@ void *StepRegistrationIterator(RegistrationIter_t *Iterator) {
 	return CurrentRegistration;
 }
 
-void *GetRegistrationFromID(Registrar_t *Registrar, size_t Index) {
+void *GetRegistrationFromID(Registrar_t *Registrar, RegistreeID_t Index) {
 	if (Index > Registrar->MaxRegistrations) return NULL;
 	return Registrar->RegistrationMap[Index];
 }
