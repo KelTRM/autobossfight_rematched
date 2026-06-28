@@ -26,6 +26,7 @@ static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseD
 	(void)From; // to remove warning
 	Health_t NewDamage = BaseDamage;
 	NewDamage *= Self->TransformationMultiplier;
+	NewDamage /= ATTACK_MULTIPLIER_BASE;
 
 	return NewDamage;
 }

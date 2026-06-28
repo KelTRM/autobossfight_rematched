@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include"entity.h"
+#include "transformation.h"
 #include"ui/ui.h"
 #include"ui/strings.h"
 #include"ui/color/color.h"
@@ -74,6 +75,8 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.EntityColor = PlayerColor;
 
 	e.AttackMultiplier = ATTACK_MULTIPLIER_BASE;
+
+	e.EntityTransformation = (Transformation_t*)&BaseTransformation;
 
 	return e;
 }
