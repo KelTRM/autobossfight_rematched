@@ -44,7 +44,7 @@ static int PlayerDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t
 	if (ShowEnergy)
 		PrintedChars += bprintf(Where, " %s (%d%%)", progressbar, Self->Energy);
 
-	PrintedChars += bprintf(Where, " [PLAYER]\n");
+	PrintedChars += bprintf(Where, " [%s]\n", Self->EntityTransformation->Name);
 	
 	free(progressbar);
 	free(NameStr);

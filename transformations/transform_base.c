@@ -2,7 +2,7 @@
 
 #define ToFixed(x)			((uint64_t)((x) * ATTACK_MULTIPLIER_BASE))
 
-#define TRANSFORMATION_ID		0
+#define TRANSFORMATION_ID		1
 
 #define TRANSFORMATION_NAME		"Base"
 #define TRANSFORMATION_COST		0
