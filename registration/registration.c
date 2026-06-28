@@ -86,11 +86,11 @@ size_t BuildRegistrationList(Registrar_t *Registrar) {
 	return RegistrationsFound;
 }
 
-RegistrationIter_t OpenAttackIterator(Registrar_t *Registrar) {
+RegistrationIter_t OpenRegistrationIterator(Registrar_t *Registrar) {
 	return (RegistrationIter_t)Registrar->RegistrationList;
 }
 
-void *StepAttackIterator(RegistrationIter_t *Iterator) {
+void *StepRegistrationIterator(RegistrationIter_t *Iterator) {
 	Linked_t Node = *((Linked_t*)Iterator);
 	void *CurrentRegistration = (void*)Node->Value;
 

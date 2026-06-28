@@ -18,6 +18,7 @@
 Registrar_t AttackRegistrar;
 
 int InitAttackRegistrar(void) {
+	InitRegistrar(ATTACK_LIMIT, &AttackRegistrar);
 	//size_t AttackBufferSize = sizeof(Attack_t*) * ATTACK_LIMIT;
 
 	//if (Attacks != NULL)
@@ -35,62 +36,65 @@ int InitAttackRegistrar(void) {
 }
 
 int RegisterAttack(Attack_t *Attack) {
-	if (Attack == NULL) return 0;	// Don't add an attack if it's NULL
+	RegistrarAdd(&AttackRegistrar, Attack, Attack->ID);
+//	if (Attack == NULL) return 0;	// Don't add an attack if it's NULL
 
-	AttackID_t ID = Attack->ID;
+//	AttackID_t ID = Attack->ID;
 
 	// Don't add the attack if it conflicts with another of the same ID
-	if (Attacks[ID] != NULL) {
-		return 0;
-	}
+//	if (Attacks[ID] != NULL) {
+//		return 0;
+//	}
 
 	// Check if the attack's ID is out of bounds
-	if (ID >= ATTACK_LIMIT) {
-		return 0;
-	}
+//	if (ID >= ATTACK_LIMIT) {
+//		return 0;
+//	}
 
-	AttackCount++;
+//	AttackCount++;
 
-	Attacks[ID] = Attack;
-	return 1;
+//	Attacks[ID] = Attack;
+//	return 1;
 }
 
 size_t BuildAttackList(void) {
-	if (AttackList != NULL)
-		free(AttackList);
+	BuildRegistrationList(&AttackRegistrar);
+//	if (AttackList != NULL)
+//		free(AttackList);
 
-	size_t AttacksFound = 0;
+//	size_t AttacksFound = 0;
 
-	Linked_t *Node = &AttackList;
-	for (AttackID_t ID = 0; ID < ATTACK_LIMIT; ID++) {
-		if (Attacks[ID] == NULL)
-			continue;
+//	Linked_t *Node = &AttackList;
+//	for (AttackID_t ID = 0; ID < ATTACK_LIMIT; ID++) {
+//		if (Attacks[ID] == NULL)
+//			continue;
 
-		*Node = malloc(sizeof(struct List));
-		memset(*Node, 0, sizeof(struct List));
+//		*Node = malloc(sizeof(struct List));
+//		memset(*Node, 0, sizeof(struct List));
 
-		(*Node)->Value = (void*)Attacks[ID];
-		Node = &(*Node)->Next;
+//		(*Node)->Value = (void*)Attacks[ID];
+//		Node = &(*Node)->Next;
 
-		AttacksFound++;
-	}
+//		AttacksFound++;
+//	}
 
-	return AttacksFound;
+//	return AttacksFound;
 }
 
 AttackIter_t OpenAttackIterator(void) {
-	return (AttackIter_t)AttackList;
+	OpenAttackIterator(&AttackRegistrar);
+//	return (AttackIter_t)AttackList;
 }
 
 Attack_t *StepAttackIterator(AttackIter_t *Iterator) {
-	Linked_t Node = *((Linked_t*)Iterator);
-	Attack_t *CurrentAttack = (Attack_t*)Node->Value;
+//	Linked_t Node = *((Linked_t*)Iterator);
+//	Attack_t *CurrentAttack = (Attack_t*)Node->Value;
 
-	*Iterator = Node->Next;
-	return CurrentAttack;
+//	*Iterator = Node->Next;
+//	return CurrentAttack;
 }
 
 Attack_t *GetAttackAtIndex(size_t Index) {
-	if (Index > ATTACK_LIMIT) return NULL;
-	return Attacks[Index];
+//	if (Index > ATTACK_LIMIT) return NULL;
+//	return Attacks[Index];
 }
