@@ -133,7 +133,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t H
 			//Self->AttackMultiplier / (ATTACK_MULTIPLIER_BASE / 100)
 		);
 
-	bprintf(Where, " [BOSS]\n");
+	bprintf(Where, " [%s]\n", Self->EntityTransformation->Name);
 
 	free(progressbar);
 	free(NameStr);
