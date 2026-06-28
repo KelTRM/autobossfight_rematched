@@ -18,7 +18,7 @@
 Registrar_t AttackRegistrar;
 
 int InitAttackRegistrar(void) {
-	InitRegistrar(ATTACK_LIMIT, &AttackRegistrar);
+	return InitRegistrar(ATTACK_LIMIT, &AttackRegistrar);
 	//size_t AttackBufferSize = sizeof(Attack_t*) * ATTACK_LIMIT;
 
 	//if (Attacks != NULL)
@@ -36,7 +36,7 @@ int InitAttackRegistrar(void) {
 }
 
 int RegisterAttack(Attack_t *Attack) {
-	RegistrarAdd(&AttackRegistrar, Attack, Attack->ID);
+	return RegistrarAdd(&AttackRegistrar, Attack, Attack->ID);
 //	if (Attack == NULL) return 0;	// Don't add an attack if it's NULL
 
 //	AttackID_t ID = Attack->ID;
@@ -58,7 +58,7 @@ int RegisterAttack(Attack_t *Attack) {
 }
 
 size_t BuildAttackList(void) {
-	BuildRegistrationList(&AttackRegistrar);
+	return BuildRegistrationList(&AttackRegistrar);
 //	if (AttackList != NULL)
 //		free(AttackList);
 
@@ -82,11 +82,12 @@ size_t BuildAttackList(void) {
 }
 
 AttackIter_t OpenAttackIterator(void) {
-	OpenAttackIterator(&AttackRegistrar);
+	return (AttackIter_t)OpenRegistrationIterator(&AttackRegistrar);
 //	return (AttackIter_t)AttackList;
 }
 
 Attack_t *StepAttackIterator(AttackIter_t *Iterator) {
+	return (Attack_t*)StepRegistrationIterator((RegistrationIter_t*)Iterator);
 //	Linked_t Node = *((Linked_t*)Iterator);
 //	Attack_t *CurrentAttack = (Attack_t*)Node->Value;
 
@@ -95,6 +96,7 @@ Attack_t *StepAttackIterator(AttackIter_t *Iterator) {
 }
 
 Attack_t *GetAttackAtIndex(size_t Index) {
+	return GetRegistrationFromID(&AttackRegistrar, Index);
 //	if (Index > ATTACK_LIMIT) return NULL;
 //	return Attacks[Index];
 }
