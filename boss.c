@@ -19,7 +19,8 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding);
+static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
+			size_t HealthPadding, size_t NamePadding);
 
 Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Entity_t Boss;
@@ -88,7 +89,8 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
-static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding) {
+static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
+			size_t HealthPadding, size_t NamePadding) {
 	size_t PrintedChars = 0;
 	
 	char *NameColoredStr = GetEntityNameStr(Self);
