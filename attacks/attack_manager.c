@@ -1,5 +1,6 @@
 #include"attack_manager.h"
-#include"linked_list/list.h"
+#include<registration.h>
+//#include"linked_list/list.h"
 #include<stddef.h>
 #include<stdlib.h>
 #include<string.h>
@@ -8,27 +9,29 @@
 // How many attacks can be registered at once
 #define ATTACK_LIMIT	256
 
-Attack_t **Attacks = NULL;
-size_t AttackCount = 0;
-size_t AttacksSize = 0;
+//Attack_t **Attacks = NULL;
+//size_t AttackCount = 0;
+//size_t AttacksSize = 0;
 
-Linked_t AttackList = NULL;
+//Linked_t AttackList = NULL;
+
+Registrar_t AttackRegistrar;
 
 int InitAttackRegistrar(void) {
-	size_t AttackBufferSize = sizeof(Attack_t*) * ATTACK_LIMIT;
+	//size_t AttackBufferSize = sizeof(Attack_t*) * ATTACK_LIMIT;
 
-	if (Attacks != NULL)
-		free(Attacks);
+	//if (Attacks != NULL)
+	//	free(Attacks);
 
-	Attacks = malloc(AttackBufferSize);
-	if (Attacks == NULL) {
-		return 0;
-	}
+	//Attacks = malloc(AttackBufferSize);
+	//if (Attacks == NULL) {
+	//	return 0;
+	//}
 
-	AttacksSize = AttackBufferSize;
-	memset(Attacks, 0, AttackBufferSize);
+	//AttacksSize = AttackBufferSize;
+	//memset(Attacks, 0, AttackBufferSize);
 
-	return ATTACK_LIMIT;
+	//return ATTACK_LIMIT;
 }
 
 int RegisterAttack(Attack_t *Attack) {

@@ -43,7 +43,7 @@ size_t InitRegistrar(size_t MaxRegistrations, Registrar_t *Registrar) {
 	return MaxRegistrations;
 }
 
-int RegisterAttack(Registrar_t *Registrar, void *Registree, RegistreeID_t RegistreeID) {
+int RegistrarAdd(Registrar_t *Registrar, void *Registree, RegistreeID_t RegistreeID) {
 	if (Registrar == NULL) return 0;	// Don't add a registree if it's NULL
 
 	// Don't add if it conflicts with another of the same ID
@@ -62,7 +62,7 @@ int RegisterAttack(Registrar_t *Registrar, void *Registree, RegistreeID_t Regist
 	return 1;
 }
 
-size_t BuildAttackList(Registrar_t *Registrar) {
+size_t BuildRegistrationList(Registrar_t *Registrar) {
 	if (Registrar->RegistrationList != NULL)
 		free(Registrar->RegistrationList);
 
