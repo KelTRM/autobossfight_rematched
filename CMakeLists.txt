@@ -30,6 +30,7 @@ target_sources(autobossfight_rematched
 add_subdirectory(ui)
 add_subdirectory(attacks)
 add_subdirectory(transformations)
+add_subdirectory(registration)
 
 target_link_libraries(autobossfight_transformations
 	PUBLIC
