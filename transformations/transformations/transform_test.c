@@ -8,7 +8,7 @@
 #define TRANSFORMATION_COST		30
 #define TRANSFORMATION_UPKEEP		10
 
-#define TRANSFORMATION_MULTIPLIER	ToFixed(1)
+#define TRANSFORMATION_MULTIPLIER	ToFixed(3)
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
