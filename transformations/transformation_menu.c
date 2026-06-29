@@ -6,7 +6,7 @@ Transformation_t *AskTransformation() {
 	Transformation_t *CurrentTransformation;
 
 	while ((CurrentTransformation=StepTransformationIterator(&Iterator)) != NULL) {
-		printf("[%s] (%lu%%/round. %lu upfront",
+		printf("[%s] (%lu%%/round. %lu upfront\n",
 				CurrentTransformation->Name,
 				CurrentTransformation->Upkeep,
 				CurrentTransformation->Cost);
