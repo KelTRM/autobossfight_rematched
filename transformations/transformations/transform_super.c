@@ -3,8 +3,9 @@
 #define ToFixed(x)			((uint64_t)((x) * ATTACK_MULTIPLIER_BASE))
 
 #define TRANSFORMATION_ID		2
-
 #define TRANSFORMATION_NAME		"Super"
+#define TRANSFORMATION_DESCRIPTION	"Does 3x damage"
+
 #define TRANSFORMATION_COST		30
 #define TRANSFORMATION_UPKEEP		10
 
@@ -14,6 +15,8 @@ static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseD
 
 const Transformation_t SuperTransformation = {
 	.Name=TRANSFORMATION_NAME,
+	.FormDescription=TRANSFORMATION_DESCRIPTION,
+
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,
 	.TransformationMultiplier=TRANSFORMATION_MULTIPLIER,

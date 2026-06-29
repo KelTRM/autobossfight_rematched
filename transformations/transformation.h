@@ -21,6 +21,8 @@ struct Transformation {
 
 	uint64_t TransformationMultiplier;
 
+	const char *FormDescription;
+
 	GetTransformedAttack_t GetDamage;
 	Maintain_t MaintainTransformation;
 

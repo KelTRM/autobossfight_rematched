@@ -3,8 +3,9 @@
 #define ToFixed(x)			((uint64_t)((x) * ATTACK_MULTIPLIER_BASE))
 
 #define TRANSFORMATION_ID		1
-
 #define TRANSFORMATION_NAME		"Base"
+#define TRANSFORMATION_DESCRIPTION	"The base transformation of a player. Does nothing"
+
 #define TRANSFORMATION_COST		0
 #define TRANSFORMATION_UPKEEP		0
 
@@ -14,6 +15,8 @@ static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseD
 
 const Transformation_t BaseTransformation = {
 	.Name=TRANSFORMATION_NAME,
+	.FormDescription=TRANSFORMATION_DESCRIPTION,
+
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,
 	.TransformationMultiplier=TRANSFORMATION_MULTIPLIER,
