@@ -53,11 +53,16 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 
-	AskTransformation();
-	printf("Not implemented.\n");
+	Transformation_t *Transformation = AskTransformation();
 
-//	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
-//	Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
+	if (Transformation->Cost > Target->Energy) {
+		printf("Insufficient energy to use form [%s]\n", Transformation->Name);
+		return NothingAttack.Attack(Self, Target, Attacker);
+	}
+	
+	printf("Using transformation %s.\n", Transformation->Name);
+
+//	printf("Not implemented.\n");
 
 	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
