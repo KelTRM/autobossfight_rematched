@@ -1,4 +1,6 @@
+#include<stdio.h>
 #include<stdlib.h>
+#include<alloca.h>
 
 #include"boss.h"
 #include"attacks/attacks.h"
@@ -103,6 +105,11 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
 
+	char *str = alloca(FormPadding + 3);
+	snprintf(str, FormPadding+3, "[%s]", Self->EntityTransformation->Name);
+
+	char *FormStr = PadLeft(str, FormPadding+2, ' ');
+
 	free(NameColoredStr);
 
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
@@ -120,8 +127,8 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 
 	PrintedChars += bprintf(
 		Where,
-		"%s has %s hp",
-		NameStr,
+		"%s %s has %s hp",
+		NameStr, FormStr,
 		HealthStr
 	);
 
@@ -135,7 +142,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 			//Self->AttackMultiplier / (ATTACK_MULTIPLIER_BASE / 100)
 		);
 
-	bprintf(Where, " [%s]\n", Self->EntityTransformation->Name);
+	bprintf(Where, "\n");
 
 	free(progressbar);
 	free(NameStr);

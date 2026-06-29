@@ -4,7 +4,7 @@
 
 #define TRANSFORMATION_ID		2
 
-#define TRANSFORMATION_NAME		"TestLonger"
+#define TRANSFORMATION_NAME		"Super"
 #define TRANSFORMATION_COST		30
 #define TRANSFORMATION_UPKEEP		10
 
@@ -12,7 +12,7 @@
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
-const Transformation_t TestTransformation = {
+const Transformation_t SuperTransformation = {
 	.Name=TRANSFORMATION_NAME,
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,

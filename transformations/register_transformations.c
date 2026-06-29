@@ -3,7 +3,7 @@
 
 const Transformation_t *TransformationsToRegister[] = {
 	&BaseTransformation,
-	&TestTransformation
+	&SuperTransformation
 };
 
 const Transformation_t *DefaultTransformation = &BaseTransformation;

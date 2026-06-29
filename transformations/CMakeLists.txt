@@ -13,7 +13,7 @@ target_sources(autobossfight_transformations
 
 		transformations/transform_base.c
 		transformations/transform_boss.c
-		transformations/transform_test.c
+		transformations/transform_super.c
 )
 
 target_include_directories(autobossfight_transformations

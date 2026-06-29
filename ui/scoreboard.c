@@ -42,8 +42,6 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 			MaximumHealth = CurrentEntity->HealthPoints;
 	}
 
-	printf("maximum form length = %zu\n", MaximumFormNameLength);
-
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
 	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
 
