@@ -4,7 +4,7 @@
 
 #define TRANSFORMATION_ID		1
 #define TRANSFORMATION_NAME		"Base"
-#define TRANSFORMATION_DESCRIPTION	"The base transformation of a player. Does nothing"
+#define TRANSFORMATION_DESCRIPTION	"Default form - Does nothing"
 
 #define TRANSFORMATION_COST		0
 #define TRANSFORMATION_UPKEEP		0
