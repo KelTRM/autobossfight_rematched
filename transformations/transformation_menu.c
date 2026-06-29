@@ -1,4 +1,6 @@
 #include"transformation_manager.h"
+#include"../utils/sleep.h"
+#include<stdlib.h>
 #include<ui.h>
 
 Transformation_t *AskTransformation(void) {
@@ -19,8 +21,33 @@ Transformation_t *AskTransformation(void) {
 
 	SwitchBuffer(Buffer);
 
-	char *Response;
-	Prompt("Select a transformation.", &Response, 0);
+	while (1) {
+		char *Response = NULL;
+		Prompt("\nSelect a transformation.", &Response, 0);
+
+		if (Response == NULL) {
+			printf("Failed to read a response. Please try again.\n");
+			sleep(1000);
+			continue;
+		}
+
+		TransformationID_t Choice;
+		Choice = atoll(Response);
+
+		CurrentTransformation = GetTransformationAtIndex(Choice);
+		if (CurrentTransformation == NULL || Choice == 0) {
+			printf("Unknown transformation '%s'. Please select a valid transformation\n",
+					Response);
+			free(Response);
+
+			sleep(1000);
+			continue;
+		}
+
+		break;
+	}
 
 	SwitchBuffer(MainBuffer);
+
+	return CurrentTransformation;
 }
