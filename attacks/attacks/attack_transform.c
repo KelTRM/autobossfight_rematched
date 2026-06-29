@@ -62,13 +62,13 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	
 	printf("Using transformation %s.\n", Transformation->Name);
 
-//	printf("Not implemented.\n");
+	Target->EntityTransformation = Transformation;
 
 	if (CanDoAttack(Attacker) == 0) return Result;
 	return Result;
 }
 
 static void Announcer(AttackData_t *d) {
-	printf("%s did nothing.\n",
-			d->Attacker->Name);
+	printf("%s transformed into %s.\n",
+			d->Target->Name, d->Target->EntityTransformation->Name);
 }
