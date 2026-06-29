@@ -12,7 +12,11 @@ int InitTransformationRegistrar(void) {
 }
 
 int RegisterTransformation(Transformation_t *Transformation) {
-	return RegistrarAdd(&Registrar, Transformation, 0);
+	return RegistrarAdd(
+		&Registrar,
+		Transformation,
+		Transformation->ID
+	);
 }
 
 Transformation_t *GetTransformationAtIndex(size_t Index) {

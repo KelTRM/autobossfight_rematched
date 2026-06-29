@@ -21,6 +21,8 @@ struct Transformation {
 
 	GetTransformedAttack_t GetDamage;
 	Maintain_t MaintainTransformation;
+
+	TransformationID_t ID;
 };
 
 Energy_t MaintainTransformation(Transformation_t *Self, Entity_t *Possessor);
