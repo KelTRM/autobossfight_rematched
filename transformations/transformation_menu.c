@@ -20,7 +20,7 @@ Transformation_t *AskTransformation(void) {
 	SwitchBuffer(Buffer);
 
 	char *Response;
-	Prompt("Select a translation.", &Response, 0);
+	Prompt("Select a transformation.", &Response, 0);
 
 	SwitchBuffer(MainBuffer);
 }
