@@ -12,8 +12,9 @@ Transformation_t *AskTransformation(void) {
 
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
-		bprintf(Buffer, "[%s] (%lu cost. %lu%% upkeep)\n",
+		bprintf(Buffer, "To use form [%s] use %lu (%lu cost. %lu%% upkeep)\n",
 			CurrentTransformation->Name,
+			CurrentTransformation->ID,
 			CurrentTransformation->Cost,
 			CurrentTransformation->Upkeep
 		);
