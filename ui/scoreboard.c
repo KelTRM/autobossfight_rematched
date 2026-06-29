@@ -14,8 +14,6 @@
 #define BOX_CHAR		"▅"
 #define ENERGY_DISP_PRECISION	20
 
-#define max(x, y)	((x)>(y)?(x):(y))
-
 extern Entity_t *Entities;
 extern size_t EntityCount;
 //extern Entity_t Players[3];

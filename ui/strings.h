@@ -3,6 +3,8 @@
 #include<stdint.h>
 #include<stddef.h>
 
+#define max(x, y)	((x)>(y)?(x):(y))
+
 char *PadLeft(const char *str, size_t n, char ch);
 char *PadRight(const char *str, size_t n, char ch);
 size_t CalculateDigitsInNumber(uint64_t n);

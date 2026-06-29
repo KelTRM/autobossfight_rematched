@@ -1,7 +1,10 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<alloca.h>
+#include<ui.h>
+#include<strings.h>
 #include"transformation_manager.h"
 #include"../utils/sleep.h"
-#include<stdlib.h>
-#include<ui.h>
 
 Transformation_t *AskTransformation(void) {
 	BUFHANDLE MainBuffer = ActiveBuffer;
@@ -10,15 +13,34 @@ Transformation_t *AskTransformation(void) {
 	TransformationIter_t Iterator = OpenTransformationIterator();
 	Transformation_t *CurrentTransformation;
 
+	size_t MaxFormLength = 0;
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
-		bprintf(Buffer, "To use form [%s] use %lu -- %s (%lu cost. %lu%% upkeep)\n",
-			CurrentTransformation->Name,
+		MaxFormLength = max(
+			MaxFormLength,
+			strlen(CurrentTransformation->Name)
+		);
+	}
+
+	Iterator = OpenTransformationIterator();
+
+	while (Iterator != NULL) {
+		CurrentTransformation = StepTransformationIterator(&Iterator);
+		
+		char *FormBuffer = alloca(MaxFormLength+3);
+		snprintf(FormBuffer, MaxFormLength+3,
+				"[%s]", CurrentTransformation->Name);
+
+		char *FormDisp = PadRight(FormBuffer, MaxFormLength+2, ' ');
+		bprintf(Buffer, "To use form %s use %lu -- %s (%lu cost. %lu%% upkeep)\n",
+			FormDisp,
 			CurrentTransformation->ID,
 			CurrentTransformation->FormDescription,
 			CurrentTransformation->Cost,
 			CurrentTransformation->Upkeep
 		);
+
+		free(FormDisp);
 	}
 
 	SwitchBuffer(Buffer);
