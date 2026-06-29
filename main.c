@@ -56,6 +56,11 @@ int main(void) {
 
 		Entity_t *CurrentPlayer = &Entities[CurrentPlayerID];
 
+		CurrentPlayer->EntityTransformation->MaintainTransformation(
+			CurrentPlayer->EntityTransformation,
+			CurrentPlayer
+		);
+
 		if (IsEntityAlive(CurrentPlayer)) {
 			CurrentPlayer->TakeTurn(CurrentPlayer, Round);
 			sleep(1500);

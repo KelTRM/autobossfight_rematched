@@ -8,6 +8,8 @@ typedef struct Transformation Transformation_t;
 
 #include"../entity.h"
 
+extern const Transformation_t *DefaultTransformation;
+
 typedef Health_t (*GetTransformedAttack_t)(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
 

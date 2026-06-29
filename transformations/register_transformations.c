@@ -6,6 +6,8 @@ const Transformation_t *TransformationsToRegister[] = {
 	&TestTransformation
 };
 
+const Transformation_t *DefaultTransformation = &BaseTransformation;
+
 size_t InitTransformations(void) {
 	InitTransformationRegistrar();
 
