@@ -27,4 +27,5 @@ Energy_t MaintainTransformation(Transformation_t *Self, Entity_t *Possessor);
 
 extern const Transformation_t BaseTransformation;
 extern Transformation_t BossTransformation;
+extern const Transformation_t TestTransformation;
 

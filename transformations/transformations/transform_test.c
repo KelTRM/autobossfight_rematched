@@ -1,10 +1,10 @@
-#include"transformation.h"
+#include"../transformation.h"
 
 #define ToFixed(x)			((uint64_t)((x) * ATTACK_MULTIPLIER_BASE))
 
-#define TRANSFORMATION_ID		1
+#define TRANSFORMATION_ID		2
 
-#define TRANSFORMATION_NAME		"Base"
+#define TRANSFORMATION_NAME		"Test"
 #define TRANSFORMATION_COST		0
 #define TRANSFORMATION_UPKEEP		0
 
@@ -12,7 +12,7 @@
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
-const Transformation_t BaseTransformation = {
+const Transformation_t TestTransformation = {
 	.Name=TRANSFORMATION_NAME,
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,

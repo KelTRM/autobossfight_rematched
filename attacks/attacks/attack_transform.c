@@ -11,6 +11,8 @@
 
 extern uint64_t Round;
 
+Transformation_t *AskTransformation(void);
+
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 
@@ -51,6 +53,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	Result.Damage = 0;
 	Result.PriorHealth = Target->HealthPoints;
 
+	AskTransformation();
 	printf("Not implemented.\n");
 
 //	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
