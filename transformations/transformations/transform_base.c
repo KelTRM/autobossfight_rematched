@@ -20,6 +20,8 @@ const Transformation_t BaseTransformation = {
 
 	.GetDamage=GetDamage,
 	.MaintainTransformation=MaintainTransformation,
+
+	.ID=TRANSFORMATION_ID
 };
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage) {
