@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include<stdlib.h>
 #include<stddef.h>
 #include<string.h>
@@ -26,18 +25,11 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		printf("\x1b[s");
 	printf("\x1b[H");
 
-	size_t MaximumNameLength = 0;
+	size_t MaximumNameLength = GetLongestElementString(Entities, Name, EntityCount);
 	Health_t MaximumHealth = 0;
 
 	for (size_t i = 0; i < EntityCount; i++) {
-		Entity_t *t = &Entities[i];
-
-//		printf("i = %p\n", t->Name);
-		const char *Name = t->Name;
-		size_t NameLength = strlen(Name);
-
-		if (NameLength > MaximumNameLength)
-			MaximumNameLength = NameLength;
+		Entity_t *t = Entities + i;
 
 		if (t->HealthPoints > MaximumHealth)
 			MaximumHealth = t->HealthPoints;

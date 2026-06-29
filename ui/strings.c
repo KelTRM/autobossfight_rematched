@@ -2,6 +2,7 @@
 #include<string.h>
 #include<math.h>
 #include"strings.h"
+#include"ui.h"
 
 #define max(x, y)	((x)>(y)?(x):(y))
 
@@ -71,3 +72,20 @@ char *IntToStr(uint64_t n) {
 	return StringifiedNumber;
 }
 
+size_t GetLongestStringAtOffset(char **Elements, size_t ElementSize, size_t ElementCount, size_t Offset) {
+	size_t Max = 0;
+
+	for (size_t i = 0; i < ElementCount; i++) {
+		size_t ElementOffset = i * ElementSize;
+		size_t addr = (size_t)Elements + ElementOffset + Offset;
+		char *str = *(char**)addr;
+
+		size_t Length = strlen(str);
+
+		if (Length > Max)
+			Max = Length;
+
+	}
+
+	return Max;
+}
