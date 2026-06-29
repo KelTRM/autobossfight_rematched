@@ -12,9 +12,7 @@ Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount) {
 		Entities[i]->DisplayEntity(
 				SelectionMenu,
 				Entities[i],
-				0,
-				0,
-				0
+				0, 0, 0, 0
 		);
 	}
 

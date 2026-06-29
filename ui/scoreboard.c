@@ -28,12 +28,21 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	size_t MaximumNameLength = GetLongestElementString(Entities, Name, EntityCount);
 	Health_t MaximumHealth = 0;
 
-	for (size_t i = 0; i < EntityCount; i++) {
-		Entity_t *t = Entities + i;
+	size_t MaximumFormNameLength = 0;
 
-		if (t->HealthPoints > MaximumHealth)
-			MaximumHealth = t->HealthPoints;
+	for (size_t i = 0; i < EntityCount; i++) {
+		Entity_t *CurrentEntity = Entities + i;
+
+		Transformation_t *EntityForm = CurrentEntity->EntityTransformation;
+		size_t EntityFormNameLength = strlen(EntityForm->Name);
+
+		MaximumFormNameLength = max(EntityFormNameLength, MaximumFormNameLength);
+
+		if (CurrentEntity->HealthPoints > MaximumHealth)
+			MaximumHealth = CurrentEntity->HealthPoints;
 	}
+
+	printf("maximum form length = %zu\n", MaximumFormNameLength);
 
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
 	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
@@ -46,7 +55,8 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 					INVALID_BUFFER_HANDLE,
 					&Entities[i], 1,
 					MaximumHealthDigits,
-					MaximumNameLength
+					MaximumNameLength,
+					MaximumFormNameLength
 			);
 			continue;
 		}

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
+#include<alloca.h>
 #include"entity.h"
 #include "transformation.h"
 #include"ui/ui.h"
@@ -13,7 +14,12 @@ const Energy_t StartingEnergy = 100;
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-static int PlayerDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding) {
+static int PlayerDisplay(BUFHANDLE Where,
+			Entity_t *Self,
+			int ShowEnergy,
+			size_t HealthPadding,
+			size_t NamePadding,
+			size_t FormPadding) {
 	size_t PrintedChars = 0;
 
 	char *NameColoredStr = GetEntityNameStr(Self);
@@ -31,23 +37,29 @@ static int PlayerDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
 
+	char *str = alloca(FormPadding + 3);
+	snprintf(str, FormPadding+3, "[%s]", Self->EntityTransformation->Name);
+
+	char *FormString = PadLeft(str, FormPadding+2, ' ');
+
 	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
 		.r=0,
 		.g=100,
 		.b=255
 	});
 
-	PrintedChars += bprintf(Where, "%s has %s hp",
+	PrintedChars += bprintf(Where, "%s %s has %s hp",
 				NameStr,
+				FormString,
 				HealthStr);
 
 	if (ShowEnergy)
 		PrintedChars += bprintf(Where, " %s (%d%%)", progressbar, Self->Energy);
 
-	PrintedChars += bprintf(Where, " [%s]\n", Self->EntityTransformation->Name);
-	
+	PrintedChars += bprintf(Where, "\n");
 	free(progressbar);
 	free(NameStr);
+	free(FormString);
 	free(HealthStr);
 
 	return PrintedChars;

@@ -18,7 +18,12 @@ typedef uint64_t Health_t;
 #include"ui/ui.h"
 
 typedef int (*EntityTurnHandler_t)(Entity_t *Self, uint64_t CurrentRound);
-typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding);
+typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where,
+				Entity_t *Self,
+				int ShowEnergy,
+				size_t HealthPadding,
+				size_t NamePadding,
+				size_t FormPadding);
 
 #include"player.h"
 #include"boss.h"
