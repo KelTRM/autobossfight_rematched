@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include<stdlib.h>
 #include<stddef.h>
 #include<string.h>
@@ -15,8 +14,6 @@
 #define BOX_CHAR		"▅"
 #define ENERGY_DISP_PRECISION	20
 
-#define max(x, y)	((x)>(y)?(x):(y))
-
 extern Entity_t *Entities;
 extern size_t EntityCount;
 //extern Entity_t Players[3];
@@ -26,21 +23,21 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		printf("\x1b[s");
 	printf("\x1b[H");
 
-	size_t MaximumNameLength = 0;
+	size_t MaximumNameLength = GetLongestElementString(Entities, Name, EntityCount);
 	Health_t MaximumHealth = 0;
 
+	size_t MaximumFormNameLength = 0;
+
 	for (size_t i = 0; i < EntityCount; i++) {
-		Entity_t *t = &Entities[i];
+		Entity_t *CurrentEntity = Entities + i;
 
-//		printf("i = %p\n", t->Name);
-		const char *Name = t->Name;
-		size_t NameLength = strlen(Name);
+		Transformation_t *EntityForm = CurrentEntity->EntityTransformation;
+		size_t EntityFormNameLength = strlen(EntityForm->Name);
 
-		if (NameLength > MaximumNameLength)
-			MaximumNameLength = NameLength;
+		MaximumFormNameLength = max(EntityFormNameLength, MaximumFormNameLength);
 
-		if (t->HealthPoints > MaximumHealth)
-			MaximumHealth = t->HealthPoints;
+		if (CurrentEntity->HealthPoints > MaximumHealth)
+			MaximumHealth = CurrentEntity->HealthPoints;
 	}
 
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
@@ -54,7 +51,8 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 					INVALID_BUFFER_HANDLE,
 					&Entities[i], 1,
 					MaximumHealthDigits,
-					MaximumNameLength
+					MaximumNameLength,
+					MaximumFormNameLength
 			);
 			continue;
 		}

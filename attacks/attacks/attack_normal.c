@@ -51,7 +51,6 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 
 	Health_t Damage = GetRandomIntBetween(0, Attacker->Attack);
 
-
 	AttackData_t *AttackMissed = MissedAttack(Self, Target, Attacker);
 	if (AttackMissed != NULL) {
 		AttackData_t r = *AttackMissed;

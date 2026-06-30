@@ -18,10 +18,17 @@ typedef uint64_t Health_t;
 #include"ui/ui.h"
 
 typedef int (*EntityTurnHandler_t)(Entity_t *Self, uint64_t CurrentRound);
-typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding);
+typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where,
+				Entity_t *Self,
+				int ShowEnergy,
+				size_t HealthPadding,
+				size_t NamePadding,
+				size_t FormPadding);
 
 #include"player.h"
 #include"boss.h"
+
+#include"transformations/transformation.h"
 
 typedef enum EntityCategory {
 	ENTITY_TYPE_PLAYER,
@@ -55,6 +62,8 @@ struct Entity {
 
 	// fixed point (63.1) multiplier for attack damage
 	uint64_t AttackMultiplier;
+
+	Transformation_t *EntityTransformation;
 };
 
 Health_t DamageEntity(Entity_t *From, Entity_t *Target, Health_t Damage);

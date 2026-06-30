@@ -1,4 +1,6 @@
+#include<stdio.h>
 #include<stdlib.h>
+#include<alloca.h>
 
 #include"boss.h"
 #include"attacks/attacks.h"
@@ -19,7 +21,8 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding);
+static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
+			size_t HealthPadding, size_t NamePadding, size_t FormPadding);
 
 Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Entity_t Boss;
@@ -44,6 +47,8 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	Boss.EntityColor = GetColorFromHex(0x646464);
 
 	Boss.AttackMultiplier = ATTACK_MULTIPLIER_BASE;
+
+	Boss.EntityTransformation = &BossTransformation;
 
 	return Boss;
 }
@@ -86,7 +91,8 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
-static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t HealthPadding, size_t NamePadding) {
+static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
+			size_t HealthPadding, size_t NamePadding, size_t FormPadding) {
 	size_t PrintedChars = 0;
 	
 	char *NameColoredStr = GetEntityNameStr(Self);
@@ -98,6 +104,11 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t H
 
 	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
+
+	char *str = alloca(FormPadding + 3);
+	snprintf(str, FormPadding+3, "[%s]", Self->EntityTransformation->Name);
+
+	char *FormStr = PadLeft(str, FormPadding+2, ' ');
 
 	free(NameColoredStr);
 
@@ -116,8 +127,8 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t H
 
 	PrintedChars += bprintf(
 		Where,
-		"%s has %s hp",
-		NameStr,
+		"%s %s has %s hp",
+		NameStr, FormStr,
 		HealthStr
 	);
 
@@ -131,7 +142,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy, size_t H
 			//Self->AttackMultiplier / (ATTACK_MULTIPLIER_BASE / 100)
 		);
 
-	bprintf(Where, " [BOSS]\n");
+	bprintf(Where, "\n");
 
 	free(progressbar);
 	free(NameStr);

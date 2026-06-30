@@ -22,6 +22,7 @@ uint64_t Round = 0;
 
 void InitPlayers(void);
 int InitAttacks(void);
+size_t InitTransformations(void);
 
 void InitEntities(void);
 
@@ -37,6 +38,10 @@ int main(void) {
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
+
+	int Transformations = InitTransformations();
+	printf("Initialized %d transformations.\n", Transformations);
+
 	int Turn = 0;
 
 	while (IsGameOngoing()) {
@@ -50,6 +55,11 @@ int main(void) {
 		int CurrentPlayerID = Turn % EntityCount;
 
 		Entity_t *CurrentPlayer = &Entities[CurrentPlayerID];
+
+		CurrentPlayer->EntityTransformation->MaintainTransformation(
+			CurrentPlayer->EntityTransformation,
+			CurrentPlayer
+		);
 
 		if (IsEntityAlive(CurrentPlayer)) {
 			CurrentPlayer->TakeTurn(CurrentPlayer, Round);

@@ -29,14 +29,24 @@ target_sources(autobossfight_rematched
 
 add_subdirectory(ui)
 add_subdirectory(attacks)
+add_subdirectory(transformations)
+add_subdirectory(registration)
+
+target_link_libraries(autobossfight_transformations
+	PUBLIC
+		autobossfight_ui_manager
+		autobossfight_registration_manager
+)
 
 target_link_libraries(autobossfight_attack_mgr
 	PUBLIC
 		autobossfight_ui_manager
+		autobossfight_registration_manager
 )
 
 target_link_libraries(autobossfight_rematched
 	PUBLIC
 		autobossfight_ui_manager
 		autobossfight_attack_mgr
+		autobossfight_transformations
 )
