@@ -6,10 +6,10 @@
 #define TRANSFORMATION_NAME		"Super"
 #define TRANSFORMATION_DESCRIPTION	"Does 3x damage"
 
-#define TRANSFORMATION_COST		30
-#define TRANSFORMATION_UPKEEP		10
+#define TRANSFORMATION_COST		20
+#define TRANSFORMATION_UPKEEP		5
 
-#define TRANSFORMATION_MULTIPLIER	ToFixed(3)
+#define TRANSFORMATION_MULTIPLIER	ToFixed(2)
 
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
