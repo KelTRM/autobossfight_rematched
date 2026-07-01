@@ -14,6 +14,7 @@ target_sources(autobossfight_attack_mgr
 		#attacks
 		attacks/attack_combo.c
 		attacks/attack_normal.c
+		attacks/attack_half.c
 		attacks/attack_full_power.c
 		attacks/attack_heal.c
 		attacks/attack_normal.c

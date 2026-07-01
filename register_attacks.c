@@ -8,6 +8,7 @@ const Attack_t *AttacksToRegister[] = {
 	&HealAttack,
 	&ComboAttack,
 	&ReviveAttack,
+	&HalfPowerAttack,
 	&FullPowerAttack,
 	&TransformAttack
 };

@@ -4,19 +4,19 @@
 #include"../rng.h"
 
 // easy-to-use attack parameters
-#define ATTACK_MINIMUM_ENERGY		90
+#define ATTACK_MINIMUM_ENERGY		45
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
-#define ATTACK_NAME			"Full power attack"
+#define ATTACK_NAME			"Half power attack"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			4
+#define ATTACK_ID			3
 
 extern uint64_t Round;
 
 static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 
-const Attack_t FullPowerAttack = {
+const Attack_t HalfPowerAttack = {
 	.AttackName=ATTACK_NAME,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
@@ -50,7 +50,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);
 
 	Health_t Damage = 0;
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 3; i++) {
 		Damage += GetRandomIntBetween(0, Attacker->Attack);
 	}
 
@@ -66,11 +66,10 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	AttackData_t Result;
 	Result.Attacker = Attacker;
 	Result.Target = Target;
-	Result.Attack = FullPowerAttack.ID;
+	Result.Attack = Self->ID;
 	Result.Damage = Damage;
 	Result.PriorHealth = PriorHealth;
 
 	return Result;
 }
-
 
