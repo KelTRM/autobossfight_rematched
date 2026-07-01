@@ -7,7 +7,7 @@
 #define ATTACK_NAME			"Boost energy"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			1
+#define ATTACK_ID			12
 
 extern uint64_t Round;
 

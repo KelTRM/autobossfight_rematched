@@ -9,7 +9,7 @@
 #define ATTACK_NAME			"Normal Attack"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			2
+#define ATTACK_ID			1
 
 extern uint64_t Round;
 

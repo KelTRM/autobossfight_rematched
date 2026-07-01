@@ -7,7 +7,7 @@
 #define ATTACK_NAME			"Transform"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			12
+#define ATTACK_ID			13
 
 extern uint64_t Round;
 

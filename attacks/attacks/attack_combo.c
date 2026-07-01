@@ -11,7 +11,7 @@
 #define ADDITIONAL_ATTACK_CHANCE	55
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
-#define ATTACK_ID			3
+#define ATTACK_ID			2
 
 extern uint64_t Round;
 
