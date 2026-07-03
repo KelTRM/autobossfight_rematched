@@ -3,7 +3,7 @@
 
 // easy-to-use attack parameters
 #define ATTACK_MINIMUM_ENERGY		0
-#define ATTACK_FIRST_AVAILABLE_ROUND	0
+#define ATTACK_FIRST_AVAILABLE_ROUND	5
 #define ATTACK_NAME			"Transform"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
