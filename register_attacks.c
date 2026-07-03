@@ -10,7 +10,8 @@ const Attack_t *AttacksToRegister[] = {
 	&ReviveAttack,
 	&HalfPowerAttack,
 	&FullPowerAttack,
-	&TransformAttack
+	&TransformAttack,
+	&SeventyPercentPowerAttack
 };
 
 size_t InitAttacks(void) {
