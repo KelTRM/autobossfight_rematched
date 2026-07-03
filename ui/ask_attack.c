@@ -8,9 +8,9 @@
 #include "strings.h"
 #include"ui.h"
 
-#define ATTACK_DISPLAY_FORMAT		"To use a %s use %zu"
+#define ATTACK_DISPLAY_FORMAT		"To use a %s use %s"
 
-void PrintAttack(Attack_t *Attack, size_t NamePadding);
+void PrintAttack(Attack_t *Attack, size_t NamePadding, size_t MaxID);
 
 int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	ClearScreen();
@@ -22,19 +22,23 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	printf("\n");
 
 	size_t MaxAttackLength = 0;
+	size_t MaxIDLength = 0;
 
 	while (Iterator != NULL) {
 		CurrentAttack = StepAttackIterator(&Iterator);
 		size_t CurrentAttackLength = strlen(CurrentAttack->AttackName);
 		if (CurrentAttackLength > MaxAttackLength)
 			MaxAttackLength = CurrentAttackLength;
+
+		if (CurrentAttack->ID > MaxIDLength)
+			MaxIDLength = CurrentAttack->ID;
 	}
 
 	Iterator = OpenAttackIterator();
 
 	while (Iterator != NULL) {
 		CurrentAttack = StepAttackIterator(&Iterator);
-		PrintAttack(CurrentAttack, MaxAttackLength);
+		PrintAttack(CurrentAttack, MaxAttackLength, MaxIDLength);
 	}
 //	size_t AttackIndex = 0;
 
@@ -129,27 +133,37 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	free(Attackees);
 
-	/*AttackData_t Result = */AttackEntity(Attack, Target, CurrentPlayer);
+	AttackEntity(Attack, Target, CurrentPlayer);
 	return 0;
 }
 
-void PrintAttack(Attack_t *Attack, size_t NamePadding) {
+void PrintAttack(Attack_t *Attack, size_t NamePadding, size_t MaxID) {
 	size_t NameLength = strlen(Attack->AttackName);
 	char *PaddedName = PadRight(Attack->AttackName, NamePadding+1, ' ');
 	PaddedName[NameLength] = ',';
 
+	size_t MaxDigits = CalculateDigitsInNumber(MaxID);
+
+	char *IdStr = IntToStr(Attack->ID);
+	char *ID = PadLeft(IdStr, MaxDigits, ' ');
+	free(IdStr);
+
 	if (Attack->FirstAvailableRound > 0) {
 		GetTerminalForegroundColorStr(100, 100, 100);
 		printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-				PaddedName, Attack->ID,
+				PaddedName, ID,
 				Attack->FirstAvailableRound);
 		ResetTerminalForegroundColorStr();
 	} else {
 		printf(ATTACK_DISPLAY_FORMAT,
-				PaddedName, Attack->ID, Attack->MinimumEnergy);
+				PaddedName, ID,
+				Attack->MinimumEnergy);
+
 		if (Attack->MinimumEnergy > 0)
 			printf(" (Requires at least %d%% energy)", Attack->MinimumEnergy);
 	}
 
+	free(ID);
+	free(PaddedName);
 	printf("\n");
 }
