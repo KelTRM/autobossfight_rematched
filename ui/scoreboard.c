@@ -23,7 +23,11 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		printf("\x1b[s");
 	printf("\x1b[H");
 
-	size_t MaximumNameLength = GetLongestElementString(Entities, Name, EntityCount);
+	size_t MaximumNameLength = GetLongestElementString(
+		Entities,
+		Name,
+		EntityCount
+	);
 	Health_t MaximumHealth = 0;
 
 	size_t MaximumFormNameLength = 0;

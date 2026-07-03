@@ -5,11 +5,12 @@
 #include"../attacks/attack_manager.h"
 #include"color/color.h"
 #include"console_manager/console.h"
+#include "strings.h"
 #include"ui.h"
 
-#define ATTACK_DISPLAY_FORMAT		"To use a %s, use %zu"
+#define ATTACK_DISPLAY_FORMAT		"To use a %s use %zu"
 
-void PrintAttack(Attack_t *Attack);
+void PrintAttack(Attack_t *Attack, size_t NamePadding);
 
 int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	ClearScreen();
@@ -20,9 +21,20 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 	printf("\n");
 
+	size_t MaxAttackLength = 0;
+
 	while (Iterator != NULL) {
 		CurrentAttack = StepAttackIterator(&Iterator);
-		PrintAttack(CurrentAttack);
+		size_t CurrentAttackLength = strlen(CurrentAttack->AttackName);
+		if (CurrentAttackLength > MaxAttackLength)
+			MaxAttackLength = CurrentAttackLength;
+	}
+
+	Iterator = OpenAttackIterator();
+
+	while (Iterator != NULL) {
+		CurrentAttack = StepAttackIterator(&Iterator);
+		PrintAttack(CurrentAttack, MaxAttackLength);
 	}
 //	size_t AttackIndex = 0;
 
@@ -121,16 +133,20 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
-void PrintAttack(Attack_t *Attack) {
+void PrintAttack(Attack_t *Attack, size_t NamePadding) {
+	size_t NameLength = strlen(Attack->AttackName);
+	char *PaddedName = PadRight(Attack->AttackName, NamePadding+1, ' ');
+	PaddedName[NameLength] = ',';
+
 	if (Attack->FirstAvailableRound > 0) {
 		GetTerminalForegroundColorStr(100, 100, 100);
 		printf(ATTACK_DISPLAY_FORMAT " (Available round %d+)",
-				Attack->AttackName, Attack->ID,
+				PaddedName, Attack->ID,
 				Attack->FirstAvailableRound);
 		ResetTerminalForegroundColorStr();
 	} else {
 		printf(ATTACK_DISPLAY_FORMAT,
-				Attack->AttackName, Attack->ID, Attack->MinimumEnergy);
+				PaddedName, Attack->ID, Attack->MinimumEnergy);
 		if (Attack->MinimumEnergy > 0)
 			printf(" (Requires at least %d%% energy)", Attack->MinimumEnergy);
 	}
