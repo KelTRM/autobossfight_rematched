@@ -8,36 +8,28 @@
 // How many attacks can be registered at once
 #define REGISTRAR_DEFAULT_LIMIT	256
 
-//void *Attacks = NULL;
-//size_t AttackCount = 0;
-//size_t AttacksSize = 0;
-
-//Linked_t List = NULL;
-
-// MaxRegistrations = 0 results in default maximum
 size_t InitRegistrar(size_t MaxRegistrations, Registrar_t *Registrar) {
+	// Can't put it nowhere
 	if (Registrar == NULL)
 		return 0;
 
+	// Get the registrar's buffer
 	if (MaxRegistrations == 0)
 		MaxRegistrations = REGISTRAR_DEFAULT_LIMIT;
 	size_t RegistrarBufferSize = sizeof(void*) * MaxRegistrations;
-	
-	//if (Attacks != NULL)
-	//	free(Attacks);
-
-//	Registrar_t Registrar;
-
-//	void *RegistrarMap;
 
 	Registrar->RegistrationMap = malloc(RegistrarBufferSize);
+
+	// safety checks
 	if (Registrar->RegistrationMap == NULL) {
 		return 0;
 	}
 
+	// Set data in the registrar itself
 	Registrar->MaxRegistrations = MaxRegistrations;
 	Registrar->RegistrationList = NULL;
-	
+
+	// null out the hashmap	
 	memset(Registrar->RegistrationMap, 0, RegistrarBufferSize);
 
 	return MaxRegistrations;
@@ -57,26 +49,32 @@ int RegistrarAdd(Registrar_t *Registrar, void *Registree, RegistreeID_t Registre
 	}
 
 	Registrar->RegistrationCount++;
-
 	Registrar->RegistrationMap[RegistreeID] = Registree;
+
 	return 1;
 }
 
 size_t BuildRegistrationList(Registrar_t *Registrar) {
+	// TODO - modify existing list instead of deleting it
 	if (Registrar->RegistrationList != NULL)
 		free(Registrar->RegistrationList);
 
+	// search registration map
 	size_t RegistrationsFound = 0;
-
 	Linked_t *Node = &Registrar->RegistrationList;
+
 	for (RegistreeID_t ID = 0; ID < Registrar->MaxRegistrations; ID++) {
 		void *Registration = Registrar->RegistrationMap[ID];
+
+		// NULL registration is unused. ignore it
 		if (Registration == NULL)
 			continue;
 
+		// define the node
 		*Node = malloc(sizeof(struct List));
 		memset(*Node, 0, sizeof(struct List));
 
+		// Set value to current registration, step into the next node
 		(*Node)->Value = Registration;
 		Node = &(*Node)->Next;
 
@@ -95,6 +93,7 @@ void *StepRegistrationIterator(RegistrationIter_t *Iterator) {
 	void *CurrentRegistration = (void*)Node->Value;
 
 	*Iterator = Node->Next;
+
 	return CurrentRegistration;
 }
 
