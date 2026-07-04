@@ -13,7 +13,6 @@
 
 extern uint64_t Round;
 
-static int CanDoAttack(Entity_t *Attacker);
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 
 const Attack_t SeventyPercentPowerAttack = {
@@ -22,7 +21,7 @@ const Attack_t SeventyPercentPowerAttack = {
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,
 
-	.Available=CanDoAttack,
+	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
 	.Announcer=DefaultAnnouncer,
@@ -33,18 +32,8 @@ const Attack_t SeventyPercentPowerAttack = {
 	.ID=ATTACK_ID
 };
 
-static int CanDoAttack(Entity_t *Attacker) {
-	if (Attacker->Energy < NormalAttack.MinimumEnergy)
-		return 0;
-
-	if (Round < NormalAttack.FirstAvailableRound)
-		return 0;
-
-	return 1;
-}
-
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
-	if (CanDoAttack(Attacker) == 0)
+	if (Self->Available(Self, Attacker) == 0)
 		return NothingAttack.Attack(Self, Target, Attacker);
 
 	RemoveEnergy(Attacker, ATTACK_MINIMUM_ENERGY);

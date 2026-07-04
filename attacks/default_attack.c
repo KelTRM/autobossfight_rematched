@@ -3,6 +3,18 @@
 #include<strings.h>
 #include"../rng.h"
 
+extern uint64_t Round;
+
+int DefaultCanAttack(Attack_t *Self, Entity_t *Attacker) {
+	if (Attacker->Energy < Self->MinimumEnergy)
+		return 0;
+
+	if (Round < Self->FirstAvailableRound)
+		return 0;
+
+	return 1;
+}
+
 void DefaultAnnouncer(AttackData_t *Attack) {
 	char *str = IntToStr(Attack->Damage);
 	printf("%s dealt %s damage to %s\n",

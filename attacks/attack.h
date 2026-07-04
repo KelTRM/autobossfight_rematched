@@ -16,7 +16,7 @@ typedef struct AttackData {
 	Health_t PriorHealth;
 } AttackData_t;
 
-typedef int (*CanAttack)(Entity_t *Attacker);
+typedef int (*CanAttack)(Attack_t *Self, Entity_t *Attacker);
 typedef AttackData_t (*OnAttack)(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
 typedef void (*AttackAnnouncer)(AttackData_t *Attack);
 

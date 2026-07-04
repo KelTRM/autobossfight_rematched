@@ -14,4 +14,5 @@ extern const Attack_t SeventyPercentPowerAttack;
 
 void DefaultAnnouncer(AttackData_t *Attack);
 AttackData_t *MissedAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);
+int DefaultCanAttack(Attack_t *Self, Entity_t *Attacker);
 

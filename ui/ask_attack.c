@@ -90,7 +90,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			continue;
 		}
 
-		if (Attack->Available(CurrentPlayer) == 0) {
+		if (Attack->Available(Attack, CurrentPlayer) == 0) {
 			printf("Attack %s is not yet available.\n", Attack->AttackName);
 
 			sleep(1000);
