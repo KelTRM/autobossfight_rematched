@@ -26,8 +26,6 @@ const Attack_t TransformAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=Announcer,
-
 	.AppliesToAllies=0,
 	.AppliesToEnemies=0,
 
@@ -36,11 +34,16 @@ const Attack_t TransformAttack = {
 
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = Self->ID;
-	Result.Damage = 0;
-	Result.PriorHealth = Target->HealthPoints;
+	GenAttackData(
+		Attacker, 
+		Target, 
+		Self, 
+		0, 
+		Target->HealthPoints, 
+		&Result
+	);
+
+	Result.Announcer = Announcer;
 
 	if (Self->Available(Self, Attacker) == 0) return Result;
 	

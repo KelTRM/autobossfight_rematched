@@ -24,8 +24,6 @@ const Attack_t SeventyPercentPowerAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer,
-
 	.AppliesToAllies=0,
 	.AppliesToEnemies=1,
 
@@ -48,16 +46,20 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 		AttackData_t r = *AttackMissed;
 		free(AttackMissed);
 		return r;
-	}	Health_t PriorHealth = Target->HealthPoints;
+	}
 
+	Health_t PriorHealth = Target->HealthPoints;
 	Damage = DamageEntity(Attacker, Target, Damage);
 
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = FullPowerAttack.ID;
-	Result.Damage = Damage;
-	Result.PriorHealth = PriorHealth;
+	GenAttackData(
+		Attacker,
+		Target,
+		Self,
+		Damage,
+		PriorHealth,
+		&Result
+	);
 
 	return Result;
 }

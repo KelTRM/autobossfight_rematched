@@ -24,8 +24,6 @@ const Attack_t NormalAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=DefaultAnnouncer,
-
 	.AppliesToAllies=0,
 	.AppliesToEnemies=1,
 
@@ -51,12 +49,8 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	Damage = DamageEntity(Attacker, Target, Damage);
 
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = NormalAttack.ID;
-	Result.Damage = Damage;
-	Result.PriorHealth = PriorHealth;
-
+	GenAttackData(Attacker, Target, Self, Damage, PriorHealth, &Result);
+	
 	return Result;
 }
 

@@ -25,8 +25,6 @@ const Attack_t HealAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=Announcer,
-
 	.AppliesToAllies=1,
 	.AppliesToEnemies=0,
 
@@ -52,16 +50,20 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	HealingAmount = HealEntity(Target, HealingAmount, 0);
 
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = HealAttack.ID;
-	Result.Damage = HealingAmount;
-	Result.PriorHealth = PriorHealth;
+	GenAttackData(
+		Attacker,
+		Target,
+		Self,
+		HealingAmount,
+		PriorHealth,
+		&Result
+	);
 
+	Result.Announcer = Announcer;
 	return Result;
 }
 
-static void Announcer(AttackData_t *Attack) {
+static void Announcer(AttackData_t *Self) {
 	printf("%s healed %s by %llu health.\n",
-			Attack->Attacker->Name, Attack->Target->Name, Attack->Damage);
+			Self->Attacker->Name, Self->Target->Name, Self->Damage);
 }

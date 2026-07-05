@@ -25,8 +25,6 @@ const Attack_t ReviveAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=Announcer,
-
 	.AppliesToAllies=1,
 	.AppliesToEnemies=0,
 
@@ -58,11 +56,16 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	HealthDrained = DamageEntity(Attacker, Attacker, HealthDrained);
 
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = Self->ID;
-	Result.Damage = HealingAmount;
-	Result.PriorHealth = PriorHealth;
+	GenAttackData(
+		Attacker,
+		Target,
+		Self,
+		HealingAmount,
+		PriorHealth,
+		&Result
+	);
+
+	Result.Announcer = Announcer;
 
 	return Result;
 }

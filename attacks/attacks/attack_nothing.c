@@ -24,8 +24,6 @@ const Attack_t NothingAttack = {
 	.Available=DefaultCanAttack,
 	.Attack=DoAttack,
 
-	.Announcer=Announcer,
-
 	.AppliesToAllies=0,
 	.AppliesToEnemies=0,
 
@@ -34,13 +32,20 @@ const Attack_t NothingAttack = {
 
 static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	AttackData_t Result;
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-	Result.Attack = Self->ID;
-	Result.Damage = 0;
-	Result.PriorHealth = Target->HealthPoints;
+	
+	GenAttackData(
+		Attacker,
+		Target,
+		Self,
+		0,
+		Target->HealthPoints,
+		&Result
+	);
+
+	Result.Announcer = Announcer;
 
 	EnergizeEntity(Result.Attacker, ENERGY_GAIN_PER_ROUND * 3);
+
 	//Result.Attacker->Energy += ENERGY_GAIN_PER_ROUND*3;
 
 	return Result;

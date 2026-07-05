@@ -2,9 +2,12 @@
 
 #include"../entity.h"
 
+typedef struct AttackData AttackData_t;
 typedef struct Attack Attack_t;
 
 typedef uint64_t AttackID_t;
+
+typedef void (*AttackAnnouncer)(AttackData_t *Attack);
 
 typedef struct AttackData {
 	Entity_t *Target;
@@ -14,6 +17,8 @@ typedef struct AttackData {
 	Health_t Damage;
 	
 	Health_t PriorHealth;
+
+	AttackAnnouncer Announcer;
 } AttackData_t;
 
 typedef int (*CanAttack)(Attack_t *Self, Entity_t *Attacker);
@@ -28,8 +33,6 @@ struct Attack {
 
 	CanAttack Available;
 	OnAttack Attack;
-
-	AttackAnnouncer Announcer;
 
 	int AppliesToAllies;
 	int AppliesToEnemies;

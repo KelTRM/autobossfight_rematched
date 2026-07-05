@@ -10,6 +10,7 @@ target_sources(autobossfight_attack_mgr
 		attack_manager.c
 		get_applicable_entities.c
 		default_attack.c
+		generate_attack_data.c
 
 		#attacks
 		attacks/attack_combo.c
