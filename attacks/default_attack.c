@@ -2,6 +2,7 @@
 #include"attack.h"
 #include<strings.h>
 #include"../rng.h"
+#include "attacks.h"
 
 extern uint64_t Round;
 
@@ -33,11 +34,14 @@ AttackData_t *MissedAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker)
 		if (r == NULL)
 			return NULL;
 
-		r->Attack = Self->ID;
-		r->Attacker = Attacker;
-		r->Target = Target;
-		r->Damage = 0;
-		r->PriorHealth = Target->HealthPoints;
+		GenAttackData(
+			Attacker,
+			Target,
+			Self,
+			0,
+			Target->HealthPoints,
+			r
+		);
 
 		return r;
 	}
