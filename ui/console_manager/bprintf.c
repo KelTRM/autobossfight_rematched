@@ -31,8 +31,8 @@ int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen) {
 	memcpy(Buffer+OldBufferSize, str, StrLen);
 
 	if (b == ActiveBuffer)
-		printf("%.*s", (int)StrLen, str);
-	fflush(stdout);
+		fprintf(Buffers[b].BufferDestination, "%.*s", (int)StrLen, str);
+	fflush(Buffers[b].BufferDestination);
 
 	Buffers[b].BufferLength = NewBufferSize;
 //	printf("recieved string of length %zu\n", StrLen);

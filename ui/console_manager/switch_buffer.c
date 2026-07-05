@@ -8,7 +8,7 @@
 
 void RefreshScreen(void) {
 	printf("\x1b[H");
-	
+
 	// disable automatic flushing
 	setvbuf(stdout, NULL, _IOFBF, 0);
 
@@ -22,7 +22,11 @@ void RefreshScreen(void) {
 	printf("\x1b[0J");
 	fflush(stdout);
 
-	setvbuf(stdout, NULL, _IOLBF, 0);
+	if (Buffers[ActiveBuffer].BufferDestination == stdout) {
+		setvbuf(stdout, NULL, _IOLBF, 0);
+	} else {
+		setvbuf(Buffers[ActiveBuffer].BufferDestination, NULL, _IONBF, 0);
+	}
 }
 
 int SwitchBuffer(BUFHANDLE Buffer) {
