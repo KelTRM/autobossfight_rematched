@@ -23,7 +23,7 @@ void DefaultAnnouncer(AttackData_t *Attack) {
 	free(str);
 }
 
-// NULL if attack hit. &NothingAttack if missed
+// NULL if attack hit. defined if missed
 AttackData_t *MissedAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	if (GetRandomIntBetween(1, 5) < 2) {
 		printf("%s has missed their attack on %s.\n", Attacker->Name, Target->Name);
