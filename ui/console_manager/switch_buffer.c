@@ -6,7 +6,28 @@
 #define setvbuf(...)		0
 #endif
 
+void RefreshAnsiTerminal(void);
+void RefreshFileBuffer(void);
+
 void RefreshScreen(void) {
+	struct Buffer *Current = &Buffers[ActiveBuffer];
+	if (Current->CloseFile == 0)
+		RefreshAnsiTerminal();
+	else
+		RefreshFileBuffer();
+}
+
+void RefreshFileBuffer(void) {
+	struct Buffer *Current = &Buffers[ActiveBuffer];
+	FILE *f = freopen(NULL, "w", Current->BufferDestination);
+	if (f == NULL)
+		return;
+
+	fwrite(Current->Buffer, 1, Current->BufferLength, Current->BufferDestination);
+	fflush(Current->BufferDestination);
+}
+
+void RefreshAnsiTerminal(void) {
 	printf("\x1b[H");
 
 	struct Buffer *Current = &Buffers[ActiveBuffer];
@@ -24,11 +45,7 @@ void RefreshScreen(void) {
 	fprintf(Current->BufferDestination, "\x1b[0J");
 	fflush(Current->BufferDestination);
 
-	if (Current->BufferDestination == stdout) {
-		setvbuf(stdout, NULL, _IOLBF, 0);
-	} else {
-		setvbuf(Current->BufferDestination, NULL, _IONBF, 0);
-	}
+	setvbuf(Current->BufferDestination, NULL, _IOLBF, 0);
 }
 
 int SwitchBuffer(BUFHANDLE Buffer) {
