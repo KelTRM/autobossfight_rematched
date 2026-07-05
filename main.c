@@ -37,10 +37,10 @@ int main(void) {
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
-	FILE *DebugFile = fopen("DEBUG.txt", "w");
+//	FILE *DebugFile = fopen("DEBUG.txt", "w");
 
 	init_debug();
-	define_debug_flush_location(DebugFile);
+	define_debug_flush_location(fopen("DEBUG.txt", "w"));
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
