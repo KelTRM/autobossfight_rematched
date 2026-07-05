@@ -9,23 +9,25 @@
 void RefreshScreen(void) {
 	printf("\x1b[H");
 
-	// disable automatic flushing
-	setvbuf(stdout, NULL, _IOFBF, 0);
+	struct Buffer *Current = &Buffers[ActiveBuffer];
 
-	for (size_t i = 0; i < Buffers[ActiveBuffer].BufferLength; i++) {
-		char ch = Buffers[ActiveBuffer].Buffer[i];
+	// disable automatic flushing
+	setvbuf(Current->BufferDestination, NULL, _IOFBF, 0);
+
+	for (size_t i = 0; i < Current->BufferLength; i++) {
+		char ch = Current->Buffer[i];
 		if (ch == '\n')
-			printf("\x1b[0K");
-		putchar(ch);
+			fprintf(Current->BufferDestination, "\x1b[0K");
+		fputc(ch, Current->BufferDestination);
 	}
 
-	printf("\x1b[0J");
-	fflush(stdout);
+	fprintf(Current->BufferDestination, "\x1b[0J");
+	fflush(Current->BufferDestination);
 
-	if (Buffers[ActiveBuffer].BufferDestination == stdout) {
+	if (Current->BufferDestination == stdout) {
 		setvbuf(stdout, NULL, _IOLBF, 0);
 	} else {
-		setvbuf(Buffers[ActiveBuffer].BufferDestination, NULL, _IONBF, 0);
+		setvbuf(Current->BufferDestination, NULL, _IONBF, 0);
 	}
 }
 
