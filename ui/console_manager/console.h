@@ -23,3 +23,6 @@ void RefreshScreen(void);
 
 int bprintf(BUFHANDLE b, const char *format, ...);
 void AttachBufferFile(BUFHANDLE Buffer, FILE *Destination, int CloseOnDeletion);
+
+void FlushBuffer(BUFHANDLE Buffer);
+

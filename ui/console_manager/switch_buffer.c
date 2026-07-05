@@ -6,19 +6,20 @@
 #define setvbuf(...)		0
 #endif
 
-void RefreshAnsiTerminal(void);
-void RefreshFileBuffer(void);
+void RefreshAnsiTerminal(BUFHANDLE Buffer);
+void RefreshFileBuffer(BUFHANDLE Buffer);
 
 void RefreshScreen(void) {
-	struct Buffer *Current = &Buffers[ActiveBuffer];
-	if (Current->CloseFile == 0)
-		RefreshAnsiTerminal();
-	else
-		RefreshFileBuffer();
+	FlushBuffer(ActiveBuffer);
+//	struct Buffer *Current = &Buffers[ActiveBuffer];
+//	if (Current->CloseFile == 0)
+//		RefreshAnsiTerminal(ActiveBuffer);
+//	else
+//		RefreshFileBuffer(ActiveBuffer);
 }
 
-void RefreshFileBuffer(void) {
-	struct Buffer *Current = &Buffers[ActiveBuffer];
+void RefreshFileBuffer(BUFHANDLE Buffer) {
+	struct Buffer *Current = &Buffers[Buffer];
 	FILE *f = freopen(NULL, "w", Current->BufferDestination);
 	if (f == NULL)
 		return;
@@ -27,10 +28,10 @@ void RefreshFileBuffer(void) {
 	fflush(Current->BufferDestination);
 }
 
-void RefreshAnsiTerminal(void) {
+void RefreshAnsiTerminal(BUFHANDLE Buffer) {
 	printf("\x1b[H");
 
-	struct Buffer *Current = &Buffers[ActiveBuffer];
+	struct Buffer *Current = &Buffers[Buffer];
 
 	// disable automatic flushing
 	setvbuf(Current->BufferDestination, NULL, _IOFBF, 0);
