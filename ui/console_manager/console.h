@@ -1,6 +1,7 @@
 #pragma once
 
 #include<stdint.h>
+#include<stdio.h>
 
 #ifndef PRESERVE_PRINTF
 #define printf(...)	bprintf(INVALID_BUFFER_HANDLE, __VA_ARGS__)
@@ -21,4 +22,4 @@ void ClearScreen(void);
 void RefreshScreen(void);
 
 int bprintf(BUFHANDLE b, const char *format, ...);
-
+void AttachBufferFile(BUFHANDLE Buffer, FILE *Destination, int CloseOnDeletion);

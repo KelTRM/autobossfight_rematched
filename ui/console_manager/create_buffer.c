@@ -23,5 +23,8 @@ found_empty_buffer:;
 	b->BufferLength = 0;
 	b->Buffer = malloc(1);
 
+	b->CloseFile = 0;
+	b->BufferDestination = stdout;
+
 	return i;
 }
