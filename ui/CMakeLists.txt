@@ -29,6 +29,8 @@ target_sources(autobossfight_ui_manager
 		console_manager/clear_screen.c
 		console_manager/copy_buffer.c
 		console_manager/delete_buffer.c
+		console_manager/attach_buffer_file.c
+		console_manager/flush_buffer.c
 
 		color/background.c
 		color/foreground.c

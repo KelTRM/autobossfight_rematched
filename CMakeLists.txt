@@ -27,19 +27,27 @@ target_sources(autobossfight_rematched
 		entity/entities.c
 )
 
+add_subdirectory(debug)
 add_subdirectory(ui)
 add_subdirectory(attacks)
 add_subdirectory(transformations)
 add_subdirectory(registration)
 
+target_link_libraries(autobossfight_debug
+	PUBLIC
+		autobossfight_ui_manager
+)
+
 target_link_libraries(autobossfight_transformations
 	PUBLIC
+		autobossfight_debug
 		autobossfight_ui_manager
 		autobossfight_registration_manager
 )
 
 target_link_libraries(autobossfight_attack_mgr
 	PUBLIC
+		autobossfight_debug
 		autobossfight_ui_manager
 		autobossfight_registration_manager
 )

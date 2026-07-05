@@ -4,6 +4,7 @@
 //#include"ui/console_manager/buffer.h"
 #include<ui.h>
 #include"utils/sleep.h"
+#include"debug/debug.h"
 
 //#ifdef __linux__
 //#include<unistd.h>
@@ -35,6 +36,11 @@ int main(void) {
 
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
+
+	FILE *DebugFile = fopen("DEBUG.txt", "w");
+
+	init_debug();
+	define_debug_flush_location(DebugFile);
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);

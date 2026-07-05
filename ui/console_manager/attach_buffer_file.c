@@ -2,6 +2,9 @@
 #include"buffer.h"
 
 void AttachBufferFile(BUFHANDLE Buffer, FILE *Destination, int CloseOnDeletion) {
+	if (Destination == NULL)
+		return;
+
 	int Result = ValidateBuffer(Buffer);
 	if (Result == 0)
 		return;
