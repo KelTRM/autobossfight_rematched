@@ -5,8 +5,9 @@
 #include"../attacks/attack_manager.h"
 #include"color/color.h"
 #include"console_manager/console.h"
-#include "strings.h"
+#include"strings.h"
 #include"ui.h"
+#include"../debug/debug.h"
 
 #define ATTACK_DISPLAY_FORMAT		"To use a %s use %s"
 
@@ -49,6 +50,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 //	}
 
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
+	write_debug(Info, "Currently playing - %s", CurrentPlayer->Name);
 
 	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {
 		// easter egg
@@ -93,9 +95,14 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		if (Attack->Available(Attack, CurrentPlayer) == 0) {
 			printf("Attack %s is not yet available.\n", Attack->AttackName);
 
+			write_debug(Info, "Player %s failed to perform attack %s.", CurrentPlayer->Name, Attack->AttackName);
+
 			sleep(1000);
 			continue;
 		}
+
+		write_debug(Info, "Player %s has selected attack %s.",
+				CurrentPlayer->Name, Attack->AttackName);
 
 		printf("You have chosen attack '%s'.\n", Attack->AttackName);
 		while (1) {
@@ -103,6 +110,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			CopyBuffer(INVALID_BUFFER_HANDLE, b);
 
 			//char *Result;
+			write_debug(Info, "Confirming attack...", "");
 			Prompt("Are you sure you want to use this attack?", &Result, 0);
 
 			CopyBuffer(b, INVALID_BUFFER_HANDLE);
@@ -111,12 +119,17 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			DeleteBuffer(b);
 
 			if (Result[0] == 'y') {
+				write_debug(Info, "Player has confirmed attack %s", Attack->AttackName);
+
 				ChosenAttack = AttackID-1;
 				break;
 			} else if (Result[0] == 'n') {
+				write_debug(Info, "Player has rejected attack %s", Attack->AttackName);
 				break;
 			} else continue;
 		}
+
+		flush_debug();
 	}
 
 	size_t AttackeeCount;
