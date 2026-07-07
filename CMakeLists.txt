@@ -4,8 +4,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(autobossfight_rematched)
 
-find_package(Lua 5.5 REQUIRED)
-
 if (MSVC)
 	add_compile_options(/W4)
 else()
@@ -29,6 +27,7 @@ target_sources(autobossfight_rematched
 		entity/entities.c
 )
 
+add_subdirectory(loadlua)
 add_subdirectory(debug)
 add_subdirectory(ui)
 add_subdirectory(attacks)

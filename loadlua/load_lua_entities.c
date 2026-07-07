@@ -14,6 +14,8 @@ int CheckLuaEntities(void) {
 	return 0;
 }
 
-size_t LoadLuaEntities(Entity_t *Entities) {
-	
+// i have no idea what i'm doing, so it's blank for now
+size_t LoadLuaEntities(Entity_t **Entities) {
+	(void)Entities;
+	return 0;
 }
