@@ -1,6 +1,6 @@
+#include"entity_manager.h"
 #include<stdlib.h>
 #include<stddef.h>
-#include"../entity.h"
 
 size_t PlayerCount = 0;
 size_t BossCount = 0;
@@ -10,25 +10,14 @@ size_t EntityCount;
 
 #define ArrayLength(array)	(sizeof(array) / sizeof(*array))
 
-struct PlayerDefinition {
-	const char *Name;		// name of the player
-	const Health_t HP;		// health of the player
-	const Health_t Heal_Min;	// minimum amount the player may heal another by
-	const Health_t Heal_Max;	// maximum amount the player may heal another by
-	
-	const uint32_t Color;
-} PlayerDefinitions[] = {
+struct PlayerDefinition PlayerDefinitions[] = {
 	// players go here
-	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF6400 },
-	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF0000 },
-	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0x00FFFF },
+	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0xFF6400 },
+	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0xFF0000 },
+	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0x00FFFF },
 };
 
-struct BossDefinition {
-	const char *Name;
-	const Health_t HP;
-	// no healing because boss bad
-} BossDefinitions[] = {
+struct BossDefinition BossDefinitions[] = {
 	// boss(es) go here
 	{ .Name="Cornelius",	.HP=325000 },
 //	{ .Name="Cornelius Jr.",	.HP=100000 }
