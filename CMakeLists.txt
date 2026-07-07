@@ -4,6 +4,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(autobossfight_rematched)
 
+find_package(Lua 5.5 REQUIRED)
+
 if (MSVC)
 	add_compile_options(/W4)
 else()
