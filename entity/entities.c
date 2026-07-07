@@ -1,4 +1,5 @@
 #include"entity_manager.h"
+#include<lua_load.h>
 #include<stdlib.h>
 #include<stddef.h>
 
@@ -24,6 +25,8 @@ struct BossDefinition BossDefinitions[] = {
 };
 
 void InitEntities(void) {
+	size_t LoadedPlayers = 
+
 	PlayerCount = ArrayLength(PlayerDefinitions);
 	BossCount = ArrayLength(BossDefinitions);
 

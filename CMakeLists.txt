@@ -55,6 +55,7 @@ target_link_libraries(autobossfight_attack_mgr
 
 target_link_libraries(autobossfight_rematched
 	PUBLIC
+		autobossfight_lua_loader
 		autobossfight_ui_manager
 		autobossfight_attack_mgr
 		autobossfight_transformations
