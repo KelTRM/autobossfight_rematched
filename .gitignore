@@ -2,3 +2,4 @@ build
 .config
 .clangd
 DEBUG.txt
+lua/*.lua
