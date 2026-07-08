@@ -2,7 +2,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stddef.h>
+// lua shit
 #include<lua.h>
+#include<lauxlib.h>
+#include<lualib.h>
 
 int CheckLuaEntities(void) {
 	// check for lua/entities.lua file. This file is required for the game to function.
@@ -30,6 +33,9 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	// buffer contains file contents of entities.lua
 	void *Buffer = malloc(FileSize);
 	fread(Buffer, FileSize, 1, f);
+
+	free(Buffer);
+	fclose(f);
 
 	(void)Entities;
 	return 0;
