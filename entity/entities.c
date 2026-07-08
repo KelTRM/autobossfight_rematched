@@ -2,6 +2,7 @@
 #include<lua_load.h>
 #include<stdlib.h>
 #include<stddef.h>
+#include<assert.h>
 
 size_t PlayerCount = 0;
 size_t BossCount = 0;
@@ -25,7 +26,9 @@ struct BossDefinition BossDefinitions[] = {
 };
 
 void InitEntities(void) {
-	size_t LoadedPlayers = 
+	Entity_t *EntitiesTmp;
+	size_t LoadedPlayers = LoadLuaEntities(&EntitiesTmp);
+	assert(LoadedPlayers == 0);
 
 	PlayerCount = ArrayLength(PlayerDefinitions);
 	BossCount = ArrayLength(BossDefinitions);
