@@ -1,7 +1,10 @@
+#define PRESERVE_PRINTF
+
 #include"../entity.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<stddef.h>
+#include"../utils/sleep.h"
 // lua shit
 #include<lua.h>
 #include<lauxlib.h>
@@ -31,8 +34,20 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	size_t FileSize = ftell(f);
 
 	// buffer contains file contents of entities.lua
-	void *Buffer = malloc(FileSize);
+	void *Buffer = malloc(FileSize+1);
 	fread(Buffer, FileSize, 1, f);
+	*((char*)Buffer + 1) = 0;
+
+	lua_State *L = luaL_newstate();
+	int err = luaL_dostring(L, Buffer);
+
+	if (err != LUA_OK) {
+		printf("lua error.\n");
+	} else {
+		printf("lua exited successfully.\n");
+	}
+
+	sleep(1000);
 
 	free(Buffer);
 	fclose(f);

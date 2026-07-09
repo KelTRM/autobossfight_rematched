@@ -24,5 +24,5 @@ set_target_properties(
 
 target_link_libraries(autobossfight_lua_loader
 	PRIVATE
-		Lua::Lua
+		${LUA_LIBRARIES}
 )
