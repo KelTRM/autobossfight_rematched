@@ -31,13 +31,11 @@ extern Entity_t *Entities;
 extern size_t EntityCount;
 
 int main(void) {
-	Init();
-	InitEntities();
-
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
-//	FILE *DebugFile = fopen("DEBUG.txt", "w");
+	Init();
+	InitEntities();
 
 	init_debug();
 	define_debug_flush_location(fopen("DEBUG.txt", "w"));

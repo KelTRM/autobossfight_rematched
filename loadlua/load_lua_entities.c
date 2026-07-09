@@ -1,5 +1,3 @@
-#define PRESERVE_PRINTF
-
 #include"../entity.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -35,10 +33,14 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 
 	// buffer contains file contents of entities.lua
 	void *Buffer = malloc(FileSize+1);
-	fread(Buffer, FileSize, 1, f);
-	*((char*)Buffer + 1) = 0;
+
+	fseek(f, 0, SEEK_SET);
+	fread(Buffer, 1, FileSize, f);
+	*((char*)Buffer + FileSize + 1) = 0;
 
 	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+//	printf("buffer = %s\nfilesize = %zu\n", Buffer, FileSize);
 	int err = luaL_dostring(L, Buffer);
 
 	if (err != LUA_OK) {
