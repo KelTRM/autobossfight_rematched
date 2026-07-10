@@ -8,6 +8,8 @@
 #include<lauxlib.h>
 #include<lualib.h>
 
+#define BOSS_TABLE_DEFINITION	"{ [\"Name\"]=string, [\"HP\"]=number }"
+
 int CheckLuaEntities(void) {
 	// check for lua/entities.lua file. This file is required for the game to function.
 	FILE *tmp = fopen("lua/entities.lua", "r");
@@ -55,5 +57,21 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	fclose(f);
 
 	(void)Entities;
+	return 0;
+}
+
+int lua_AddBoss(lua_State *L) {
+	int n = lua_gettop(L);
+
+	if (n != 1) {
+		lua_pushliteral(L, "AddBoss - expected 1 argument of " BOSS_TABLE_DEFINITION);
+		lua_error(L);
+	}
+
+	int ParamType = lua_type(L, 1);
+	if (ParamType != LUA_TTABLE) {
+		lua_pushliteral(L, "AddBoss - expected param table of " BOSS_TABLE_DEFINITION);
+	}
+
 	return 0;
 }
