@@ -79,7 +79,7 @@ int LuaAddBoss(lua_State *L) {
 		lua_pushliteral(L, "Expected [\"Name\"] of type string");
 	}
 
-	
+	lua_pushnumber(L, 0);
 
-	return 0;
+	return 1;
 }
