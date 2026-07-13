@@ -10,6 +10,8 @@
 
 #define BOSS_TABLE_DEFINITION	"{ [\"Name\"]=string, [\"HP\"]=number }"
 
+int LuaAddBoss(lua_State *L);
+
 int CheckLuaEntities(void) {
 	// check for lua/entities.lua file. This file is required for the game to function.
 	FILE *tmp = fopen("lua/entities.lua", "r");
@@ -42,7 +44,18 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
-//	printf("buffer = %s\nfilesize = %zu\n", Buffer, FileSize);
+
+	struct luaL_Reg fns[] = {
+		{
+			"AddBoss",
+			LuaAddBoss
+		},
+		{ NULL, NULL }
+	};
+	luaL_setfuncs(L, fns, 0);
+
+	printf("debug\n");
+	//	printf("buffer = %s\nfilesize = %zu\n", Buffer, FileSize);
 	int err = luaL_dostring(L, Buffer);
 
 	if (err != LUA_OK) {
@@ -50,6 +63,7 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	} else {
 		printf("lua exited successfully.\n");
 	}
+
 
 	sleep(1000);
 
@@ -61,25 +75,25 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 }
 
 int LuaAddBoss(lua_State *L) {
-	int n = lua_gettop(L);
+//	int n = lua_gettop(L);
 
-	if (n != 1) {
-		lua_pushliteral(L, "expected 1 argument of " BOSS_TABLE_DEFINITION);
-		lua_error(L);
-	}
+//	if (n != 1) {
+//		lua_pushliteral(L, "expected 1 argument of " BOSS_TABLE_DEFINITION);
+//		lua_error(L);
+//	}
 
-	int ParamType = lua_type(L, 1);
-	if (ParamType != LUA_TTABLE) {
-		lua_pushliteral(L, "expected param " BOSS_TABLE_DEFINITION);
-		lua_error(L);
-	}
+//	int ParamType = lua_type(L, 1);
+//	if (ParamType != LUA_TTABLE) {
+//		lua_pushliteral(L, "expected param " BOSS_TABLE_DEFINITION);
+//		lua_error(L);
+//	}
 
-	int NameType = lua_getfield(L, 1, "Name");
-	if (NameType != LUA_TSTRING) {
-		lua_pushliteral(L, "Expected [\"Name\"] of type string");
-	}
+//	int NameType = lua_getfield(L, 1, "Name");
+//	if (NameType != LUA_TSTRING) {
+//		lua_pushliteral(L, "Expected [\"Name\"] of type string");
+//	}
 
-	lua_pushnumber(L, 0);
+//	lua_pushnumber(L, 0);
 
-	return 1;
+	return 0;
 }
