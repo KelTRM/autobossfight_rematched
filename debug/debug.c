@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<stdarg.h>
 #define PRESERVE_PRINTF
 
 #include"debug.h"
@@ -12,4 +15,40 @@ void InitDebugBuffer(void) {
 		Buffer = CreateBuffer();
 
 	DebugBuffer = Buffer;
+}
+
+void DebugWrite(const char *Source, const char *restrict format, ...) {
+#define FORMAT_FMT	"[%s] %s"
+	// generate the format
+	size_t FormatLen = snprintf(NULL, 0,
+			FORMAT_FMT, Source, format);
+
+	char *FormatBuffer = malloc(FormatLen+1);
+	FormatLen = snprintf(FormatBuffer, FormatLen,
+			FORMAT_FMT, Source, format);
+
+	va_list args;
+	va_start(args, format);
+	int DebugLen = vsnprintf(NULL, 0, FormatBuffer, args);
+
+	if (DebugLen < 0) {
+		free(FormatBuffer);
+		return;
+	}
+
+	va_end(args);
+	va_start(args, format);
+
+	char *DebugTextBuffer = malloc(DebugLen);
+	DebugLen = vsnprintf(DebugTextBuffer, DebugLen, FormatBuffer, args);
+
+	PutsBuffer(DebugBuffer, DebugTextBuffer, DebugLen);
+
+	free(DebugTextBuffer);
+	free(FormatBuffer);
+
+	FlushBuffer(DebugBuffer);
+
+	return;
+#undef FORMAT_FMT
 }

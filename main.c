@@ -34,11 +34,11 @@ int main(void) {
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
-	Init();
-	InitEntities();
-
 	init_debug();
 	define_debug_flush_location(fopen("DEBUG.txt", "w"));
+
+	Init();
+	InitEntities();
 
 	int Attacks = InitAttacks();
 	printf("Initialized %d attacks.\n", Attacks);
