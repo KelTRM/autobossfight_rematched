@@ -17,7 +17,7 @@ void InitDebugBuffer(void) {
 	DebugBuffer = Buffer;
 }
 
-void DebugWrite(const char *Source, const char *restrict format, ...) {
+int DebugWrite(const char *Source, const char *restrict format, ...) {
 #define FORMAT_FMT	"[%s] %s"
 	// generate the format
 	size_t FormatLen = snprintf(NULL, 0,
@@ -33,14 +33,14 @@ void DebugWrite(const char *Source, const char *restrict format, ...) {
 
 	if (DebugLen < 0) {
 		free(FormatBuffer);
-		return;
+		return 0;
 	}
 
 	va_end(args);
 	va_start(args, format);
 
-	char *DebugTextBuffer = malloc(DebugLen);
-	DebugLen = vsnprintf(DebugTextBuffer, DebugLen, FormatBuffer, args);
+	char *DebugTextBuffer = malloc(DebugLen+1);
+	DebugLen = vsnprintf(DebugTextBuffer, DebugLen+1, FormatBuffer, args);
 
 	PutsBuffer(DebugBuffer, DebugTextBuffer, DebugLen);
 
@@ -49,6 +49,6 @@ void DebugWrite(const char *Source, const char *restrict format, ...) {
 
 	FlushBuffer(DebugBuffer);
 
-	return;
+	return DebugLen;
 #undef FORMAT_FMT
 }

@@ -15,7 +15,7 @@
 extern BUFHANDLE DebugBuffer;
 
 void InitDebugBuffer(void);
-void DebugWrite(const char *Source, const char *restrict format, ...);
+int DebugWrite(const char *Source, const char *restrict format, ...);
 
 // init_debug doesn't need parameters, but it looks more natural with the empty param list
 #define init_debug()				InitDebugBuffer()
