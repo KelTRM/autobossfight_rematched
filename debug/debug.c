@@ -38,12 +38,8 @@ int DebugWrite(const char *Source, const char *restrict format, ...) {
 	va_end(args);
 	va_start(args, format);
 
-//	printf("formatbuffer = %s", FormatBuffer);
-
 	char *DebugTextBuffer = malloc(DebugLen+1);
 	DebugLen = vsnprintf(DebugTextBuffer, DebugLen+1, FormatBuffer, args);
-
-//	printf("DebugTextBuffer = %s", DebugTextBuffer);
 
 	va_end(args);
 
@@ -52,7 +48,7 @@ int DebugWrite(const char *Source, const char *restrict format, ...) {
 	free(DebugTextBuffer);
 	free(FormatBuffer);
 
-//	FlushBuffer(DebugBuffer);
+	FlushBuffer(DebugBuffer);
 
 	return DebugLen;
 }
