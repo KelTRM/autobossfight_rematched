@@ -1,4 +1,3 @@
-#include"../entity.h"
 #include"../debug/debug.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -8,24 +7,19 @@
 #include<lua.h>
 #include<lauxlib.h>
 #include<lualib.h>
+#include"entity_ldr.h"
 
 #define BOSS_TABLE_DEFINITION	"{ [\"Name\"]=string, [\"HP\"]=number }"
 
+struct {
+	DefMgr_t *Players;
+	DefMgr_t *Bosses;
+} EntityLoaderData;
+
 int LuaAddBoss(lua_State *L);
 
-int CheckLuaEntities(void) {
-	// check for lua/entities.lua file. This file is required for the game to function.
-	FILE *tmp = fopen("lua/entities.lua", "r");
-	if (tmp == NULL)
-		return -1;
-
-	fclose(tmp);
-
-	return 0;
-}
-
 // i have no idea what i'm doing, so it's blank for now
-size_t LoadLuaEntities(Entity_t **Entities) {
+size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";
 
 	// read contents of entities lua file
@@ -44,6 +38,12 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	fseek(f, 0, SEEK_SET);
 	fread(Buffer, 1, FileSize, f);
 	*((char*)Buffer + FileSize + 1) = 0;
+
+	CreateDefMgr(Players);
+	CreateDefMgr(Bosses);
+
+	EntityLoaderData.Players = Players;
+	EntityLoaderData.Bosses = Bosses;
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
@@ -70,17 +70,20 @@ size_t LoadLuaEntities(Entity_t **Entities) {
 	}
 
 
-	sleep(1000);
+//	sleep(1000);
 
 	free(Buffer);
 	fclose(f);
 
-	(void)Entities;
+	lua_close(L);
+
 	return 0;
 }
 
 int LuaAddBoss(lua_State *L) {
 	int n = lua_gettop(L);
+
+//	write_debug(LuaAddBoss, "recieved %d args", n);
 
 	if (n != 1) {
 		lua_pushliteral(L, "expected 1 argument of " BOSS_TABLE_DEFINITION);
@@ -96,11 +99,43 @@ int LuaAddBoss(lua_State *L) {
 	int NameType = lua_getfield(L, 1, "Name");
 	if (NameType != LUA_TSTRING) {
 		lua_pushliteral(L, "Expected [\"Name\"] of type string");
+		lua_error(L);
 	}
 
-	
+	const char *Name = lua_tostring(L, -1);
+	write_debug(Lua, "Read boss name of %s", Name);
+
+	int HealthType = lua_getfield(L, 1, "HP");
+	if (HealthType != LUA_TNUMBER) {
+		lua_pushliteral(L, "Expected [\"HP\"] of type number.");
+		lua_pushfstring(L, "Expected [\"HP\"] of type number. Recieved %s instead",
+						lua_typename(L, HealthType));
+		lua_error(L);
+	}
+
+	lua_Number HP = lua_tonumber(L, -1);
+
+	write_debug(EntityManager, "Loading boss { %s, %d }", Name, HP);
+
+	struct BossDefinition Boss = {
+		.Name=Name,
+		.HP=HP
+	};
+
+	AddBoss(EntityLoaderData.Bosses, &Boss);
 
 	lua_pushnumber(L, 1);
+
+	return 1;
+}
+
+int CheckLuaEntities(void) {
+	// check for lua/entities.lua file. This file is required for the game to function.
+	FILE *tmp = fopen("lua/entities.lua", "r");
+	if (tmp == NULL)
+		return -1;
+
+	fclose(tmp);
 
 	return 0;
 }

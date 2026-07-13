@@ -8,6 +8,7 @@ add_library(autobossfight_lua_loader)
 target_sources(autobossfight_lua_loader
 	PRIVATE
 		load_lua_entities.c
+		entity_ldr.c
 )
 
 target_include_directories(autobossfight_lua_loader

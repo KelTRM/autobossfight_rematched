@@ -26,12 +26,18 @@ struct BossDefinition BossDefinitions[] = {
 };
 
 void InitEntities(void) {
-	Entity_t *EntitiesTmp;
-	size_t LoadedPlayers = LoadLuaEntities(&EntitiesTmp);
-	assert(LoadedPlayers == 0);
+	DefMgr_t Players;
+	DefMgr_t Bosses;
+
+	size_t LoadedPlayers = LoadLuaEntities(&Players, &Bosses);
+//	Entity_t *EntitiesTmp;
+//	size_t LoadedPlayers = LoadLuaEntities(&EntitiesTmp);
+//	assert(LoadedPlayers == 0);
 
 	PlayerCount = ArrayLength(PlayerDefinitions);
-	BossCount = ArrayLength(BossDefinitions);
+//	BossCount = ArrayLength(BossDefinitions);
+
+	BossCount = Bosses.DefinitionCount;
 
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));
@@ -48,7 +54,7 @@ void InitEntities(void) {
 	}
 
 	for (size_t i = 0; i < BossCount; i++) {
-		struct BossDefinition *Boss = &BossDefinitions[i];
+		struct BossDefinition *Boss = &Bosses.BossDefinition[i];
 		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP);
 
 		for (size_t j = 0; j < PlayerCount; j++) {
