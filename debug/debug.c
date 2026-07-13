@@ -15,7 +15,7 @@ void InitDebugBuffer(void) {
 	DebugBuffer = Buffer;
 }
 
-#define FORMAT_FMT	"[ %s ] %s\n"
+#define FORMAT_FMT	"[%s] %s\n"
 
 int DebugWrite(const char *Source, const char *restrict format, ...) {
 	// generate the format
