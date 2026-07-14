@@ -8,6 +8,7 @@
 #include<lauxlib.h>
 #include<lualib.h>
 #include"entity_ldr.h"
+#include"table_validation.h"
 
 #define BOSS_TABLE_DEFINITION	"{ [\"Name\"]=string, [\"HP\"]=number }"
 
@@ -17,8 +18,10 @@ struct {
 } EntityLoaderData;
 
 int LuaAddBoss(lua_State *L);
+int InitializeEntitiyManagerTable(lua_State *L, int Index);
 
-// i have no idea what i'm doing, so it's blank for now
+int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses);
+
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";
 
@@ -54,8 +57,10 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	};
 	lua_newtable(L);
 
+	InitializeEntitiyManagerTable(L, -1);
+
 	luaL_setfuncs(L, fns, 0);
-	lua_setglobal(L, "AddBoss");
+	lua_setglobal(L, "bossfight");
 //	luaL_setfuncs(L, fns, int nup)
 
 	//	printf("buffer = %s\nfilesize = %zu\n", Buffer, FileSize);
@@ -69,8 +74,9 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 		write_debug(Lua, "Exited script %s successfully.", EntityLua);
 	}
 
-
-//	sleep(1000);
+	lua_getglobal(L, "bossfight");
+	lua_getfield(L, 1, "Bosses");
+	RegisterLuaBosses(L, -1, Bosses);
 
 	free(Buffer);
 	fclose(f);
@@ -80,49 +86,29 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	return 0;
 }
 
+int PushLuaArray(lua_State *L, int ArrayIndex);
+
 int LuaAddBoss(lua_State *L) {
 	int n = lua_gettop(L);
 
 //	write_debug(LuaAddBoss, "recieved %d args", n);
 
-	if (n != 1) {
+	if (n != 2) {
 		lua_pushliteral(L, "expected 1 argument of " BOSS_TABLE_DEFINITION);
 		lua_error(L);
 	}
 
-	int ParamType = lua_type(L, 1);
-	if (ParamType != LUA_TTABLE) {
-		lua_pushliteral(L, "expected param " BOSS_TABLE_DEFINITION);
+	VerifyBossDefTable(L);
+
+	int Type = lua_getfield(L, -2, "Bosses");
+	if (Type != LUA_TTABLE) {
+		lua_pushfstring(L, "Expected [\"Bosses\"] of type table");
 		lua_error(L);
 	}
 
-	int NameType = lua_getfield(L, 1, "Name");
-	if (NameType != LUA_TSTRING) {
-		lua_pushliteral(L, "Expected [\"Name\"] of type string");
-		lua_error(L);
-	}
+	lua_pushvalue(L, -2);
 
-	const char *Name = lua_tostring(L, -1);
-	write_debug(Lua, "Read boss name of %s", Name);
-
-	int HealthType = lua_getfield(L, 1, "HP");
-	if (HealthType != LUA_TNUMBER) {
-		lua_pushliteral(L, "Expected [\"HP\"] of type number.");
-		lua_pushfstring(L, "Expected [\"HP\"] of type number. Recieved %s instead",
-						lua_typename(L, HealthType));
-		lua_error(L);
-	}
-
-	lua_Number HP = lua_tonumber(L, -1);
-
-	write_debug(EntityManager, "Loading boss { %s, %d }", Name, HP);
-
-	struct BossDefinition Boss = {
-		.Name=Name,
-		.HP=HP
-	};
-
-	AddBoss(EntityLoaderData.Bosses, &Boss);
+	PushLuaArray(L, -2);
 
 	lua_pushnumber(L, 1);
 
