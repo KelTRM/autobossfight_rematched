@@ -1,10 +1,10 @@
 # Lua extensions
 
-[EXPERIMENTAL. FEATURE IS INCOMPLETE. IT MAY HAVE ISSUES AND POOR FUNCTIONALITY FOR THE TIME BEING]
+WARNING - THIS FEATURE IS INCOMPLETE. EVERYTHING IS A WORK IN PROGRESS AND IS SUBJECT TO CHANGE
 
 ## Entities
 
-### Adding/removing
+### Adding/removing entities
 
 On load, the file lua/entities.lua is loaded and executed. it may add players/bosses to the game
 
