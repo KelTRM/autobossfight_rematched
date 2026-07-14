@@ -2,14 +2,7 @@
 
 #include"../entity.h"
 #include"entity_ldr.h"
-#include<lua.h>
 
 int CheckLuaEntities(void);
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses);
-
-// Verifies a boss table at the top of the stack. Returns lua error if otherwise
-void VerifyBossDefTable(lua_State *L);
-
-// Verifies a player table at the top of the stack. Returns lua error if otherwise
-void VerifyPlayerDefTable(lua_State *L);
 
