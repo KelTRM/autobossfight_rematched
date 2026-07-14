@@ -40,6 +40,8 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 
 		lua_pop(L, 1);
 	}
+
+	return BossCount;
 }
 
 int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
@@ -93,4 +95,6 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 
 		lua_pop(L, 1);
 	}
+	
+	return PlayerCount;
 }

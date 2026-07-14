@@ -30,13 +30,17 @@ void InitEntities(void) {
 	DefMgr_t Players;
 	DefMgr_t Bosses;
 
-	size_t LoadedPlayers = LoadLuaEntities(&Players, &Bosses);
+	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
+	write_debug(InitEntities, "Loaded %zu entity definitions from lua.", LoadedEntities);
 
-	write_debug(InitEntities, "Loaded %zu entity definitions from lua.", LoadedPlayers);
+	if (LoadedEntities == 0) {
+		write_debug(InitEntities, "No entities loaded. exiting...");
+		exit(-1);
+	}
 
 //	Entity_t *EntitiesTmp;
-//	size_t LoadedPlayers = LoadLuaEntities(&EntitiesTmp);
-//	assert(LoadedPlayers == 0);
+//	size_t LoadedEntities = LoadLuaEntities(&EntitiesTmp);
+//	assert(LoadedEntities == 0);
 
 //	PlayerCount = ArrayLength(PlayerDefinitions);
 //	BossCount = ArrayLength(BossDefinitions);

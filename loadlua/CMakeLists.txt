@@ -13,6 +13,7 @@ target_sources(autobossfight_lua_loader
 		ValidateEntityTables.c
 		PushLuaArray.c
 		RegisterLuaEntities.c
+		LuaAddEntity.c
 )
 
 target_include_directories(autobossfight_lua_loader
