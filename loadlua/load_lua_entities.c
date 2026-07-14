@@ -18,9 +18,11 @@ struct {
 } EntityLoaderData;
 
 int LuaAddBoss(lua_State *L);
-int InitializeEntitiyManagerTable(lua_State *L, int Index);
+int LuaAddPlayer(lua_State *L);
+int InitializeEntityManagerTable(lua_State *L, int Index);
 
 int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses);
+int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players);
 
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";
@@ -53,17 +55,16 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 
 	luaL_Reg fns[] = {
 		{ "AddBoss", LuaAddBoss },
+		{ "AddPlayer", LuaAddPlayer },
 		{ NULL, NULL }
 	};
 	lua_newtable(L);
 
-	InitializeEntitiyManagerTable(L, -1);
+	InitializeEntityManagerTable(L, -1);
 
 	luaL_setfuncs(L, fns, 0);
 	lua_setglobal(L, "bossfight");
-//	luaL_setfuncs(L, fns, int nup)
 
-	//	printf("buffer = %s\nfilesize = %zu\n", Buffer, FileSize);
 	int err = luaL_dostring(L, Buffer);
 
 	if (err != LUA_OK) {
@@ -75,8 +76,14 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	}
 
 	lua_getglobal(L, "bossfight");
-	lua_getfield(L, 1, "Bosses");
+
+	lua_getfield(L, -1, "Bosses");
 	RegisterLuaBosses(L, -1, Bosses);
+	lua_pop(L, 1);
+
+	lua_getfield(L, -1, "Players");
+	RegisterLuaPlayers(L, -1, Players);
+	lua_pop(L, 1);
 
 	free(Buffer);
 	fclose(f);
@@ -107,8 +114,35 @@ int LuaAddBoss(lua_State *L) {
 	}
 
 	lua_pushvalue(L, -2);
-
 	PushLuaArray(L, -2);
+	lua_pop(L, 1);	// pop(Bosses)
+	
+	lua_pushnumber(L, 1);
+
+	return 1;
+}
+
+int LuaAddPlayer(lua_State *L) {
+	int n = lua_gettop(L);
+
+//	write_debug(LuaAddBoss, "recieved %d args", n);
+
+	if (n != 2) {
+		lua_pushliteral(L, "expected 1 argument of " BOSS_TABLE_DEFINITION);
+		lua_error(L);
+	}
+
+	VerifyPlayerDefTable(L);
+
+	int Type = lua_getfield(L, -2, "Players");
+	if (Type != LUA_TTABLE) {
+		lua_pushfstring(L, "Expected [\"Players\"] of type table");
+		lua_error(L);
+	}
+
+	lua_pushvalue(L, -2);
+	PushLuaArray(L, -2);
+	lua_pop(L, 1);	// pop(Players)
 
 	lua_pushnumber(L, 1);
 

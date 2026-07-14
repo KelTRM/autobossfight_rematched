@@ -1,4 +1,5 @@
 #include"entity_manager.h"
+#include"../debug/debug.h"
 #include<lua_load.h>
 #include<stdlib.h>
 #include<stddef.h>
@@ -30,20 +31,27 @@ void InitEntities(void) {
 	DefMgr_t Bosses;
 
 	size_t LoadedPlayers = LoadLuaEntities(&Players, &Bosses);
+
+	write_debug(InitEntities, "Loaded %zu entity definitions from lua.", LoadedPlayers);
+
 //	Entity_t *EntitiesTmp;
 //	size_t LoadedPlayers = LoadLuaEntities(&EntitiesTmp);
 //	assert(LoadedPlayers == 0);
 
-	PlayerCount = ArrayLength(PlayerDefinitions);
+//	PlayerCount = ArrayLength(PlayerDefinitions);
 //	BossCount = ArrayLength(BossDefinitions);
 
+	PlayerCount = Players.DefinitionCount;
 	BossCount = Bosses.DefinitionCount;
+
+	write_debug(InitEntities, "read %zu players & %zu bosses", PlayerCount, BossCount);
 
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));
 
 	for (size_t i = 0; i < PlayerCount; i++) {
-		struct PlayerDefinition *Player = &PlayerDefinitions[i];
+//		struct PlayerDefinition *Player = &PlayerDefinitions[i];
+		struct PlayerDefinition *Player = &Players.PlayerDefinition[i];//&PlayerDefinitions[i];
 		Entities[i] = CreatePlayer(
 				Player->Name,
 				Player->HP,
