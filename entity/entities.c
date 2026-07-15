@@ -25,13 +25,6 @@ void InitEntities(void) {
 		exit(-1);
 	}
 
-//	Entity_t *EntitiesTmp;
-//	size_t LoadedEntities = LoadLuaEntities(&EntitiesTmp);
-//	assert(LoadedEntities == 0);
-
-//	PlayerCount = ArrayLength(PlayerDefinitions);
-//	BossCount = ArrayLength(BossDefinitions);
-
 	PlayerCount = Players.DefinitionCount;
 	BossCount = Bosses.DefinitionCount;
 
@@ -41,8 +34,7 @@ void InitEntities(void) {
 	Entities = calloc(EntityCount, sizeof(Entity_t));
 
 	for (size_t i = 0; i < PlayerCount; i++) {
-//		struct PlayerDefinition *Player = &PlayerDefinitions[i];
-		struct PlayerDefinition *Player = &Players.PlayerDefinition[i];//&PlayerDefinitions[i];
+		struct PlayerDefinition *Player = &Players.PlayerDefinition[i];
 		Entities[i] = CreatePlayer(
 				Player->Name,
 				Player->HP,
