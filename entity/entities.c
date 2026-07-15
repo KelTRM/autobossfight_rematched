@@ -11,20 +11,7 @@ size_t BossCount = 0;
 Entity_t *Entities;
 size_t EntityCount;
 
-#define ArrayLength(array)	(sizeof(array) / sizeof(*array))
-
-//struct PlayerDefinition PlayerDefinitions[] = {
-	// players go here
-//	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0xFF6400 },
-//	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0xFF0000 },
-//	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,	.Heal_Max=7500,	.Color=0x00FFFF },
-//};
-
-//struct BossDefinition BossDefinitions[] = {
-	// boss(es) go here
-//	{ .Name="Cornelius",	.HP=325000 },
-//	{ .Name="Cornelius Jr.",	.HP=100000 }
-//};
+// #define ArrayLength(array)	(sizeof(array) / sizeof(*array))
 
 void InitEntities(void) {
 	DefMgr_t Players;
