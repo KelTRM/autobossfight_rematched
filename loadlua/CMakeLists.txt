@@ -9,11 +9,12 @@ target_sources(autobossfight_lua_loader
 	PRIVATE
 		load_lua_entities.c
 		entity_ldr.c
-		InitLuaEntityManager.c
-		ValidateEntityTables.c
-		PushLuaArray.c
-		RegisterLuaEntities.c
-		LuaAddEntity.c
+		init_lua_entity_manager.c
+		validate_entity_tables.c
+		push_lua_array.c
+		register_lua_entities.c
+		lua_add_entity.c
+		read_file.c
 )
 
 target_include_directories(autobossfight_lua_loader

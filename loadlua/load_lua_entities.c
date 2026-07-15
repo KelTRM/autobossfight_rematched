@@ -5,6 +5,7 @@
 #include"../utils/sleep.h"
 #include"lua_registration.h"
 #include"table_validation.h"
+#include"lua_file_mgr.h"
 
 // lua shit
 #include<lua.h>
@@ -14,29 +15,6 @@
 int LuaAddBoss(lua_State *L);
 int LuaAddPlayer(lua_State *L);
 int InitializeEntityManagerTable(lua_State *L, int Index);
-
-char *ReadFileAsStr(const char *Filename) {
-	FILE *f = fopen(Filename, "r");
-
-	if (f == NULL)
-		return NULL;
-
-	fseek(f, 0, SEEK_END);
-	size_t Size = ftell(f);
-
-	char *Buffer = malloc(Size+1);
-	if (Buffer == NULL)
-		return NULL;
-
-	fseek(f, 0, SEEK_SET);
-	fread(Buffer, 1, Size, f);
-
-	Buffer[Size] = 0;
-
-	fclose(f);
-
-	return Buffer;
-}
 
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";

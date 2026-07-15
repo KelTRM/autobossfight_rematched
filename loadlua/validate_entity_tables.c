@@ -29,3 +29,5 @@ void VerifyPlayerDefTable(lua_State *L) {
 	VerifyField(L, "HealMax", LUA_TNUMBER);
 	VerifyField(L, "Color", LUA_TNUMBER);
 }
+
+
