@@ -6,7 +6,8 @@ WARNING - THIS FEATURE IS INCOMPLETE. EVERYTHING IS A WORK IN PROGRESS AND IS SU
 
 ### Adding/removing entities
 
-On load, the file lua/entities.lua is loaded and executed. it may add players/bosses to the game
+On load, the file lua/entities.lua is loaded and executed.
+this file is responsible for specifying the players and bosses which will participate in the game.
 
 To add a player, you may use
 ```lua
