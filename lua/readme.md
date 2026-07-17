@@ -95,16 +95,56 @@ The table contains both a `from` and `target` parameter, each being entities.
 
 # Types
 
+All following types are contructed from tables,
+which may be used to interact with the elements of the fight.
+
+While these are all tables, it's recommended to not use these as tables directly,
+but use their APIs for interacting with them.
+
+Some, such as entities, are unable to work through traditional table definitions.
+This is due to direct interaction with the internals to get/modify these
+
 ## Entity
 
-Allows accessing an entity. May be used by the following interface
+The entity type is responsible for interacting with players and bosses.
 
+The entity cannot be directly interacted with, and must be used by the below API
 ```lua
 entity:GetHealth()          -- returns number of health points
 entity:GetEnergy()          -- returns energy as a percentage
 entity:Heal(hp)             -- heals entity by hp, returns amount healed
-entity:Damage(hp)           -- damages entity by hp, returns damage dealt
+entity:Attack(target,hp)    -- removes hp from target's health
 entity:Living()             -- returns whether the entity is alive
+entity:GetEnemies()         -- gets the enemies of the entity
 ```
 
-## AttackHandler
+## AttackData
+
+`AttackData` values are for AttackHandler return values.
+An instance may be created using `bossfight.attack:AttackData(attack)` (attack param optional)
+
+The AttackData type has the following data points attached to it.
+
+ - Target (target of the given attack) entity
+ - Attacker (attacker of the target) entity
+ - Damage (damage dealt) number
+ - Announcer (method to handle attack message) function
+ - ID (leave nil) number
+
+All of the following can be altered using `AttackData:SetX(X)`
+For example
+
+```lua
+local attack = bossfight.attack:AttackData()
+attack:SetDamage(100)
+```
+
+You may also find some additional announcers in bossfight.announcers, such as
+
+ - default
+ - heal
+
+### Notes
+
+When the attack heals the target, the Damage value is used to indicate the HP given to the target
+
