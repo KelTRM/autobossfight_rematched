@@ -2,6 +2,31 @@
 
 WARNING - THIS FEATURE IS INCOMPLETE. EVERYTHING IS A WORK IN PROGRESS AND IS SUBJECT TO CHANGE
 
+# Scripts
+
+At load time, the file `lua/script.lua` is loaded. This file is the main script,
+and is responsible for loading all other scripts.
+Think of this file as a place to say what scripts you do and don't want to use.
+
+## Adding scripts
+
+The system for adding and removing scripts acts as a state machine
+
+The state machine contains the following
+
+ - A list of all required files for this script
+ - The current type of script to add (`attack` or `entity`)
+
+The list, containing the value of the type as of when it was added.
+
+This may be interacted with by the following interface
+```lua
+local dependencies = bossfight:GetDependencyList();
+
+dependencies:SetType("entity")
+dependencies:AddDependency("entity_adder")
+```
+
 # Entities
 
 ## Adding/removing entities
@@ -147,4 +172,3 @@ You may also find some additional announcers in bossfight.announcers, such as
 ### Notes
 
 When the attack heals the target, the Damage value is used to indicate the HP given to the target
-
