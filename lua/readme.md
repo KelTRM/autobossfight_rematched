@@ -24,8 +24,20 @@ This may be interacted with by the following interface
 local dependencies = bossfight:GetDependencyList();
 
 dependencies:SetType("entity")
-dependencies:AddDependency("entity_adder")
+dependencies:AddDependency("entity.lua")
+
+dependencies:SetType("attack")
+dependencies:AddDependency("attack.lua")
 ```
+
+Note - A dependency list may be created by any lua script,
+but a script may not load one which can do something beyond its permission.
+This means while you could put everything within script.lua,
+it's better to keep everything separate as to keep everything organized.
+
+On top of that, it's best to keep script.lua custom to your game.
+The current iteration of the scripting system has no ability to change what's in a different script,
+but that's not guarenteed to remain the same and it could end up causing damage in the future.
 
 # Entities
 
