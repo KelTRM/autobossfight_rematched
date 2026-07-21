@@ -50,6 +50,12 @@ char *CleanseFilePath(const char *Filename) {
 					continue;
 				}
 
+				char ch = *Filename;
+				
+				if (ch == '/') {
+					CurrentState = STATE_NEXT_SEGMENT;
+				}
+
 				size_t Bytes = strlen(CurrentPtr);
 				CurrentPtr = realloc(CurrentPtr, Bytes+1);
 
@@ -58,7 +64,6 @@ char *CleanseFilePath(const char *Filename) {
 					continue;
 				}
 
-				char ch = *Filename;
 				Filename++;
 				
 				CurrentPtr[Bytes] = ch;
@@ -71,7 +76,7 @@ char *CleanseFilePath(const char *Filename) {
 			} break;
 
 			case STATE_ERR: {
-				for (int i = 0; i < CurrentIndex; i++) {
+				for (size_t i = 0; i < CurrentIndex; i++) {
 					if (Locations[CurrentIndex] != NULL)
 						free(Locations[CurrentIndex]);
 				}
@@ -83,7 +88,16 @@ char *CleanseFilePath(const char *Filename) {
 
 			default:	printf("Unknown state.\n");
 		}
+
+		Filename++;
 	}
+
+	printf("CurrentIndex = %zu\n", CurrentIndex);
+	for (size_t i = 0; i < CurrentIndex; i++) {
+		printf("i=%zu", i);
+	}
+
+	return "";
 }
 
 
