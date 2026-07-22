@@ -42,6 +42,8 @@ char *CleanseFilePath(const char *Filename) {
 				
 				Locations[CurrentIndex] = malloc(1);
 				*Locations[CurrentIndex] = 0;
+
+				CurrentState = STATE_READ_FILENAME;
 			} break;
 			case STATE_READ_FILENAME: {
 				char *CurrentPtr = Locations[CurrentIndex];
@@ -94,11 +96,12 @@ char *CleanseFilePath(const char *Filename) {
 
 	printf("CurrentIndex = %zu\n", CurrentIndex);
 	for (size_t i = 0; i < CurrentIndex; i++) {
-		printf("i=%zu", i);
+		printf("Locations[%zu]=%s\n", i, Locations[CurrentIndex]);
 	}
 
 	return "";
 }
 
-
-
+char **SplitPath(const char *Path) {
+	char **Step = malloc(sizeof(char**));
+}
