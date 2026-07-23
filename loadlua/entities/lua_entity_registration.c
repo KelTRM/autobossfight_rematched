@@ -12,7 +12,7 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 
 	write_debug(LuaBossRegistration, "Registering %zu bosses...", BossCount);
 
-	for (int i = 1; i <= BossCount; i++) {
+	for (size_t i = 1; i <= BossCount; i++) {
 		int type = lua_rawgeti(L, ArrayIdx, i);
 
 		if (type == LUA_TNIL) continue;
@@ -49,7 +49,7 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 
 	write_debug(LuaBossRegistration, "Registering %zu players...", PlayerCount);
 
-	for (int i = 1; i <= PlayerCount; i++) {
+	for (size_t i = 1; i <= PlayerCount; i++) {
 		int type = lua_rawgeti(L, ArrayIdx, i);
 
 		if (type == LUA_TNIL) continue;
