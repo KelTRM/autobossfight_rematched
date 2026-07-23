@@ -7,6 +7,15 @@
 #include"table_validation.h"
 #include<stddef.h>
 
+void LuaAssertType(lua_State *L, int Type, int Expected) {
+	if (Type != Expected) {
+		lua_pushfstring(L, "Expected type %s. got %s instead",
+				lua_typename(L, Expected),
+				lua_typename(L, Type));
+		lua_error(L);
+	}
+}
+
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue) {
 	int Type = lua_getfield(L, -1, Name);
 	
@@ -38,15 +47,11 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 	write_debug(LuaBossRegistration, "Registering %zu bosses...", BossCount);
 
 	for (size_t i = 1; i <= BossCount; i++) {
-		int type = lua_rawgeti(L, ArrayIdx, i);
+		int Type = lua_rawgeti(L, ArrayIdx, i);
 
-		if (type == LUA_TNIL) continue;
+		if (Type == LUA_TNIL) continue;
 
-		if (type != LUA_TTABLE) {
-			lua_pushfstring(L, "Expected type %s. got %s instead", "table", lua_typename(L, type));
-			lua_error(L);
-		}
-
+		LuaAssertType(L, Type, LUA_TTABLE);
 		VerifyBossDefTable(L);
 
 		const char *Name = ReadLuaTableString(L, "Name", "nil");
@@ -70,15 +75,11 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 	write_debug(LuaBossRegistration, "Registering %zu players...", PlayerCount);
 
 	for (size_t i = 1; i <= PlayerCount; i++) {
-		int type = lua_rawgeti(L, ArrayIdx, i);
+		int Type = lua_rawgeti(L, ArrayIdx, i);
 
-		if (type == LUA_TNIL) continue;
+		if (Type == LUA_TNIL) continue;
 
-		if (type != LUA_TTABLE) {
-			lua_pushfstring(L, "Expected type %s. got %s instead", "table", lua_typename(L, type));
-			lua_error(L);
-		}
-
+		LuaAssertType(L, Type, LUA_TTABLE);
 		VerifyPlayerDefTable(L);
 
 		const char *Name   = ReadLuaTableString(L, "Name", "nil");
