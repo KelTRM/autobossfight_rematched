@@ -15,7 +15,7 @@ target_sources(autobossfight_lua_loader
 		entities/register_lua_entities.c
 		entities/lua_add_entity.c
 		read_file.c
-		path_handler/cleanse_path.c
+		path_handler/split_path.c
 )
 
 target_include_directories(autobossfight_lua_loader

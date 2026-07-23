@@ -23,7 +23,7 @@ char **SplitPath(const char *Path) {
 	for (const char *p = Path; *p != 0; p++) {
 		switch (State) {
 			case STATE_CURR:
-				printf("STATE_CURR %zu\n", i+1);
+//				printf("STATE_CURR %zu\n", i+1);
 				{ char **l = realloc(Locations, ++i);
 				if (l == NULL)
 					return NULL;
@@ -31,7 +31,7 @@ char **SplitPath(const char *Path) {
 
 				Locations[i-1] = "."; }
 			case STATE_LOCATION:
-				printf("STATE_LOCATION %zu\n", i+1);
+//				printf("STATE_LOCATION %zu\n", i+1);
 				{ char **l = realloc(Locations, ++i);
 				if (l == NULL)
 					return NULL;
@@ -40,7 +40,7 @@ char **SplitPath(const char *Path) {
 				Locations[i-1] = malloc(0);
 				State = STATE_READ; } break;
 			case STATE_READ:
-				printf("STATE_READ %c\n", *p);
+//				printf("STATE_READ %c\n", *p);
 				{ if (*(p+1) == '/') {
 					State = STATE_LOCATION;
 					//break;
