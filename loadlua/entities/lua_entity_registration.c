@@ -91,11 +91,8 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		write_debug(LuaBossRegistration, "Found player { %s, %d }", Name, (int)HP);
 
 		struct PlayerDefinition Player = {
-			.Name=Name,
-			.HP=HP,
-			.Heal_Min=HealMin,
-			.Heal_Max=HealMax,
-			.Color=Color
+			.Name=Name, .HP=HP,
+			.Heal_Min=HealMin, .Heal_Max=HealMax, .Color=Color
 		};
 
 		AddPlayer(Players, &Player);
