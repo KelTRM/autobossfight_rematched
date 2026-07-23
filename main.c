@@ -30,12 +30,7 @@ void InitEntities(void);
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-char *ParsePath(char *Pathname);
-
 int main(void) {
-	ParsePath("lua/attack.lua");
-	sleep(2000);
-
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
