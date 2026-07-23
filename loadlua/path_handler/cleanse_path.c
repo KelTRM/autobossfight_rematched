@@ -3,111 +3,60 @@
 #include<string.h>
 
 enum States {
-	STATE_NEXT_SEGMENT,
-	STATE_READ_FILENAME,
-	STATE_CURRENT_DIR,
-	STATE_PARENT_DIR,
-	STATE_ERR
+	STATE_READ,
+	STATE_LOCATION,
+	STATE_CURR
 };
 
-char *CleanseFilePath(const char *Filename) {
-	if (Filename == NULL)
-		return NULL;
+char **SplitPath(const char *Path) {
+	enum States State = STATE_CURR;
 
-	if (*Filename == 0)
-		return NULL;
+	char **Locations = malloc(0);
+	size_t i = 0;
 
-	char **Locations = calloc(sizeof(char*), 1);
+	if (*Path == '/')
+		State = STATE_LOCATION;
+
 	if (Locations == NULL)
 		return NULL;
 
-	enum States CurrentState = STATE_NEXT_SEGMENT;
-	*Locations = NULL;
+	for (const char *p = Path; *p != 0; p++) {
+		switch (State) {
+			case STATE_CURR:
+				printf("STATE_CURR %zu\n", i+1);
+				{ char **l = realloc(Locations, ++i);
+				if (l == NULL)
+					return NULL;
+				Locations = l;
 
-	size_t CurrentIndex = 0;
+				Locations[i-1] = "."; }
+			case STATE_LOCATION:
+				printf("STATE_LOCATION %zu\n", i+1);
+				{ char **l = realloc(Locations, ++i);
+				if (l == NULL)
+					return NULL;
+				Locations = l;
 
-	while (*Filename != 0) {
-		switch (CurrentState) {
-			case STATE_NEXT_SEGMENT: {
-				if (Locations[CurrentIndex] != NULL)
-					CurrentIndex++;
-
-				char **ptr = realloc(Locations, sizeof(char*) * CurrentIndex+1);
-				if (ptr == NULL) {
-					CurrentState = STATE_ERR;
-					continue;
+				Locations[i-1] = malloc(0);
+				State = STATE_READ; } break;
+			case STATE_READ:
+				printf("STATE_READ %c\n", *p);
+				{ if (*(p+1) == '/') {
+					State = STATE_LOCATION;
+					//break;
 				}
-
-				Locations = ptr;
-				
-				Locations[CurrentIndex] = malloc(1);
-				*Locations[CurrentIndex] = 0;
-
-				CurrentState = STATE_READ_FILENAME;
-			} break;
-			case STATE_READ_FILENAME: {
-				char *CurrentPtr = Locations[CurrentIndex];
-				if (CurrentPtr == NULL) {
-					CurrentState = STATE_ERR;
-					continue;
-				}
-
-				char ch = *Filename;
-				
-				if (ch == '/') {
-					CurrentState = STATE_NEXT_SEGMENT;
-				}
-
-				size_t Bytes = strlen(CurrentPtr);
-				CurrentPtr = realloc(CurrentPtr, Bytes+1);
-
-				if (CurrentPtr == NULL) {
-					CurrentState = STATE_ERR;
-					continue;
-				}
-
-				Filename++;
-				
-				CurrentPtr[Bytes] = ch;
-				CurrentPtr[Bytes+1] = 0;
-
-				Locations[CurrentIndex] = CurrentPtr;
-			} break;
-			case STATE_CURRENT_DIR: {
-				
-			} break;
-
-			case STATE_ERR: {
-				for (size_t i = 0; i < CurrentIndex; i++) {
-					if (Locations[CurrentIndex] != NULL)
-						free(Locations[CurrentIndex]);
-				}
-
-				free(Locations);
-
-				return NULL;
-			} break;
-
-			default:	printf("Unknown state.\n");
+				size_t len = strlen(Locations[i-1]);
+				char *txt = realloc(Locations[i-1], len+2);
+				if (txt == NULL)
+					return NULL;
+				txt[len] = *p;
+				txt[len+1] = 0; }
 		}
-
-		Filename++;
 	}
-
-	printf("CurrentIndex = %zu\n", CurrentIndex);
-	for (size_t i = 0; i < CurrentIndex; i++) {
-		printf("Locations[%zu]=%s\n", i, Locations[CurrentIndex]);
+	for (size_t j = 0; j < i; j++) {
+		printf("\"%s\" ", Locations[j]);
 	}
+	fflush(stdout);
 
-	return "";
-}
-
-char **SplitPath(const char *Path) {
-	char **Step = malloc(sizeof(char**));
-	if (Step == NULL)
-		return NULL;
-
-	char **CurrentStep = &Step[0];
-
-
+	return Locations;
 }

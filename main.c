@@ -9,7 +9,8 @@
 //#ifdef __linux__
 //#include<unistd.h>
 //#endif
-char *CleanseFilePath(const char *Filename);
+// char *CleanseFilePath(const char *Filename);
+char **SplitPath(const char *Path);
 
 int Init(void);
 
@@ -33,7 +34,8 @@ extern size_t EntityCount;
 
 int main(void) {
 
-	CleanseFilePath("/home/kelvin/desktop/file.txt");
+//	CleanseFilePath("/home/kelvin/desktop/file.txt");
+	SplitPath("/home/kelvin/desktop/file.txt");
 	sleep(2000);
 
 	BUFHANDLE b = CreateBuffer();
