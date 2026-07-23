@@ -12,9 +12,7 @@
 #include<lauxlib.h>
 #include<lualib.h>
 
-int LuaAddBoss(lua_State *L);
-int LuaAddPlayer(lua_State *L);
-int InitializeEntityManagerTable(lua_State *L, int Index);
+void DefineEntityTable(lua_State *L);
 
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";
@@ -29,17 +27,7 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	luaL_Reg fns[] = {
-		{ "AddBoss", LuaAddBoss },
-		{ "AddPlayer", LuaAddPlayer },
-		{ NULL, NULL }
-	};
-	lua_newtable(L);
-
-	InitializeEntityManagerTable(L, -1);
-
-	luaL_setfuncs(L, fns, 0);
-	lua_setglobal(L, "bossfight");
+	DefineEntityTable(L);
 
 	int err = luaL_dostring(L, Buffer);
 
@@ -54,6 +42,7 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	}
 
 	lua_getglobal(L, "bossfight");
+	lua_getfield(L, -1, "entity");
 
 	lua_getfield(L, -1, "Bosses");
 	int Count = RegisterLuaBosses(L, -1, Bosses);
@@ -63,6 +52,8 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	Count += RegisterLuaPlayers(L, -1, Players);
 	lua_pop(L, 1);
 
+	lua_pop(L, 2);
+
 	free(Buffer);
 
 	lua_close(L);
@@ -70,13 +61,3 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	return Count;
 }
 
-int CheckLuaEntities(void) {
-	// check for lua/entities.lua file. This file is required for the game to function.
-	FILE *tmp = fopen("lua/entities.lua", "r");
-	if (tmp == NULL)
-		return -1;
-
-	fclose(tmp);
-
-	return 0;
-}
