@@ -81,7 +81,7 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		lua_Number Color = lua_tonumber(L, -1);
 		lua_pop(L, 1);
 
-		write_debug(LuaBossRegistration, "Found boss { %s, %d }", Name, (int)HP);
+		write_debug(LuaBossRegistration, "Found player { %s, %d }", Name, (int)HP);
 
 		struct PlayerDefinition Player = {
 			.Name=Name,
