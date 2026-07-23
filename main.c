@@ -10,8 +10,6 @@
 //#include<unistd.h>
 //#endif
 // char *CleanseFilePath(const char *Filename);
-char **SplitPath(const char *Path);
-
 int Init(void);
 
 int IsGameOngoing(void);
@@ -32,10 +30,10 @@ void InitEntities(void);
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
-int main(void) {
+char *ParsePath(char *Pathname);
 
-//	CleanseFilePath("/home/kelvin/desktop/file.txt");
-	SplitPath("/home/kelvin/desktop/file.txt");
+int main(void) {
+	ParsePath("lua/attack.lua");
 	sleep(2000);
 
 	BUFHANDLE b = CreateBuffer();

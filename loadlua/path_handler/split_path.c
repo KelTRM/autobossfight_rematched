@@ -8,7 +8,7 @@ enum States {
 	STATE_CURR
 };
 
-char **SplitPath(const char *Path) {
+char **SplitPath(const char *Path, size_t *len) {
 	enum States State = STATE_CURR;
 
 	char **Locations = malloc(0);
@@ -24,12 +24,13 @@ char **SplitPath(const char *Path) {
 		switch (State) {
 			case STATE_CURR:
 //				printf("STATE_CURR %zu\n", i+1);
-				{ char **l = realloc(Locations, ++i);
+				{ char **l = realloc(Locations, (++i) + 1);
 				if (l == NULL)
 					return NULL;
 				Locations = l;
 
-				Locations[i-1] = "."; }
+				Locations[i-1] = ".";
+				State = STATE_LOCATION; }
 			case STATE_LOCATION:
 //				printf("STATE_LOCATION %zu\n", i+1);
 				{ char **l = realloc(Locations, ++i);
@@ -38,7 +39,8 @@ char **SplitPath(const char *Path) {
 				Locations = l;
 
 				Locations[i-1] = malloc(0);
-				State = STATE_READ; } break;
+				State = STATE_READ;
+				if (*p == '/') break; }
 			case STATE_READ:
 //				printf("STATE_READ %c\n", *p);
 				{ if (*(p+1) == '/') {
@@ -58,5 +60,6 @@ char **SplitPath(const char *Path) {
 	}
 	fflush(stdout);
 
+	if (len != NULL) *len = i;
 	return Locations;
 }
