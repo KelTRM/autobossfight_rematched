@@ -7,13 +7,13 @@ add_library(autobossfight_lua_loader)
 
 target_sources(autobossfight_lua_loader
 	PRIVATE
-		load_lua_entities.c
+		entities/load_lua_entities.c
 		entity_ldr.c
-		init_lua_entity_manager.c
-		validate_entity_tables.c
+		entities/init_lua_entity_manager.c
+		entities/validate_entity_tables.c
 		push_lua_array.c
-		register_lua_entities.c
-		lua_add_entity.c
+		entities/register_lua_entities.c
+		entities/lua_add_entity.c
 		read_file.c
 		path_handler/cleanse_path.c
 )

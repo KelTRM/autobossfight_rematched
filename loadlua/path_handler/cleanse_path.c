@@ -104,4 +104,10 @@ char *CleanseFilePath(const char *Filename) {
 
 char **SplitPath(const char *Path) {
 	char **Step = malloc(sizeof(char**));
+	if (Step == NULL)
+		return NULL;
+
+	char **CurrentStep = &Step[0];
+
+
 }
