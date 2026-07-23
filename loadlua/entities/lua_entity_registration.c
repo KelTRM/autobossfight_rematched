@@ -7,6 +7,31 @@
 #include"table_validation.h"
 #include<stddef.h>
 
+const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue) {
+	int Type = lua_getfield(L, -1, Name);
+	
+	const char *str = DefaultValue;
+	if (Type == LUA_TSTRING) {
+		str = lua_tostring(L, -1);
+	}
+
+	lua_pop(L, 1);
+
+	return str;
+}
+
+lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue) {
+	int Type = lua_getfield(L, -1, Name);
+
+	lua_Number n = DefaultValue;
+	if (Type == LUA_TNUMBER) {
+		n = lua_tonumber(L, -1);
+	}
+
+	lua_pop(L, 1);
+	return n;
+}
+
 int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 	size_t BossCount = lua_rawlen(L, ArrayIdx);
 
@@ -24,13 +49,8 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 
 		VerifyBossDefTable(L);
 
-		lua_getfield(L, -1, "Name");
-		const char *Name = lua_tostring(L, -1);
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "HP");
-		lua_Number HP = lua_tonumber(L, -1);
-		lua_pop(L, 1);
+		const char *Name = ReadLuaTableString(L, "Name", "nil");
+		lua_Number HP    = ReadLuaTableNumber(L, "HP", 10000);
 
 		write_debug(LuaBossRegistration, "Found boss { %s, %d }", Name, (int)HP);
 
@@ -61,25 +81,11 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 
 		VerifyPlayerDefTable(L);
 
-		lua_getfield(L, -1, "Name");
-		const char *Name = lua_tostring(L, -1);
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "HP");
-		lua_Number HP = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "HealMin");
-		lua_Number HealMin = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "HealMax");
-		lua_Number HealMax = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "Color");
-		lua_Number Color = lua_tonumber(L, -1);
-		lua_pop(L, 1);
+		const char *Name   = ReadLuaTableString(L, "Name", "nil");
+		lua_Number HP      = ReadLuaTableNumber(L, "HP", 10000);
+		lua_Number HealMin = ReadLuaTableNumber(L, "HealMin", 2500);
+		lua_Number HealMax = ReadLuaTableNumber(L, "HealMax", 7500);
+		lua_Number Color   = ReadLuaTableNumber(L, "Color", 0xFFFFFF);
 
 		write_debug(LuaBossRegistration, "Found player { %s, %d }", Name, (int)HP);
 
