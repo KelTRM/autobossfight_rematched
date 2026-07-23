@@ -12,6 +12,7 @@ target_sources(autobossfight_lua_loader
 		entities/init_lua_entity_manager.c
 		entities/validate_entity_tables.c
 		push_lua_array.c
+		entities/lua_entity_registration.c
 		entities/register_lua_entities.c
 		entities/lua_add_entity.c
 		read_file.c
