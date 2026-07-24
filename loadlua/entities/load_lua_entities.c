@@ -6,11 +6,14 @@
 #include"lua_registration.h"
 #include"lua_file_mgr.h"
 #include"lua_entities.h"
+#include"../lua_bossfight.h"
 
 // lua shit
 #include<lua.h>
 #include<lauxlib.h>
 #include<lualib.h>
+
+// void LoadBossfightTable(lua_State *L, int Perms);
 
 size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	const char *EntityLua = "lua/entities.lua";
@@ -25,7 +28,9 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	DefineEntityTable(L);
+//	printf("test\n");
+	LoadBossfightTable(L, PERM_ENTITY);
+//	DefineEntityTable(L);
 
 	int err = luaL_dostring(L, Buffer);
 

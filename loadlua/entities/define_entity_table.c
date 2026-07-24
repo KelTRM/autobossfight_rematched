@@ -4,6 +4,7 @@
 #include<lualib.h>
 #include"lua_entities.h"
 
+// Reads bossfight table from top of stack, adds entity field
 void DefineEntityTable(lua_State *L) {
 	luaL_Reg fns[] = {
 		{ "AddBoss", LuaAddBoss },
@@ -11,14 +12,8 @@ void DefineEntityTable(lua_State *L) {
 		{ NULL, NULL }
 	};
 
-	lua_newtable(L);
-	
 	// bossfight:entity table
 	lua_newtable(L);
 	InitializeEntityManagerTable(L, -1);
 	luaL_setfuncs(L, fns, 0);
-	
-	lua_setfield(L, -2, "entity");
-
-	lua_setglobal(L, "bossfight");
 }

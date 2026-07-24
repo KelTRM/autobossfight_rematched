@@ -19,6 +19,7 @@ target_sources(autobossfight_lua_loader
 		path_handler/split_path.c
 		path_handler/parse_path.c
 		entities/define_entity_table.c
+		load_bossfight_table.c
 )
 
 target_include_directories(autobossfight_lua_loader
