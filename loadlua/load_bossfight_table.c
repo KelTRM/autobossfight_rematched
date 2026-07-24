@@ -7,6 +7,8 @@
 //	PERM_ATTACK
 //};
 
+void DefineAttackTable(lua_State *L);
+
 // pushes bossfight table to top of stack
 void LoadBossfightTable(lua_State *L, int Perms) {
 	lua_newtable(L);
@@ -17,6 +19,11 @@ void LoadBossfightTable(lua_State *L, int Perms) {
 		lua_setfield(L, -2, "entity");
 
 		printf("tst\n");
+	}
+
+	if ((Perms & PERM_ATTACK) != 0) {
+		DefineAttackTable(L);
+		lua_setfield(L, -2, "attack");
 	}
 
 	lua_setglobal(L, "bossfight");
