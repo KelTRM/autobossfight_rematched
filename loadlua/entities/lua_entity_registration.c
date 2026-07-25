@@ -1,3 +1,5 @@
+#define USE_STD_STRLEN
+
 #include"entity_ldr.h"
 #include"../debug/debug.h"
 #include<lua.h>
@@ -6,6 +8,8 @@
 #include"entity_ldr.h"
 #include"table_validation.h"
 #include<stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 void LuaAssertType(lua_State *L, int Type, int Expected) {
 	if (Type != Expected) {
@@ -57,9 +61,12 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 		const char *Name = ReadLuaTableString(L, "Name", "nil");
 		lua_Number HP    = ReadLuaTableNumber(L, "HP", 10000);
 
-		write_debug(LuaBossRegistration, "Found boss { %s, %d }", Name, (int)HP);
+		char *NewName = malloc(strlen(Name)+1);
+		strncpy(NewName, Name, strlen(Name)+1);
 
-		struct BossDefinition Boss = { .Name=Name, .HP=HP };
+		write_debug(LuaBossRegistration, "Found boss { %s, %d }", NewName, (int)HP);
+
+		struct BossDefinition Boss = { .Name=NewName, .HP=HP };
 
 		AddBoss(Bosses, &Boss);
 
@@ -88,10 +95,13 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		lua_Number HealMax = ReadLuaTableNumber(L, "HealMax", 7500);
 		lua_Number Color   = ReadLuaTableNumber(L, "Color", 0xFFFFFF);
 
-		write_debug(LuaBossRegistration, "Found player { %s, %d }", Name, (int)HP);
+		char *NewName = malloc(strlen(Name)+1);
+		strncpy(NewName, Name, strlen(Name)+1);
+
+		write_debug(LuaBossRegistration, "Found player { %s, %d }", NewName, (int)HP);
 
 		struct PlayerDefinition Player = {
-			.Name=Name, .HP=HP,
+			.Name=NewName, .HP=HP,
 			.Heal_Min=HealMin, .Heal_Max=HealMax, .Color=Color
 		};
 
