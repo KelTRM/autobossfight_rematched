@@ -112,5 +112,7 @@ int CreateAttackPlugin(lua_State *L) {
 	lua_newtable(L);
 	lua_setfield(L, -2, "current_entries");
 
+	luaL_setfuncs(L, fns, 0);
+
 	return 1;
 }
