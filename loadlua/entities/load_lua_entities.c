@@ -26,9 +26,7 @@ size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-//	printf("test\n");
 	LoadBossfightTable(L, PERM_ENTITY | PERM_ATTACK);
-//	DefineEntityTable(L);
 
 	int err = luaL_dostring(L, Buffer);
 

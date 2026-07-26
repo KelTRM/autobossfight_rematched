@@ -1,5 +1,7 @@
 #include<lua.h>
 #include<lauxlib.h>
+#include"lua_attack.h"
+
 /*
  * -- ATTACK TABLE --
 {
@@ -13,8 +15,6 @@
 */
 
 // local attacks=bossfight:CreateAttackPlugin();
-
-int CreateAttackPlugin(lua_State *L);
 
 void DefineAttackTable(lua_State *L) {
 	luaL_Reg fns[] = {

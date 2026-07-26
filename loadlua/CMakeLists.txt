@@ -17,6 +17,7 @@ target_sources(autobossfight_lua_loader
 
 		attacks/define_attack_table.c
 		attacks/define_attack_plugin.c
+		attacks/lua_add_attack.c
 
 		path_handler/split_path.c
 		path_handler/parse_path.c
