@@ -102,7 +102,7 @@ The table taken in by `AddAttack` contains the data for the attack.
 Below is the layout of this table
 
 ```lua
-{
+local AttackTable = {
 	AttackName="example",   -- The name of the attack. This is exclusively for the display name
 	RequiredEnergy=0,       -- The amount of energy the attack consumes
 	EarliestRound=0,        -- The first round in which the attack can be done (nil=0)
@@ -115,6 +115,23 @@ Below is the layout of this table
 Most of these are pretty straight forward.
 The only things worth noting are the details of `CanAttack` and `AttackHandler`,
 which will be described in the section below
+
+Once all your attacks have been added to the `AttackPlugin`, you must register the plugin with the bossfight.
+This may be done with `bossfight.attack:RegisterAttackPlugin(AttackPlugin)`
+
+Below is an example of this process.
+```lua
+-- Create the plugin
+local plugin = bossfight.attack:CreateAttackPlugin()
+
+-- Add the attacks to the plugin
+plugin:AddAttack(AttackTable)
+
+-- Register the plugin
+bossfight.attack:RegisterAttackPlugin(plugin)
+
+-- Attack "example" should now be visible
+```
 
 ## AttackHandler
 
