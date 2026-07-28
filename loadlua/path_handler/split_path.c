@@ -11,7 +11,7 @@ enum States {
 char **SplitPath(const char *Path, size_t *len) {
 	enum States State = STATE_CURR;
 
-	char **Locations = malloc(0);
+	char **Locations = NULL;
 	size_t i = 0;
 
 	if (*Path == '/')
@@ -20,7 +20,8 @@ char **SplitPath(const char *Path, size_t *len) {
 	if (Locations == NULL)
 		return NULL;
 
-	for (const char *p = Path; *p != 0; p++) {
+	const char *p = Path;
+	while (*p != 0) {
 		switch (State) {
 			case STATE_CURR:
 //				printf("STATE_CURR %zu\n", i+1);
@@ -30,7 +31,7 @@ char **SplitPath(const char *Path, size_t *len) {
 				Locations = l;
 
 				Locations[i-1] = ".";
-				State = STATE_LOCATION; }
+				State = STATE_LOCATION; continue; }
 			case STATE_LOCATION:
 //				printf("STATE_LOCATION %zu\n", i+1);
 				{ char **l = realloc(Locations, ++i);
@@ -38,9 +39,10 @@ char **SplitPath(const char *Path, size_t *len) {
 					return NULL;
 				Locations = l;
 
-				Locations[i-1] = malloc(0);
+				Locations[i-1] = NULL;
 				State = STATE_READ;
-				if (*p == '/') break; }
+				if (*p == '/') break;
+				continue; }
 			case STATE_READ:
 //				printf("STATE_READ %c\n", *p);
 				{ if (*(p+1) == '/') {
@@ -52,8 +54,9 @@ char **SplitPath(const char *Path, size_t *len) {
 				if (txt == NULL)
 					return NULL;
 				txt[len] = *p;
-				txt[len+1] = 0; }
+				txt[len+1] = 0; break; }
 		}
+		p++;
 	}
 	for (size_t j = 0; j < i; j++) {
 		printf("\"%s\" ", Locations[j]);
