@@ -6,7 +6,9 @@
 // easy-to-use attack parameters
 #define ATTACK_MINIMUM_ENERGY		25
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
+
 #define ATTACK_NAME			"Combo Attack"
+#define ATTACK_IDENTIFIER		"combo"
 
 #define ADDITIONAL_ATTACK_CHANCE	55
 
@@ -19,6 +21,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 
 const Attack_t ComboAttack = {
 	.AttackName=ATTACK_NAME,
+	.Identifier=ATTACK_IDENTIFIER,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,

@@ -27,6 +27,7 @@ typedef void (*AttackAnnouncer)(AttackData_t *Attack);
 
 struct Attack {
 	const char *AttackName;
+	const char *Identifier;
 
 	Energy_t MinimumEnergy;
 	uint64_t FirstAvailableRound;
@@ -38,6 +39,8 @@ struct Attack {
 	int AppliesToEnemies;
 
 	AttackID_t ID;
+
+	void *LuaAttackData;
 };
 
 AttackData_t AttackEntity(Attack_t *Attack, Entity_t *Target, Entity_t *Attacker);
