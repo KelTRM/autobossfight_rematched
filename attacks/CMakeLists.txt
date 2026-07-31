@@ -11,6 +11,7 @@ target_sources(autobossfight_attack_mgr
 		get_applicable_entities.c
 		default_attack.c
 		generate_attack_data.c
+		find_attack_from_id.c
 
 		#attacks
 		attacks/attack_combo.c
