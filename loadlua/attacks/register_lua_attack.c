@@ -43,7 +43,23 @@ struct LuaAttack_t {
 */
 
 Attack_t ConvertTableToAttack(lua_State *L, int idx) {
-	lua_pushvalue(L, idx);
+	idx = lua_absindex(L, idx);
+
+	if (!lua_istable(L, idx)) {
+		lua_pushstring(L, "recieved non-table as attack.");
+		lua_error(L);
+	}
+
+	Attack_t Attack = { 0 };
+
+	int type = lua_getfield(L, idx, "id");
+	if (type != LUA_TNUMBER) {
+		lua_pushstring(L, "recieved field id of type other than number");
+		lua_error(L);
+	}
+	Attack.ID = lua_tonumber(L, -1);
+
+//	lua_pushvalue(L, idx);
 
 	return (Attack_t){ 0 };
 }
