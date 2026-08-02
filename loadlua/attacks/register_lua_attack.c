@@ -86,6 +86,11 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 		lua_error(L);
 	}
 
+	if (MinimumEnergy < 0) {
+		lua_pushstring(L, "Invalid value for minimum energy.");
+		lua_error(L);
+	}
+
 	write_debug(DEBUG_MODE, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }");
 
 	Attack_t LuaAttack = { 0 };
