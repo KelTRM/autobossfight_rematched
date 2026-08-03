@@ -10,7 +10,10 @@
 
 typedef struct LuaAttack {
 	lua_State *L;
-	int AttackTable;
+//	int AttackTable;
+
+	const char *AttackTableName;
+	int AttackTableIndex;
 
 //	AttackID_t PluginID;
 //	AttackID_t AttackID;
@@ -55,9 +58,15 @@ AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attac
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
 
 	lua_State *L = Attack->L;
-	int idx = Attack->AttackTable;
 
-	lua_pushvalue(L, idx);
+	// get the attack table
+	lua_getglobal(L, Attack->AttackTableName);
+	lua_getfield(L, -1, Attack->AttackTableName);
+	lua_remove(L, -2);
+
+	lua_getfield(L, -1, "attack_handler");
+
+//	int idx = Attack->AttackTable;
 
 	lua_call(L, 2, 1);
 }
