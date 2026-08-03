@@ -1,3 +1,4 @@
+#include <assert.h>
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
@@ -61,12 +62,28 @@ AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attac
 
 	// get the attack table
 	lua_getglobal(L, Attack->AttackTableName);
-	lua_getfield(L, -1, Attack->AttackTableName);
+	
+	int type = lua_getfield(L, -1, Attack->AttackTableName);
+	assert(type == LUA_TTABLE);
+
 	lua_remove(L, -2);
 
-	lua_getfield(L, -1, "attack_handler");
+	type = lua_getfield(L, -1, "attack_handler");
+	assert(type == LUA_TFUNCTION);
 
-//	int idx = Attack->AttackTable;
+	// self arg
+	lua_pushvalue(L, -2);
+
+	// attack arg
+	lua_newtable(L);
+
+	// attack.target
+	lua_newtable(L);
+	lua_setfield(L, -2, "target");
+
+	// attack.attacker
+	lua_newtable(L);
+	lua_setfield(L, -2, "attacker");
 
 	lua_call(L, 2, 1);
 }
@@ -120,7 +137,8 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	// define the lua attack data
 	LuaAttack_t LuaAttackData = {
 		.L=L,
-		.AttackTable=idx
+		.AttackTableName="nil",
+//		.AttackTable=idx
 	};
 
 	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttackData));
