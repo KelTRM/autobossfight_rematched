@@ -8,12 +8,13 @@
 #include<string.h>
 #include<lua.h>
 
-struct LuaAttack_t {
+typedef struct LuaAttack {
 	lua_State *L;
+	int AttackTable;
 
-	AttackID_t PluginID;
-	AttackID_t AttackID;
-};
+//	AttackID_t PluginID;
+//	AttackID_t AttackID;
+} LuaAttack_t;
 
 /*
 	// lua_pop(L, 1);
@@ -50,25 +51,21 @@ struct LuaAttack_t {
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 
+AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
+
+	lua_State *L = Attack->L;
+	int idx = Attack->AttackTable;
+
+	lua_pushvalue(L, idx);
+
+	lua_call(L, 2, 1);
+}
+
 Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	idx = lua_absindex(L, idx);
 
-//	if (!lua_istable(L, idx)) {
-//		lua_pushstring(L, "recieved non-table as attack.");
-//		lua_error(L);
-//	}
-
-//	Attack_t Attack = { 0 };
-
-//	int type = lua_getfield(L, idx, "id");
-//	if (type != LUA_TNUMBER) {
-//		lua_pushstring(L, "recieved field id of type other than number");
-//		lua_error(L);
-//	}
-//	Attack.ID = lua_tonumber(L, -1);
-
-//	type = lua_getfield(L, idx, "first_round");
-
+	// read the table
 	AttackID_t ID = ReadLuaTableNumber(L, "id", 0);
 	lua_Number FirstRound = ReadLuaTableNumber(L, "first_round", 0);
 	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
@@ -76,6 +73,7 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
 	const char *Identifier = ReadLuaTableString(L, "int_name", NULL);
 
+	// validate the data
 	if (DisplayName == NULL) {
 		lua_pushstring(L, "invalid attack name.");
 		lua_error(L);
@@ -93,16 +91,35 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 
 	write_debug(DEBUG_MODE, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }");
 
+	// define the attack's struct
 	Attack_t LuaAttack = { 0 };
 
 	LuaAttack.ID = ID;
 	LuaAttack.FirstAvailableRound = FirstRound;
 	LuaAttack.MinimumEnergy = MinimumEnergy;
 	
-	LuaAttack.Identifier = malloc(strlen(Identifier));
-	LuaAttack.AttackName = malloc(strlen(DisplayName));
+	// copy the strings
+	size_t IdentifierLength = strlen(Identifier);
+	size_t NameLength = strlen(DisplayName);
 
-	return (Attack_t){ 0 };
+	LuaAttack.Identifier = malloc(IdentifierLength);
+	LuaAttack.AttackName = malloc(NameLength);
+
+	strncpy((char*)LuaAttack.Identifier, Identifier, IdentifierLength);
+	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength);
+
+	// define the lua attack data
+	LuaAttack_t LuaAttackData = {
+		.L=L,
+		.AttackTable=idx
+	};
+
+	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttackData));
+	memcpy(LuaAttack.LuaAttackData, &LuaAttackData, sizeof(LuaAttackData));
+
+	return LuaAttack;
 }
 
-void RegisterLuaAttacks(lua_State *L) {}
+void RegisterLuaAttacks(lua_State *L) {
+
+}
