@@ -51,7 +51,7 @@ int AddAttack(lua_State *L) {
 	}
 
 	// lua_pop(L, 1);
-	lua_setfield(L, -2, "attack_handler");
+	lua_setfield(L, -2, "can_attack");
 
 	// push AttackHandler
 	type = lua_getfield(L, 3, "AttackHandler");
@@ -60,7 +60,7 @@ int AddAttack(lua_State *L) {
 		lua_pushnil(L);
 	}
 
-	lua_setfield(L, -2, "can_attack");
+	lua_setfield(L, -2, "attack_handler");
 
 	lua_pushnumber(L, ID);
 	lua_setfield(L, -2, "id");
