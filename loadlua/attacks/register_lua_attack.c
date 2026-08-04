@@ -1,9 +1,11 @@
 #include <assert.h>
+#include <stdio.h>
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
 #include"lua_attack.h"
 #include"../../attacks/attacks.h"
+#include"types/lua_types.h"
 #include"../debug/debug.h"
 #include<stdlib.h>
 #include<string.h>
@@ -11,13 +13,9 @@
 
 typedef struct LuaAttack {
 	lua_State *L;
-//	int AttackTable;
 
 	const char *AttackTableName;
-	int AttackTableIndex;
-
-//	AttackID_t PluginID;
-//	AttackID_t AttackID;
+	const char *AttackTableIndex;
 } LuaAttack_t;
 
 /*
@@ -55,7 +53,7 @@ typedef struct LuaAttack {
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 
-AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+const AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
 
 	lua_State *L = Attack->L;
@@ -63,13 +61,21 @@ AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attac
 	// get the attack table
 	lua_getglobal(L, Attack->AttackTableName);
 	
-	int type = lua_getfield(L, -1, Attack->AttackTableName);
+	int type = lua_getfield(L, -1, Attack->AttackTableIndex);
 	assert(type == LUA_TTABLE);
 
 	lua_remove(L, -2);
 
 	type = lua_getfield(L, -1, "attack_handler");
-	assert(type == LUA_TFUNCTION);
+	if (type != LUA_TFUNCTION) {
+		printf("Not implemented.");
+		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
+				Attack->AttackTableIndex);
+
+		lua_pop(L, 2);
+		return (AttackData_t){ 0 };
+	}
+//	assert(type == LUA_TFUNCTION);
 
 	// self arg
 	lua_pushvalue(L, -2);
@@ -78,14 +84,17 @@ AttackData_t *LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attac
 	lua_newtable(L);
 
 	// attack.target
-	lua_newtable(L);
+	CreateEntityTable(L, Target);
 	lua_setfield(L, -2, "target");
 
 	// attack.attacker
-	lua_newtable(L);
+	CreateEntityTable(L, Attacker);
 	lua_setfield(L, -2, "attacker");
 
 	lua_call(L, 2, 1);
+	lua_pop(L, 1);
+
+	return (AttackData_t){ 0 };
 }
 
 Attack_t ConvertTableToAttack(lua_State *L, int idx) {
@@ -148,5 +157,5 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 }
 
 void RegisterLuaAttacks(lua_State *L) {
-
+	(void)L;
 }
