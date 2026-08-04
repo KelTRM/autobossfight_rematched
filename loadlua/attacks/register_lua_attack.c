@@ -75,7 +75,6 @@ const AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *
 		lua_pop(L, 2);
 		return (AttackData_t){ 0 };
 	}
-//	assert(type == LUA_TFUNCTION);
 
 	// self arg
 	lua_pushvalue(L, -2);
