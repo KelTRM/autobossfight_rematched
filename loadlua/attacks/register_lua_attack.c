@@ -3,13 +3,16 @@
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
-#include"lua_attack.h"
+// #include"lua_attack.h"
 #include"../../attacks/attacks.h"
+#include"lua_registration.h"
 #include"types/lua_types.h"
 #include"../debug/debug.h"
 #include<stdlib.h>
 #include<string.h>
 #include<lua.h>
+
+const char *PluginRegistrationsName = "__bossfight_registered_plugins";
 
 typedef struct LuaAttack {
 	lua_State *L;
@@ -53,7 +56,7 @@ typedef struct LuaAttack {
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 
-const AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
 
 	lua_State *L = Attack->L;
@@ -131,6 +134,12 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	LuaAttack.ID = ID;
 	LuaAttack.FirstAvailableRound = FirstRound;
 	LuaAttack.MinimumEnergy = MinimumEnergy;
+
+	LuaAttack.Attack = LuaAttackManager;
+	LuaAttack.Available = DefaultCanAttack;
+
+	LuaAttack.AppliesToAllies = 0;
+	LuaAttack.AppliesToEnemies = 1;
 	
 	// copy the strings
 	size_t IdentifierLength = strlen(Identifier);
@@ -155,6 +164,45 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	return LuaAttack;
 }
 
-void RegisterLuaAttacks(lua_State *L) {
-	(void)L;
+int RegisterLuaAttacks(lua_State *L) {
+	int args = lua_gettop(L);
+
+	if (args != 2) {
+		lua_pushstring(L, "plugin:RegisterLuaAttacks - expected 1 parameter.");
+		lua_error(L);
+	}
+
+	int type = lua_getglobal(L, PluginRegistrationsName);
+	if (type == LUA_TNIL) {
+		// define new registered plugin table
+		lua_newtable(L);
+		lua_setglobal(L, PluginRegistrationsName);
+	} else if (type != LUA_TTABLE) {
+		// can be presumed another instance of the name exists. results in failure
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+
+	lua_getfield(L, 1, "current_entries");
+
+	size_t RegistrationCount = 0;
+	size_t RegistrationsProvided = lua_rawlen(L, -1);
+
+	for (size_t i = 1; i <= RegistrationsProvided; i++) {
+		// get the registration
+		lua_rawgeti(L, -1, i);
+
+		// add table to the registered plugin list
+		Attack_t Attack = ConvertTableToAttack(L, -1);
+		lua_setfield(L, -3, Attack.Identifier);
+
+		// clear the registration
+		lua_pushnil(L);
+		lua_rawseti(L, -2, i);
+	}
+
+	PushLuaArray(L, -1);
+
+	lua_pushnumber(L, RegistrationCount);
+	return 1;
 }
