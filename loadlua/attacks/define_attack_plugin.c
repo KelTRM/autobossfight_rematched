@@ -4,6 +4,7 @@
 #include"../../debug/debug.h"
 #include"lua_attack.h"
 
+
 /*
  * -- ATTACK TABLE --
 {

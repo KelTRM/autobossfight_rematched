@@ -2,6 +2,8 @@
 #include<lauxlib.h>
 #include"lua_attack.h"
 
+int RegisterLuaAttacks(lua_State *L);
+
 /*
  * -- ATTACK TABLE --
 {
@@ -19,6 +21,8 @@
 void DefineAttackTable(lua_State *L) {
 	luaL_Reg fns[] = {
 		{ "CreateAttackPlugin", CreateAttackPlugin },
+		// to be changed
+		{ "RegisterAttackPlugin", RegisterLuaAttacks },
 		{ NULL, NULL }
 	};
 
