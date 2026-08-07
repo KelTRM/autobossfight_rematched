@@ -126,7 +126,8 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 		lua_error(L);
 	}
 
-	write_debug(DEBUG_MODE, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }");
+	write_debug(DEBUG_MODE, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }",
+			Identifier, DisplayName, FirstRound, MinimumEnergy, ID);
 
 	// define the attack's struct
 	Attack_t LuaAttack = { 0 };
@@ -177,18 +178,22 @@ int RegisterLuaAttacks(lua_State *L) {
 		// define new registered plugin table
 		lua_newtable(L);
 		lua_setglobal(L, PluginRegistrationsName);
+		lua_getglobal(L, PluginRegistrationsName);
 	} else if (type != LUA_TTABLE) {
 		// can be presumed another instance of the name exists. results in failure
 		lua_pushnumber(L, 0);
 		return 1;
 	}
 
-	lua_getfield(L, 1, "current_entries");
+	lua_getfield(L, 2, "current_entries");
 
 	size_t RegistrationCount = 0;
 	size_t RegistrationsProvided = lua_rawlen(L, -1);
 
+	int top = lua_gettop(L);
+
 	for (size_t i = 1; i <= RegistrationsProvided; i++) {
+		assert(top == lua_gettop(L));
 		// get the registration
 		lua_rawgeti(L, -1, i);
 
@@ -200,8 +205,8 @@ int RegisterLuaAttacks(lua_State *L) {
 		lua_pushnil(L);
 		lua_rawseti(L, -2, i);
 	}
-
-	PushLuaArray(L, -1);
+	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
+	PushLuaArray(L, -2);
 
 	lua_pushnumber(L, RegistrationCount);
 	return 1;
