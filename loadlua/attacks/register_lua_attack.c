@@ -4,6 +4,7 @@
 
 // oh fuck this is gonna be a pain.
 // #include"lua_attack.h"
+#include"../../attacks/attack_manager.h"
 #include"../../attacks/attacks.h"
 #include"lua_registration.h"
 #include"types/lua_types.h"
@@ -198,8 +199,13 @@ int RegisterLuaAttacks(lua_State *L) {
 		lua_rawgeti(L, -1, i);
 
 		// add table to the registered plugin list
-		Attack_t Attack = ConvertTableToAttack(L, -1);
-		lua_setfield(L, -3, Attack.Identifier);
+		Attack_t *Attack = malloc(sizeof(Attack_t));
+		assert(Attack != NULL);
+		*Attack = ConvertTableToAttack(L, -1);
+
+		RegisterAttack(Attack);
+
+		lua_setfield(L, -3, Attack->Identifier);
 
 		// clear the registration
 		lua_pushnil(L);
