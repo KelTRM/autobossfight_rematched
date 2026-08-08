@@ -203,7 +203,8 @@ int RegisterLuaAttacks(lua_State *L) {
 		assert(Attack != NULL);
 		*Attack = ConvertTableToAttack(L, -1);
 
-		RegisterAttack(Attack);
+		// this was bad - attack registrar is still uninitialized
+//		RegisterAttack(Attack);
 
 		lua_setfield(L, -3, Attack->Identifier);
 
