@@ -41,3 +41,7 @@ LuaAttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 
 	return Manager;
 }
+
+void AllocateAttackPlugin(LuaAttackMgr_t *Manager, size_t RequiredPlugins) {
+	
+}
