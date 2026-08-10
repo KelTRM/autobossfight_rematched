@@ -1,4 +1,5 @@
 #include<stdlib.h>
+#include<string.h>
 #include"../../attacks/attack.h"
 
 // # of IDs allocated at a time
@@ -36,12 +37,26 @@ AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 		MaxAttacks = MAX_ATTACKS_DEFAULT;
 
 	AttackMgr_t Manager;
-	Manager.Attacks = NULL;
-	Manager.MaxAttackCount = (MaxAttacks / ATTACK_BLOCK_SIZE) + ((MaxAttacks % ATTACK_BLOCK_SIZE) > 0);
+	Manager.MaxAttackCount = ((MaxAttacks-1) / ATTACK_BLOCK_SIZE)+1;
+	Manager.Attacks = calloc(Manager.MaxAttackCount, sizeof(struct Attacks));
+
+	if (Manager.Attacks == NULL)
+		return (AttackMgr_t){ 0 };
+
+	for (size_t i = 0; i < Manager.MaxAttackCount; i++) {
+		memset(Manager.Attacks[i].Attack, 0, sizeof(Attack_t*) * ATTACK_BLOCK_SIZE);
+		Manager.Attacks[i].PluginID = -1;
+	}
 
 	return Manager;
 }
 
-void AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins) {
-	
+size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins) {
+	size_t RequiredBlocks = ((RequiredPlugins-1) / ATTACK_BLOCK_SIZE)+1;
+	size_t FreeBlocksFound = 0;
+	uint32_t FirstFreeBlock = -1;
+
+	for (size_t i = 0; i < Manager->MaxAttackCount; i++) {
+		
+	}
 }
