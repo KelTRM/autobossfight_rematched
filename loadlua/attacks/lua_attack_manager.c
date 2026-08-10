@@ -10,14 +10,14 @@ typedef struct AttackPlugin {
 	size_t Count;
 } AttackPlugin_t;
 
-typedef struct LuaAttackManager {
-	struct PluginAllocation {
-		AttackPlugin_t *Plugins;
-		size_t BlocksAlloc;
-		size_t BlockOffset;
-	} *Plugins;
-	size_t PluginCount;
-} LuaAttackMgr_t;
+typedef struct AttackManager {
+	struct Attacks {
+		Attack_t *Attack[ATTACK_BLOCK_SIZE];
+		uint32_t PluginID;
+	} *Attacks;
+
+	size_t MaxAttackCount;
+} AttackMgr_t;
 
 /*
  * --- PLUGIN ID MODEL ---
@@ -31,17 +31,17 @@ typedef struct LuaAttackManager {
  */
 
 // MaxAttacks = 0 gives default
-LuaAttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
+AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 	if (MaxAttacks == 0)
 		MaxAttacks = MAX_ATTACKS_DEFAULT;
 
-	LuaAttackMgr_t Manager;
-	Manager.Plugins = NULL;
-	Manager.PluginCount = 0;
+	AttackMgr_t Manager;
+	Manager.Attacks = NULL;
+	Manager.MaxAttackCount = (MaxAttacks / ATTACK_BLOCK_SIZE) + ((MaxAttacks % ATTACK_BLOCK_SIZE) > 0);
 
 	return Manager;
 }
 
-void AllocateAttackPlugin(LuaAttackMgr_t *Manager, size_t RequiredPlugins) {
+void AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins) {
 	
 }
