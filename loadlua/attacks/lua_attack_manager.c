@@ -2,6 +2,9 @@
 #include<string.h>
 #include"../../attacks/attack.h"
 
+typedef uint32_t	PluginID_t;
+typedef int64_t		BlockID_t;
+
 // todos:
 // implement plugin handle system
 // implement plugin attack size handler
@@ -10,11 +13,17 @@
 // # of IDs allocated at a time
 #define ATTACK_BLOCK_SIZE		10
 #define MAX_ATTACKS_DEFAULT		65535
+#define MAX_PLUGINS			32767
 
-typedef struct AttackPlugin {
-	Attack_t *Attacks;
-	size_t Count;
-} AttackPlugin_t;
+// plugin id refers to index into array
+struct PluginRegistry {
+	int Registered;		// 0xFFFFFFFF if registered, anything else otherwise
+	
+	BlockID_t FirstRegisteredBlock;
+	size_t AllocatedBlockCount;
+	
+	size_t MaxAttacks;
+};
 
 typedef struct AttackManager {
 	struct Attacks {
@@ -22,9 +31,10 @@ typedef struct AttackManager {
 		uint32_t PluginID;
 	} *Attacks;
 
+	BlockID_t BlockIdCount;
 	size_t MaxAttackCount;
+	struct PluginRegistry Plugins[MAX_PLUGINS];
 } AttackMgr_t;
-
 /*
  * --- PLUGIN ID MODEL ---
  *
@@ -56,9 +66,13 @@ AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 	return Manager;
 }
 
-size_t GetPluginSizeFromID() {
+size_t GetPluginSizeFromID(PluginID_t ID) {
 	// not implemented
 	return 0;
+}
+
+static PluginID_t GetNewPluginID(BlockID_t FirstBlock, size_t BlockCount, size_t AttackCount) {
+
 }
 
 size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
@@ -93,6 +107,5 @@ size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t
 	}
 
 	*ID = FirstFreeBlock;
-
 	return FreeBlocksFound;
 }
