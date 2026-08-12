@@ -14,14 +14,18 @@ typedef int64_t		BlockID_t;
 #define ATTACK_BLOCK_SIZE		10
 #define MAX_ATTACKS_DEFAULT		65535
 #define MAX_PLUGINS			32767
+#define PLUGIN_DEFINED			0xFFFFFFFFul
 
 // plugin id refers to index into array
 struct PluginRegistry {
-	int Registered;		// 0xFFFFFFFF if registered, anything else otherwise
+	uint32_t Registered;		// 0xFFFFFFFF if registered, anything else otherwise
 	
 	BlockID_t FirstRegisteredBlock;
 	size_t AllocatedBlockCount;
-	
+
+	// list of attacks with no specified allocation
+	Attack_t **UnallocatedAttacks;
+
 	size_t MaxAttacks;
 };
 
@@ -66,13 +70,19 @@ AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 	return Manager;
 }
 
-size_t GetPluginSizeFromID(PluginID_t ID) {
-	// not implemented
-	return 0;
+size_t GetPluginSizeFromID(AttackMgr_t *mgr, PluginID_t ID) {
+	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED) return 0;
+	return mgr->Plugins[ID].MaxAttacks;
+//	return 0;
 }
 
-static PluginID_t GetNewPluginID(BlockID_t FirstBlock, size_t BlockCount, size_t AttackCount) {
+static PluginID_t GetNewPluginID(AttackMgr_t *mgr, BlockID_t FirstBlock, size_t BlockCount, size_t AttackCount) {
+	for (PluginID_t i = 0; i < MAX_PLUGINS; i++) {
+		if (mgr->Plugins[i].Registered == PLUGIN_DEFINED) continue;
 
+		// PluginID = i
+		
+	}
 }
 
 size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
