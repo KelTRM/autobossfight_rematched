@@ -2,6 +2,11 @@
 #include<string.h>
 #include"../../attacks/attack.h"
 
+// todos:
+// implement plugin handle system
+// implement plugin attack size handler
+// implement interface for adding/removing plugin attacks
+
 // # of IDs allocated at a time
 #define ATTACK_BLOCK_SIZE		10
 #define MAX_ATTACKS_DEFAULT		65535
@@ -51,6 +56,11 @@ AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 	return Manager;
 }
 
+size_t GetPluginSizeFromID() {
+	// not implemented
+	return 0;
+}
+
 size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
 	if (ID == NULL) return 0;
 	size_t RequiredBlocks = ((RequiredPlugins-1) / ATTACK_BLOCK_SIZE)+1;
@@ -81,4 +91,8 @@ size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t
 		struct Attacks *Block = &Manager->Attacks[FirstFreeBlock+i];
 		Block->PluginID = FirstFreeBlock;
 	}
+
+	*ID = FirstFreeBlock;
+
+	return FreeBlocksFound;
 }
