@@ -81,7 +81,12 @@ static PluginID_t GetNewPluginID(AttackMgr_t *mgr, BlockID_t FirstBlock, size_t 
 		if (mgr->Plugins[i].Registered == PLUGIN_DEFINED) continue;
 
 		// PluginID = i
-		
+		mgr->Plugins[i].Registered = PLUGIN_DEFINED;
+
+		mgr->Plugins[i].MaxAttacks = AttackCount;
+		mgr->Plugins[i].UnallocatedAttacks = NULL;
+		mgr->Plugins[i].FirstRegisteredBlock = FirstBlock;
+		mgr->Plugins[i].AllocatedBlockCount = BlockCount;
 	}
 }
 
