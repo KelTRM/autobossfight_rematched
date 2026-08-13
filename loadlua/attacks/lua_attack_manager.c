@@ -104,12 +104,19 @@ int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
 }
 
 Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
-//	BlockID_t 
+	if (ValidatePlugin(mgr, ID) == 0) return NULL;
+	
+	size_t MaxAttacks = mgr->Plugins[ID].MaxAttacks;
+	if (Attack > MaxAttacks) return NULL;
 
-	BlockID_t IndexBlock;
-	uint32_t BlockIndex;
+	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
 
-	return NULL;
+	BlockID_t IndexBlock = (Attack / ATTACK_BLOCK_SIZE) + PluginBlock;
+	if (IndexBlock > mgr->BlockIdCount) return NULL;
+
+	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
+
+	return &mgr->Attacks[PluginBlock].Attack[BlockIndex];
 }
 
 size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
