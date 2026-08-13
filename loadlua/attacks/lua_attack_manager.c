@@ -25,9 +25,10 @@ struct PluginRegistry {
 	BlockID_t FirstRegisteredBlock;
 	size_t AllocatedBlockCount;
 
-	// list of attacks with no specified allocation
-	Attack_t **UnallocatedAttacks;
-	size_t UnallocatedAttackCount;
+	// should instead check if existing plugin has ID=0, and move if true
+//	// list of attacks with no specified allocation
+//	Attack_t **UnallocatedAttacks;
+//	size_t UnallocatedAttackCount;
 
 	size_t MaxAttacks;
 };
@@ -87,8 +88,8 @@ static PluginID_t GetNewPluginID(AttackMgr_t *mgr, BlockID_t FirstBlock, size_t 
 		mgr->Plugins[i].Registered = PLUGIN_DEFINED;
 
 		mgr->Plugins[i].MaxAttacks = AttackCount;
-		mgr->Plugins[i].UnallocatedAttacks = NULL;
-		mgr->Plugins[i].UnallocatedAttackCount = 0;
+//		mgr->Plugins[i].UnallocatedAttacks = NULL;
+//		mgr->Plugins[i].UnallocatedAttackCount = 0;
 		mgr->Plugins[i].FirstRegisteredBlock = FirstBlock;
 		mgr->Plugins[i].AllocatedBlockCount = BlockCount;
 		return i;
