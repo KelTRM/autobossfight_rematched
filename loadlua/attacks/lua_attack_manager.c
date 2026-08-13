@@ -14,7 +14,9 @@ typedef int64_t		BlockID_t;
 #define ATTACK_BLOCK_SIZE		10
 #define MAX_ATTACKS_DEFAULT		65535
 #define MAX_PLUGINS			32767
+
 #define PLUGIN_DEFINED			0xFFFFFFFFul
+#define INVALID_PLUGIN_ID		0xFFFFFFFFul
 
 // plugin id refers to index into array
 struct PluginRegistry {
@@ -25,6 +27,7 @@ struct PluginRegistry {
 
 	// list of attacks with no specified allocation
 	Attack_t **UnallocatedAttacks;
+	size_t UnallocatedAttackCount;
 
 	size_t MaxAttacks;
 };
@@ -85,9 +88,52 @@ static PluginID_t GetNewPluginID(AttackMgr_t *mgr, BlockID_t FirstBlock, size_t 
 
 		mgr->Plugins[i].MaxAttacks = AttackCount;
 		mgr->Plugins[i].UnallocatedAttacks = NULL;
+		mgr->Plugins[i].UnallocatedAttackCount = 0;
 		mgr->Plugins[i].FirstRegisteredBlock = FirstBlock;
 		mgr->Plugins[i].AllocatedBlockCount = BlockCount;
+		return i;
 	}
+	return INVALID_PLUGIN_ID;
+}
+
+int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
+	if (ID >= MAX_PLUGINS) return 0;
+	if (mgr == NULL) return 0;
+	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED) return 0;
+
+	return 1;
+}
+
+Attack_t *IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
+//	BlockID_t 
+
+	BlockID_t IndexBlock;
+	uint32_t BlockIndex;
+
+	return NULL;
+}
+
+size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
+	// make sure request is valid
+	if (mgr == NULL)
+		return 0;
+	
+	// confirm plugin exists
+	if (ID > MAX_PLUGINS)
+		return 0;
+	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED)
+		return 0;
+
+	// confirm attack exists
+	if (Attack == NULL)
+		return 0;
+
+	if (Attack->ID == 0) {
+		// unallocated attack. take care of later
+		return 1;
+	}
+
+	// attack explicitly requests ID. to be respected unless ID is taken
 }
 
 size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
