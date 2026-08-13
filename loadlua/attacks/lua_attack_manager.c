@@ -1,3 +1,4 @@
+#include <assert.h>
 #include<stdlib.h>
 #include<string.h>
 #include"../../attacks/attack.h"
@@ -86,10 +87,7 @@ static PluginID_t GetNewPluginID(AttackMgr_t *mgr, BlockID_t FirstBlock, size_t 
 
 		// PluginID = i
 		mgr->Plugins[i].Registered = PLUGIN_DEFINED;
-
 		mgr->Plugins[i].MaxAttacks = AttackCount;
-//		mgr->Plugins[i].UnallocatedAttacks = NULL;
-//		mgr->Plugins[i].UnallocatedAttackCount = 0;
 		mgr->Plugins[i].FirstRegisteredBlock = FirstBlock;
 		mgr->Plugins[i].AllocatedBlockCount = BlockCount;
 		return i;
@@ -105,7 +103,7 @@ int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
 	return 1;
 }
 
-Attack_t *IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
+Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
 //	BlockID_t 
 
 	BlockID_t IndexBlock;
@@ -115,26 +113,31 @@ Attack_t *IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
 }
 
 size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
-	// make sure request is valid
-	if (mgr == NULL)
-		return 0;
-	
-	// confirm plugin exists
-	if (ID > MAX_PLUGINS)
-		return 0;
-	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED)
-		return 0;
+	// make sure the plugin exists
+	if (ValidatePlugin(mgr, ID) == 0) return 0;
 
 	// confirm attack exists
 	if (Attack == NULL)
 		return 0;
 
-	if (Attack->ID == 0) {
-		// unallocated attack. take care of later
+	if (Attack->ID != 0) {
+		// attack explicitly requests ID. to be respected unless ID is taken
+		return 1;
+	}
+unallocated: //goto unallocated if existing allocated array exists
+	for (AttackID_t i = 0; i < mgr->Plugins->MaxAttacks; i++) {
+		Attack_t **Attack = IndexPluginSpace(mgr, ID, i);
+		assert(Attack != NULL);	// shit's seriously fucked up if this assert fails
+		if (*Attack != NULL) continue;
+		// found new attack id to use
+		
+		
+
 		return 1;
 	}
 
-	// attack explicitly requests ID. to be respected unless ID is taken
+	// couldn't find free attack here.
+	return 0;
 }
 
 size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
