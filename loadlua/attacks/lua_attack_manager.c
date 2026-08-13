@@ -128,17 +128,20 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 		return 0;
 
 	if (Attack->ID != 0) {
+		// temporary to prevent warning
+		goto unallocated;
+
 		// attack explicitly requests ID. to be respected unless ID is taken
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
 	for (AttackID_t i = 0; i < mgr->Plugins->MaxAttacks; i++) {
-		Attack_t **Attack = IndexPluginSpace(mgr, ID, i);
-		assert(Attack != NULL);	// shit's seriously fucked up if this assert fails
-		if (*Attack != NULL) continue;
+		Attack_t **IdxAttack = IndexPluginSpace(mgr, ID, i);
+		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
+		if (*IdxAttack != NULL) continue;
 		// found new attack id to use
 		
-		
+		*IdxAttack = Attack;
 
 		return 1;
 	}
