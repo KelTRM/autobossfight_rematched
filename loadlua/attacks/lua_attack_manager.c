@@ -1,6 +1,7 @@
 #include<assert.h>
 #include<stdlib.h>
 #include<string.h>
+#include"lua_attack_manager.h"
 #include"../../registration/registration.h"
 #include"../../attacks/attack.h"
 
@@ -20,31 +21,6 @@ typedef int64_t		BlockID_t;
 #define PLUGIN_DEFINED			0xFFFFFFFFul
 #define INVALID_PLUGIN_ID		0xFFFFFFFFul
 
-// plugin id refers to index into array
-struct PluginRegistry {
-	uint32_t Registered;		// 0xFFFFFFFF if registered, anything else otherwise
-	
-	BlockID_t FirstRegisteredBlock;
-	size_t AllocatedBlockCount;
-
-	// should instead check if existing plugin has ID=0, and move if true
-//	// list of attacks with no specified allocation
-//	Attack_t **UnallocatedAttacks;
-//	size_t UnallocatedAttackCount;
-
-	size_t MaxAttacks;
-};
-
-typedef struct AttackManager {
-	struct Attacks {
-		Attack_t *Attack[ATTACK_BLOCK_SIZE];
-		uint32_t PluginID;
-	} *Attacks;
-
-	BlockID_t BlockIdCount;
-	size_t MaxAttackCount;
-	struct PluginRegistry Plugins[MAX_PLUGINS];
-} AttackMgr_t;
 /*
  * --- PLUGIN ID MODEL ---
  *

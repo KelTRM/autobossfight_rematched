@@ -15,7 +15,7 @@
 
 //Linked_t AttackList = NULL;
 
-Registrar_t AttackRegistrar;
+extern Registrar_t AttackRegistrar;
 
 int InitAttackRegistrar(void) {
 	return InitRegistrar(ATTACK_LIMIT, &AttackRegistrar);

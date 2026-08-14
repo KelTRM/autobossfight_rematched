@@ -1,5 +1,7 @@
 #include"attacks/attacks.h"
 #include"attack_manager.h"
+#include<lua_load.h>
+#include<registration.h>
 #include<stddef.h>
 
 const Attack_t *AttacksToRegister[] = {
@@ -14,7 +16,9 @@ const Attack_t *AttacksToRegister[] = {
 	&SeventyPercentPowerAttack
 };
 
-size_t InitAttacks(void) {
+Registrar_t AttackRegistrar;
+
+size_t InitAttacks(void *Lua) {
 	InitAttackRegistrar();
 
 	size_t AttackCount = sizeof(AttacksToRegister) / sizeof(*AttacksToRegister);
@@ -23,6 +27,8 @@ size_t InitAttacks(void) {
 	for (size_t i = 0; i < AttackCount; i++) {
 		RegisteredAttacks += RegisterAttack((Attack_t*)AttacksToRegister[i]);
 	}
+
+	LoadLuaAttacks(Lua, AttackRegistrar);
 
 	BuildAttackList();
 
