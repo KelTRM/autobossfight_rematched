@@ -132,6 +132,18 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 		if (Requested == NULL)
 			goto unallocated;
 
+		Attack_t *ExistingAttack = *Requested;
+		if (ExistingAttack != NULL) {
+			if (ExistingAttack->ID != 0) {
+				// requested ID taken. go after different spot
+				goto unallocated;
+			}
+			*Requested = NULL;
+			// a little recursion never hurts
+			AddAttackToPlugin(mgr, ID, Attack);
+			AddAttackToPlugin(mgr, ID, ExistingAttack);
+		}
+
 		// attack explicitly requests ID. to be respected unless ID is taken
 		return 1;
 	}
