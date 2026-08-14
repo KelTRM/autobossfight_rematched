@@ -37,10 +37,13 @@ int main(void) {
 	init_debug();
 	define_debug_flush_location(fopen("DEBUG.txt", "w"));
 
-	Init();
-	InitEntities();
+	// should initialize the lua state
+	void *lua = InitLua();
 
-	int Attacks = InitAttacks();
+	Init();
+	InitEntities(lua);
+
+	int Attacks = InitAttacks(lua);
 	printf("Initialized %d attacks.\n", Attacks);
 
 	int Transformations = InitTransformations();
