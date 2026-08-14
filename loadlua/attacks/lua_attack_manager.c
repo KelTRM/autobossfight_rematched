@@ -128,8 +128,9 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 		return 0;
 
 	if (Attack->ID != 0) {
-		// temporary to prevent warning
-		goto unallocated;
+		Attack_t **Requested = IndexPluginSpace(mgr, ID, Attack->ID);
+		if (Requested == NULL)
+			goto unallocated;
 
 		// attack explicitly requests ID. to be respected unless ID is taken
 		return 1;
@@ -150,7 +151,7 @@ unallocated: //goto unallocated if existing allocated array exists
 	return 0;
 }
 
-size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t *ID) {
+size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, PluginID_t *ID) {
 	if (ID == NULL) return 0;
 	size_t RequiredBlocks = ((RequiredPlugins-1) / ATTACK_BLOCK_SIZE)+1;
 	size_t FreeBlocksFound = 0;
@@ -176,11 +177,17 @@ size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, size_t
 		return 0;
 	}
 
+	PluginID_t PluginID = GetNewPluginID(Manager,
+					FirstFreeBlock,
+					RequiredBlocks,
+					RequiredPlugins);
+
+
 	for (size_t i = 0; i < FreeBlocksFound; i++) {
 		struct Attacks *Block = &Manager->Attacks[FirstFreeBlock+i];
-		Block->PluginID = FirstFreeBlock;
+		Block->PluginID = PluginID;
 	}
 
-	*ID = FirstFreeBlock;
+	*ID = PluginID;
 	return FreeBlocksFound;
 }
