@@ -1,6 +1,7 @@
-#include <assert.h>
+#include<assert.h>
 #include<stdlib.h>
 #include<string.h>
+#include"../../registration/registration.h"
 #include"../../attacks/attack.h"
 
 typedef uint32_t	PluginID_t;
@@ -202,4 +203,25 @@ size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, Plugin
 
 	*ID = PluginID;
 	return FreeBlocksFound;
+}
+
+// for plugging into old attack management system
+size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax) {
+	size_t AttacksAdded = 0;
+
+	for (BlockID_t i = 0; i < mgr->BlockIdCount; i++) {
+		for (size_t j = 0; j < ATTACK_BLOCK_SIZE; j++) {
+			RegistreeID_t ID = (i*ATTACK_BLOCK_SIZE)+j;
+			// stop if the max is exceeded
+			if (ID >= RegistrarMax) return AttacksAdded;
+
+			Attack_t *Attack = mgr->Attacks[i].Attack[j];
+
+			// no need to do anything if no attack
+			if (Attack == NULL) continue;
+
+			// add the attack
+			AttacksAdded += RegistrarAdd(Registrar, Attack, ID);
+		}
+	}
 }
