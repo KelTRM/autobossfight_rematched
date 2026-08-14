@@ -13,11 +13,13 @@ size_t EntityCount;
 
 // #define ArrayLength(array)	(sizeof(array) / sizeof(*array))
 
-void InitEntities(void) {
+void InitEntities(void *Lua) {
 	DefMgr_t Players;
 	DefMgr_t Bosses;
 
-	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
+//	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
+	size_t LoadedEntities = LoadLuaEntities(Lua, &Players, &Bosses);
+//	LoadLuaEntities(&Players, &Bosses);
 	write_debug(InitEntities, "Loaded %zu entity definitions from lua.", LoadedEntities);
 
 	if (LoadedEntities == 0) {

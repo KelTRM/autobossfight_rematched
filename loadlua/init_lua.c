@@ -1,32 +1,21 @@
 #include<stdlib.h>
 #include<lua.h>
 #include<lauxlib.h>
-#include"entity_ldr.h"
+#include <string.h>
+// #include"entity_ldr.h"
 #include"lua_bossfight.h"
-#include"attacks/lua_attack_manager.h"
+// #include"attacks/lua_attack_manager.h"
 #include"../debug/debug.h"
 #include"../utils/sleep.h"
 
 const char *LuaInitFile = "lua/init.lua";
 
-struct BossfightLuaState {
-	lua_State *L;
-	struct {
-		DefMgr_t Players;
-		DefMgr_t Bosses;
-	} Entities;
-
-	// struct incase of future additions
-	struct {
-		AttackMgr_t mgr;
-	} Attacks;
-};
-
 void *InitLua(void) {
-	struct BossfightLuaState State = { 0 };
+	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
+	memset(State, 0, sizeof(*State));
 
-	CreateDefMgr(&State.Entities.Players);
-	CreateDefMgr(&State.Entities.Bosses);
+//	CreateDefMgr(&State.Entities.Players);
+//	CreateDefMgr(&State.Entities.Bosses);
 
 	lua_State *L = luaL_newstate();
 
@@ -44,5 +33,7 @@ void *InitLua(void) {
 		write_debug(Lua, "Exited script %s successfully.", LuaInitFile);
 	}
 
-	return L;
+	State->L = L;
+
+	return State;
 }

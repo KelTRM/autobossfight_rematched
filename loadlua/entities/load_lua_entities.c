@@ -13,37 +13,12 @@
 #include<lauxlib.h>
 #include<lualib.h>
 
-size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses) {
-	const char *EntityLua = "lua/entities.lua";
-
-	char *Buffer = ReadFileAsStr(EntityLua);
-	if (Buffer == NULL)
-		return 0;
-
+size_t LoadLuaEntities(void *LuaState, DefMgr_t *Players, DefMgr_t *Bosses) {
 	CreateDefMgr(Players);
 	CreateDefMgr(Bosses);
 
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	LoadBossfightTable(L, PERM_ENTITY | PERM_ATTACK);
-
-	int err = luaL_dostring(L, Buffer);
-
-	if (err != LUA_OK) {
-		const char *LuaErr = lua_tostring(L, -1);
-
-		write_debug(Lua, "%s", LuaErr);
-		printf("lua error in file %s - %s\n", EntityLua, LuaErr);
-		sleep(1000);
-	} else {
-		write_debug(Lua, "Exited script %s successfully.", EntityLua);
-	}
-
-	int Count = RegisterLuaEntities(L, Players, Bosses);
-
-	free(Buffer);
-	lua_close(L);
+	struct BossfightLuaState *State = LuaState;
+	int Count = RegisterLuaEntities(State->L, Players, Bosses);
 
 	return Count;
 }

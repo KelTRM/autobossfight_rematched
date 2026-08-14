@@ -26,6 +26,7 @@ target_sources(autobossfight_lua_loader
 		
 		types/lua_entity.c
 
+		init_lua.c
 		entity_ldr.c
 		push_lua_array.c
 		read_file.c

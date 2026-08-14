@@ -21,11 +21,12 @@ extern const int BossCount;
 
 uint64_t Round = 0;
 
-void InitPlayers(void);
-int InitAttacks(void);
+//void InitPlayers(void);
+int InitAttacks(void *Lua);
 size_t InitTransformations(void);
 
-void InitEntities(void);
+void *InitLua(void);
+void InitEntities(void *Lua);
 
 extern Entity_t *Entities;
 extern size_t EntityCount;
@@ -38,12 +39,12 @@ int main(void) {
 	define_debug_flush_location(fopen("DEBUG.txt", "w"));
 
 	// should initialize the lua state
-	void *lua = InitLua();
+	void *Lua = InitLua();
 
 	Init();
-	InitEntities(lua);
+	InitEntities(Lua);
 
-	int Attacks = InitAttacks(lua);
+	int Attacks = InitAttacks(Lua);
 	printf("Initialized %d attacks.\n", Attacks);
 
 	int Transformations = InitTransformations();

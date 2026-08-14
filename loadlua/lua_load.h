@@ -21,5 +21,5 @@ struct LuaData {
 #include"entity_ldr.h"
 
 int CheckLuaEntities(void);
-size_t LoadLuaEntities(DefMgr_t *Players, DefMgr_t *Bosses);
+size_t LoadLuaEntities(void *LuaState, DefMgr_t *Players, DefMgr_t *Bosses);
 
