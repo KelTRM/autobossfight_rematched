@@ -203,9 +203,6 @@ int RegisterLuaAttacks(lua_State *L) {
 		if (Ident == NULL)
 			continue;
 
-		// this was bad - attack registrar is still uninitialized
-//		RegisterAttack(Attack);
-
 		lua_setfield(L, -3, Ident);
 
 		// clear the registration
