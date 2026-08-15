@@ -199,14 +199,19 @@ int RegisterLuaAttacks(lua_State *L) {
 		lua_rawgeti(L, -1, i);
 
 		// add table to the registered plugin list
-		Attack_t *Attack = malloc(sizeof(Attack_t));
-		assert(Attack != NULL);
-		*Attack = ConvertTableToAttack(L, -1);
+//		Attack_t *Attack = malloc(sizeof(Attack_t));
+//		assert(Attack != NULL);
+//		*Attack = ConvertTableToAttack(L, -1);
+
+//		lua_getfield(L, -1, "");
+		const char *Ident = ReadLuaTableString(L, "int_name", NULL);
+		if (Ident == NULL)
+			continue;
 
 		// this was bad - attack registrar is still uninitialized
 //		RegisterAttack(Attack);
 
-		lua_setfield(L, -3, Attack->Identifier);
+		lua_setfield(L, -3, Ident);
 
 		// clear the registration
 		lua_pushnil(L);
