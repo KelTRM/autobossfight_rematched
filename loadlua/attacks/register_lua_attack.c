@@ -198,12 +198,7 @@ int RegisterLuaAttacks(lua_State *L) {
 		// get the registration
 		lua_rawgeti(L, -1, i);
 
-		// add table to the registered plugin list
-//		Attack_t *Attack = malloc(sizeof(Attack_t));
-//		assert(Attack != NULL);
-//		*Attack = ConvertTableToAttack(L, -1);
-
-//		lua_getfield(L, -1, "");
+		// get the identifier
 		const char *Ident = ReadLuaTableString(L, "int_name", NULL);
 		if (Ident == NULL)
 			continue;
