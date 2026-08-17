@@ -1,3 +1,4 @@
+#include <lualib.h>
 #include<stdlib.h>
 #include<lua.h>
 #include<lauxlib.h>
@@ -20,6 +21,7 @@ void *InitLua(void) {
 	lua_State *L = luaL_newstate();
 
 	LoadBossfightTable(L, PERM_ENTITY | PERM_ATTACK);
+	luaL_openlibs(L);
 
 	int err = luaL_dofile(L, LuaInitFile);
 

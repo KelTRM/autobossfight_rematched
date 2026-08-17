@@ -2,6 +2,7 @@
 
 #include<stdint.h>
 #include"../../attacks/attack.h"
+#include"../../registration/registration.h"
 
 typedef uint32_t	PluginID_t;
 typedef int64_t		BlockID_t;
@@ -38,3 +39,11 @@ typedef struct AttackManager {
 	size_t MaxAttackCount;
 	struct PluginRegistry Plugins[MAX_PLUGINS];
 } AttackMgr_t;
+
+AttackMgr_t OpenAttackAllocator(size_t MaxAttacks);
+size_t GetPluginSizeFromID(AttackMgr_t *mgr, PluginID_t ID);
+int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID);
+Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack);
+size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack);
+size_t AllocateAttackPlugin(AttackMgr_t *Manager, size_t RequiredPlugins, PluginID_t *ID);
+size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax);

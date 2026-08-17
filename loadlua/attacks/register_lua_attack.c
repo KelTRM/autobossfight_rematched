@@ -186,6 +186,7 @@ int RegisterLuaAttacks(lua_State *L) {
 		return 1;
 	}
 
+	lua_newtable(L);
 	lua_getfield(L, 2, "current_entries");
 
 	size_t RegistrationCount = 0;
@@ -204,11 +205,15 @@ int RegisterLuaAttacks(lua_State *L) {
 			continue;
 
 		lua_setfield(L, -3, Ident);
+		RegistrationCount++;
 
 		// clear the registration
 		lua_pushnil(L);
 		lua_rawseti(L, -2, i);
 	}
+
+	lua_pop(L, 1);
+
 	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
 	PushLuaArray(L, -2);
 
