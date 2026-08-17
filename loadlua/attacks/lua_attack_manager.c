@@ -9,14 +9,9 @@ typedef uint32_t	PluginID_t;
 typedef int64_t		BlockID_t;
 
 // todos:
-// implement plugin handle system
-// implement plugin attack size handler
-// implement interface for adding/removing plugin attacks
-
-// # of IDs allocated at a time
-// #define ATTACK_BLOCK_SIZE		10
-// #define MAX_ATTACKS_DEFAULT		65535
-// #define MAX_PLUGINS			32767
+// implement plugin handle system - done
+// implement plugin attack size handler - done
+// implement interface for adding/removing plugin attacks - half done
 
 #define PLUGIN_DEFINED			0xFFFFFFFFul
 #define INVALID_PLUGIN_ID		0xFFFFFFFFul
