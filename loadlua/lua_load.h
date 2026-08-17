@@ -23,5 +23,5 @@ struct LuaData {
 
 int CheckLuaEntities(void);
 size_t LoadLuaEntities(void *LuaState, DefMgr_t *Players, DefMgr_t *Bosses);
-size_t LoadLuaAttacks(void *LuaState, Registrar_t Registrar);
+size_t LoadLuaAttacks(void *LuaState, Registrar_t *Registrar);
 

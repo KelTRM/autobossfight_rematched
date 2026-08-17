@@ -28,7 +28,7 @@ size_t InitAttacks(void *Lua) {
 		RegisteredAttacks += RegisterAttack((Attack_t*)AttacksToRegister[i]);
 	}
 
-	LoadLuaAttacks(Lua, AttackRegistrar);
+	LoadLuaAttacks(Lua, &AttackRegistrar);
 
 	BuildAttackList();
 
