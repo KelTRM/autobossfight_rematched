@@ -22,38 +22,6 @@ typedef struct LuaAttack {
 	const char *AttackTableIndex;
 } LuaAttack_t;
 
-/*
-	// lua_pop(L, 1);
-	lua_setfield(L, -2, "attack_handler");
-
-	// push AttackHandler
-	type = lua_getfield(L, 3, "AttackHandler");
-	if (type != LUA_TFUNCTION) {
-		lua_pop(L, 1);
-		lua_pushnil(L);
-	}
-
-	lua_setfield(L, -2, "can_attack");
-
-	lua_pushnumber(L, ID);
-	lua_setfield(L, -2, "id");
-
-	lua_pushnumber(L, EarliestRound);
-	lua_setfield(L, -2, "first_round");
-
-	lua_pushnumber(L, RequiredEnergy);
-	lua_setfield(L, -2, "minimum_energy");
-
-	lua_pushstring(L, AttackDispName);
-	lua_setfield(L, -2, "disp_name");
-
-	lua_pushstring(L, AttackName);
-	lua_setfield(L, -2, "int_name");
-
-	lua_getfield(L, 1, "current_entries");
-	lua_pushvalue(L, -2);
-*/
-
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 
@@ -169,17 +137,30 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 int RegisterLuaAttacks(lua_State *L) {
 	int args = lua_gettop(L);
 
+//	printf("args=%llu", args);
+
+	write_debug(RegisterLuaAttacks, "recieved %d args",
+			args);
+
 	if (args != 2) {
+		write_debug(RegisterLuaAttacks, "Recieved insufficient arg count of %s",
+				args);
 		lua_pushstring(L, "plugin:RegisterLuaAttacks - expected 1 parameter.");
 		lua_error(L);
 	}
 
 	int type = lua_getglobal(L, PluginRegistrationsName);
+
+	write_debug(RegisterLuaAttacks, "found type %s of global %s",
+			lua_typename(L, type),
+			PluginRegistrationsName);
+
 	if (type == LUA_TNIL) {
 		// define new registered plugin table
 		lua_newtable(L);
 		lua_setglobal(L, PluginRegistrationsName);
 		lua_getglobal(L, PluginRegistrationsName);
+		write_debug(RegisterLuaAttacks, "wrote value to global %s", PluginRegistrationsName);
 	} else if (type != LUA_TTABLE) {
 		// can be presumed another instance of the name exists. results in failure
 		lua_pushnumber(L, 0);

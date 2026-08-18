@@ -20,7 +20,7 @@ void *InitLua(void) {
 
 	lua_State *L = luaL_newstate();
 
-	LoadBossfightTable(L, PERM_ENTITY | PERM_ATTACK);
+	LoadBossfightTable(L, 0);
 	luaL_openlibs(L);
 
 	int err = luaL_dofile(L, LuaInitFile);

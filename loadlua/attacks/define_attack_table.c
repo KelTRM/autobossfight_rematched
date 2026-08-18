@@ -19,9 +19,10 @@ int RegisterLuaAttacks(lua_State *L);
 // local attacks=bossfight:CreateAttackPlugin();
 
 void DefineAttackTable(lua_State *L) {
+//	printf("Test\n");
+
 	luaL_Reg fns[] = {
 		{ "CreateAttackPlugin", CreateAttackPlugin },
-		// to be changed
 		{ "RegisterAttackPlugin", RegisterLuaAttacks },
 		{ NULL, NULL }
 	};

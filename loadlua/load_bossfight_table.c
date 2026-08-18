@@ -13,18 +13,13 @@ void DefineAttackTable(lua_State *L);
 void LoadBossfightTable(lua_State *L, int Perms) {
 	lua_newtable(L);
 
-	printf("Perms = %d\n", Perms);
-	if ((Perms & PERM_ENTITY) != 0) {
-		DefineEntityTable(L);
-		lua_setfield(L, -2, "entity");
+	DefineEntityTable(L);
+	lua_setfield(L, -2, "entity");
 
-		printf("tst\n");
-	}
+//	printf("tst\n");
 
-	if ((Perms & PERM_ATTACK) != 0) {
-		DefineAttackTable(L);
-		lua_setfield(L, -2, "attack");
-	}
+	DefineAttackTable(L);
+	lua_setfield(L, -2, "attack");
 
 	lua_setglobal(L, "bossfight");
 }
