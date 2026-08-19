@@ -77,7 +77,7 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
 
 	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
-	const char *Identifier = ReadLuaTableString(L, "int_name", NULL);
+//	const char *Identifier = ReadLuaTableString(L, "int_name", NULL);
 
 	// validate the data
 	if (DisplayName == NULL) {
@@ -85,18 +85,18 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 		lua_error(L);
 	}
 
-	if (Identifier == NULL) {
-		lua_pushstring(L, "invalid attack identifier");
-		lua_error(L);
-	}
+//	if (Identifier == NULL) {
+//		lua_pushstring(L, "invalid attack identifier");
+//		lua_error(L);
+//	}
 
 	if (MinimumEnergy < 0) {
 		lua_pushstring(L, "Invalid value for minimum energy.");
 		lua_error(L);
 	}
 
-	write_debug(DEBUG_MODE, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }",
-			Identifier, DisplayName, FirstRound, MinimumEnergy, ID);
+	write_debug(ConvertTableToAttack, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }",
+			DisplayName, (int)FirstRound, (int)MinimumEnergy, ID);
 
 	// define the attack's struct
 	Attack_t LuaAttack = { 0 };
@@ -112,13 +112,14 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	LuaAttack.AppliesToEnemies = 1;
 	
 	// copy the strings
-	size_t IdentifierLength = strlen(Identifier);
+//	size_t IdentifierLength = strlen(Identifier);
 	size_t NameLength = strlen(DisplayName);
 
-	LuaAttack.Identifier = malloc(IdentifierLength);
+	LuaAttack.Identifier = NULL;
 	LuaAttack.AttackName = malloc(NameLength);
+//	LuaAttack.AttackName = NULL;
 
-	strncpy((char*)LuaAttack.Identifier, Identifier, IdentifierLength);
+//	strncpy((char*)LuaAttack.Identifier, Identifier, IdentifierLength);
 	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength);
 
 	// define the lua attack data
