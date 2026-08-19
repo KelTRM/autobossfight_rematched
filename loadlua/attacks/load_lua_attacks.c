@@ -4,20 +4,20 @@
 #include<lua_load.h>
 
 size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar);
-//size_t RegisterLuaAttacks(AttackMgr_t *Manager, lua_State *L);
+size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L);
 
 size_t LoadLuaAttacks(void *LuaState, Registrar_t *Registrar) {
 	struct BossfightLuaState *State = LuaState;
 
-//	size_t AttackCount = RegisterLuaAttacks(&State->Attacks.mgr, State->L);
+	size_t AttackCount = RegisterLuaPlugins(&State->Attacks.mgr, State->L);
 	RegisterAttackPlugins(&State->Attacks.mgr, Registrar);
 
-//	return AttackCount;
+	return AttackCount;
 }
 
-///size_t RegisterLuaAttacks(AttackMgr_t *Manager, lua_State *L) {
+size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
 
-//}
+}
 
 size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar) {
 
