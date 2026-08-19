@@ -137,30 +137,18 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 int RegisterLuaAttacks(lua_State *L) {
 	int args = lua_gettop(L);
 
-//	printf("args=%llu", args);
-
-	write_debug(RegisterLuaAttacks, "recieved %d args",
-			args);
-
 	if (args != 2) {
-		write_debug(RegisterLuaAttacks, "Recieved insufficient arg count of %s",
-				args);
 		lua_pushstring(L, "plugin:RegisterLuaAttacks - expected 1 parameter.");
 		lua_error(L);
 	}
 
 	int type = lua_getglobal(L, PluginRegistrationsName);
 
-	write_debug(RegisterLuaAttacks, "found type %s of global %s",
-			lua_typename(L, type),
-			PluginRegistrationsName);
-
 	if (type == LUA_TNIL) {
 		// define new registered plugin table
 		lua_newtable(L);
 		lua_setglobal(L, PluginRegistrationsName);
 		lua_getglobal(L, PluginRegistrationsName);
-		write_debug(RegisterLuaAttacks, "wrote value to global %s", PluginRegistrationsName);
 	} else if (type != LUA_TTABLE) {
 		// can be presumed another instance of the name exists. results in failure
 		lua_pushnumber(L, 0);
