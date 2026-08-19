@@ -3,9 +3,7 @@
 #include<lua.h>
 #include<lauxlib.h>
 #include <string.h>
-// #include"entity_ldr.h"
 #include"lua_bossfight.h"
-// #include"attacks/lua_attack_manager.h"
 #include"../debug/debug.h"
 #include"../utils/sleep.h"
 
@@ -14,6 +12,8 @@ const char *LuaInitFile = "lua/init.lua";
 void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
 	memset(State, 0, sizeof(*State));
+
+	State->Attacks.mgr = OpenAttackAllocator(0);
 
 //	CreateDefMgr(&State.Entities.Players);
 //	CreateDefMgr(&State.Entities.Bosses);
