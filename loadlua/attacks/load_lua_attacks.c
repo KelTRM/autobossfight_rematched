@@ -17,9 +17,12 @@ size_t LoadLuaAttacks(void *LuaState, Registrar_t *Registrar) {
 	struct BossfightLuaState *State = LuaState;
 
 	size_t AttackCount = RegisterLuaPlugins(&State->Attacks.mgr, State->L);
-	RegisterAttackPlugins(&State->Attacks.mgr, Registrar);
+	size_t RegistrationCount = RegisterAttackPlugins(&State->Attacks.mgr, Registrar);
 
-	return AttackCount;
+	write_debug(LoadLuaAttacks, "got %lu attacks, registered %lu attacks.",
+			AttackCount, RegistrationCount);
+
+	return RegistrationCount;
 }
 
 size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
@@ -68,16 +71,28 @@ size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L) {
 		
 		lua_pop(L, 1);
 
-		Attack_t **Attack = IndexPluginSpace(Manager, ID, LuaAttack->ID);
-		if (Attack == NULL) continue;
+		// get identifier
+		int IdentifierType = lua_type(L, -1);
+		if (IdentifierType == LUA_TSTRING) {
+			const char *str = lua_tolstring(L, -1, NULL);
+			LuaAttack->Identifier = str;
+		}
 
-		*Attack = LuaAttack;
-		RegisteredAttacks++;
+//		write_debug(RegisterPlugin, "got attack identifier = %s", LuaAttack->Identifier);
+//		write_debug(RegisterPlugin, "got attack display name = %s", LuaAttack->AttackName);
+//		Attack_t **Attack = IndexPluginSpace(Manager, ID, LuaAttack->ID);
+//		if (Attack == NULL) continue;
+
+//		write_debug(RegisterPlugin, "adding attack from plugin %d @ id=%d", ID, LuaAttack->ID);
+
+		RegisteredAttacks += AddAttackToPlugin(Manager, ID, LuaAttack);
+//		*Attack = LuaAttack;
+//		RegisteredAttacks++;
 	}
 
 	return RegisteredAttacks;
 }
 
 size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar) {
-
+	return RegisterPluginAttacks(mgr, Registrar, 255);
 }

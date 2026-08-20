@@ -95,7 +95,7 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 		lua_error(L);
 	}
 
-	write_debug(ConvertTableToAttack, "Registering attack \"%s\" of { \"%s\", %d, %d, %d }",
+	write_debug(ConvertTableToAttack, "Registering attack \"%s\" of { %d, %d, %d }",
 			DisplayName, (int)FirstRound, (int)MinimumEnergy, ID);
 
 	// define the attack's struct
@@ -116,11 +116,11 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	size_t NameLength = strlen(DisplayName);
 
 	LuaAttack.Identifier = NULL;
-	LuaAttack.AttackName = malloc(NameLength);
+	LuaAttack.AttackName = malloc(NameLength + 1);
 //	LuaAttack.AttackName = NULL;
 
 //	strncpy((char*)LuaAttack.Identifier, Identifier, IdentifierLength);
-	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength);
+	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
 
 	// define the lua attack data
 	LuaAttack_t LuaAttackData = {

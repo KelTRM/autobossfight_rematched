@@ -4,6 +4,7 @@
 #include"lua_attack_manager.h"
 #include"../../registration/registration.h"
 #include"../../attacks/attack.h"
+#include"../../debug/debug.h"
 
 typedef uint32_t	PluginID_t;
 typedef int64_t		BlockID_t;
@@ -35,6 +36,8 @@ AttackMgr_t OpenAttackAllocator(size_t MaxAttacks) {
 	AttackMgr_t Manager;
 	Manager.MaxAttackCount = ((MaxAttacks-1) / ATTACK_BLOCK_SIZE)+1;
 	Manager.Attacks = calloc(Manager.MaxAttackCount, sizeof(struct Attacks));
+
+	Manager.BlockIdCount = Manager.MaxAttackCount / ATTACK_BLOCK_SIZE;
 
 	if (Manager.Attacks == NULL)
 		return (AttackMgr_t){ 0 };
@@ -84,9 +87,12 @@ Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) 
 	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
 
 	BlockID_t IndexBlock = (Attack / ATTACK_BLOCK_SIZE) + PluginBlock;
+//	write_debug(IndexPluginSpace, "IndexBlock=%lu, mgr->BlockIdCount=%lu", IndexBlock, mgr->BlockIdCount);
 	if (IndexBlock > mgr->BlockIdCount) return NULL;
 
 	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
+
+//	write_debug(IndexPluginSpace, "current attack coordinate - %lu:%lu", IndexBlock, BlockIndex);
 
 	return &mgr->Attacks[PluginBlock].Attack[BlockIndex];
 }
@@ -122,6 +128,7 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 unallocated: //goto unallocated if existing allocated array exists
 	for (AttackID_t i = 0; i < mgr->Plugins->MaxAttacks; i++) {
 		Attack_t **IdxAttack = IndexPluginSpace(mgr, ID, i);
+//		write_debug(AddAttackToPlugin, "indexing id=%lu", i);
 		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
 		if (*IdxAttack != NULL) continue;
 		// found new attack id to use
@@ -191,8 +198,19 @@ size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t Re
 			// no need to do anything if no attack
 			if (Attack == NULL) continue;
 
+			write_debug(RegisterPluginAttacks, "registering attack id = %d", Attack->ID);
+			
+			Attack_t *RegistrarAttack = (Attack_t*)malloc(sizeof(Attack_t));
+			memcpy(RegistrarAttack, Attack, sizeof(Attack_t));
+
+			RegistrarAttack->ID = ID+1;
+
 			// add the attack
-			AttacksAdded += RegistrarAdd(Registrar, Attack, ID);
+			AttacksAdded += RegistrarAdd(
+				Registrar,
+				RegistrarAttack,
+				RegistrarAttack->ID
+			);
 		}
 	}
 }
