@@ -18,12 +18,19 @@ int DefaultCanAttack(Attack_t *Self, Entity_t *Attacker) {
 }
 
 void DefaultAnnouncer(AttackData_t *Attack) {
-	assert(Attack->Attacker != NULL);
-	assert(Attack->Target != NULL);
+	const char *AttackerName = "air";
+	const char *TargetName = "air";
+
+	if (Attack->Attacker != NULL)
+		AttackerName = Attack->Attacker->Name;	
+	if (Attack->Target != NULL)
+		TargetName = Attack->Target->Name;
+//	assert(Attack->Attacker != NULL);
+//	assert(Attack->Target != NULL);
 
 	char *str = IntToStr(Attack->Damage);
 	printf("%s dealt %s damage to %s\n",
-			Attack->Attacker->Name, str, Attack->Target->Name);
+			AttackerName, str, TargetName);
 	free(str);
 }
 
