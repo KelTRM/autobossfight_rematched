@@ -18,8 +18,8 @@ const char *PluginRegistrationsName = "__bossfight_registered_plugins";
 typedef struct LuaAttack {
 	lua_State *L;
 
-	const char *AttackTableName;
-	const char *AttackTableIndex;
+	const char *AttackPluginKey;
+	size_t AttackPluginIndex;
 } LuaAttack_t;
 
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
@@ -27,14 +27,25 @@ lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number Default
 
 AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
+	assert(Attack != NULL);
 
 	lua_State *L = Attack->L;
+	assert(L != NULL);
+
+	assert(Attack->AttackPluginKey != NULL);
 
 	// get the attack table
-	lua_getglobal(L, Attack->AttackTableName);
-	
-	int type = lua_getfield(L, -1, Attack->AttackTableIndex);
+	printf("Getting PluginRegistrationsName\n");
+	int type = lua_getglobal(L, PluginRegistrationsName);
 	assert(type == LUA_TTABLE);
+
+	// Get the plugin
+	printf("Getting AttackPluginIndex\n");
+	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
+	assert(type == LUA_TTABLE);
+
+	printf("Getting AttackPluginKey\n");
+	lua_getfield(L, -1, Attack->AttackPluginKey);
 
 	lua_remove(L, -2);
 
@@ -42,7 +53,7 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	if (type != LUA_TFUNCTION) {
 		printf("Not implemented.");
 		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
-				Attack->AttackTableIndex);
+				Attack->AttackPluginKey);
 
 		lua_pop(L, 2);
 		return (AttackData_t){ 0 };
@@ -68,7 +79,7 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	return (AttackData_t){ 0 };
 }
 
-Attack_t ConvertTableToAttack(lua_State *L, int idx) {
+Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx) {
 	idx = lua_absindex(L, idx);
 
 	// read the table
@@ -77,18 +88,12 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
 
 	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
-//	const char *Identifier = ReadLuaTableString(L, "int_name", NULL);
 
 	// validate the data
 	if (DisplayName == NULL) {
 		lua_pushstring(L, "invalid attack name.");
 		lua_error(L);
 	}
-
-//	if (Identifier == NULL) {
-//		lua_pushstring(L, "invalid attack identifier");
-//		lua_error(L);
-//	}
 
 	if (MinimumEnergy < 0) {
 		lua_pushstring(L, "Invalid value for minimum energy.");
@@ -111,26 +116,21 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx) {
 	LuaAttack.AppliesToAllies = 0;
 	LuaAttack.AppliesToEnemies = 1;
 	
-	// copy the strings
-//	size_t IdentifierLength = strlen(Identifier);
 	size_t NameLength = strlen(DisplayName);
 
 	LuaAttack.Identifier = NULL;
 	LuaAttack.AttackName = malloc(NameLength + 1);
-//	LuaAttack.AttackName = NULL;
 
-//	strncpy((char*)LuaAttack.Identifier, Identifier, IdentifierLength);
 	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
 
-	// define the lua attack data
-	LuaAttack_t LuaAttackData = {
+	LuaAttack_t AttackData = {
 		.L=L,
-		.AttackTableName="nil",
-//		.AttackTable=idx
+		.AttackPluginIndex=PluginIdx,
+		.AttackPluginKey=Key
 	};
 
-	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttackData));
-	memcpy(LuaAttack.LuaAttackData, &LuaAttackData, sizeof(LuaAttackData));
+	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttack_t));
+	memcpy(LuaAttack.LuaAttackData, &AttackData, sizeof(LuaAttack_t));
 
 	return LuaAttack;
 }

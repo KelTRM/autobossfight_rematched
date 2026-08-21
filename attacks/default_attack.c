@@ -2,7 +2,8 @@
 #include"attack.h"
 #include<strings.h>
 #include"../rng.h"
-#include "attacks.h"
+#include"attacks.h"
+#include<assert.h>
 
 extern uint64_t Round;
 
@@ -17,6 +18,9 @@ int DefaultCanAttack(Attack_t *Self, Entity_t *Attacker) {
 }
 
 void DefaultAnnouncer(AttackData_t *Attack) {
+	assert(Attack->Attacker != NULL);
+	assert(Attack->Target != NULL);
+
 	char *str = IntToStr(Attack->Damage);
 	printf("%s dealt %s damage to %s\n",
 			Attack->Attacker->Name, str, Attack->Target->Name);

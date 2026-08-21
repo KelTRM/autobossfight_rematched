@@ -11,7 +11,7 @@ extern const char *PluginRegistrationsName;
 
 size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar);
 size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L);
-size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L);
+size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t PluginIndex);
 
 size_t LoadLuaAttacks(void *LuaState, Registrar_t *Registrar) {
 	struct BossfightLuaState *State = LuaState;
@@ -32,15 +32,15 @@ size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
 	size_t PluginCount = lua_rawlen(L, -1);
 	for (size_t i = 0; i < PluginCount; i++) {
 		lua_rawgeti(L, -1, i+1);
-		RegisterPlugin(Manager, L);
+		RegisterPlugin(Manager, L, i+1);
 		lua_pop(L, 1);
 	}
 }
 
-Attack_t ConvertTableToAttack(lua_State *L, int idx);
+Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx);
 
 // Plugin array @ top of stack
-size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L) {
+size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t Index) {
 	size_t RequiredAttacks=0;
 
 	// iterate over plugin to get attack count
@@ -66,18 +66,19 @@ size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L) {
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
 		if (RegisteredAttacks >= RequiredAttacks) break;
-		Attack_t *LuaAttack = (Attack_t*)malloc(sizeof(Attack_t));
-		*LuaAttack = ConvertTableToAttack(L, -1);
-		
-		lua_pop(L, 1);
+	
+		const char *Identifier = NULL;
 
 		// get identifier
-		int IdentifierType = lua_type(L, -1);
+		int IdentifierType = lua_type(L, -2);
 		if (IdentifierType == LUA_TSTRING) {
-			const char *str = lua_tolstring(L, -1, NULL);
-			LuaAttack->Identifier = str;
+			Identifier = lua_tolstring(L, -2, NULL);
 		}
 
+		Attack_t *LuaAttack = (Attack_t*)malloc(sizeof(Attack_t));
+		*LuaAttack = ConvertTableToAttack(L, -1, Identifier, Index);
+		
+		lua_pop(L, 1);
 //		write_debug(RegisterPlugin, "got attack identifier = %s", LuaAttack->Identifier);
 //		write_debug(RegisterPlugin, "got attack display name = %s", LuaAttack->AttackName);
 //		Attack_t **Attack = IndexPluginSpace(Manager, ID, LuaAttack->ID);
