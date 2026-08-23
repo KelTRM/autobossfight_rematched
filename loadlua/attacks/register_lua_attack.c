@@ -40,27 +40,12 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	assert(type == LUA_TTABLE);
 
 	// Get the plugin
-	printf("Getting AttackPluginIndex\n");
 	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
 	assert(type == LUA_TTABLE);
 
-	printf("Getting AttackPluginKey\n");
 	lua_getfield(L, -1, Attack->AttackPluginKey);
 
 	lua_remove(L, -2);
-
-	type = lua_getfield(L, -1, "attack_handler");
-	if (type != LUA_TFUNCTION) {
-		printf("Not implemented.");
-		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
-				Attack->AttackPluginKey);
-
-		lua_pop(L, 2);
-		return (AttackData_t){ 0 };
-	}
-
-	// self arg
-	lua_pushvalue(L, -2);
 
 	// attack arg
 	lua_newtable(L);
@@ -73,10 +58,41 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	CreateEntityTable(L, Attacker);
 	lua_setfield(L, -2, "attacker");
 
-	lua_call(L, 2, 1);
-	lua_pop(L, 1);
+	type = lua_getfield(L, -2, "attack_handler");
+	if (type != LUA_TFUNCTION) {
+		printf("Not implemented.");
+		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
+				Attack->AttackPluginKey);
 
-	return (AttackData_t){ 0 };
+		lua_pop(L, 3);
+		return (AttackData_t){ 0 };
+	}
+
+	// self arg
+	lua_pushvalue(L, -3);
+
+	lua_pushvalue(L, -3);
+
+	lua_call(L, 2, 1);
+
+	AttackData_t Result = { 0 };
+
+	type = lua_type(L, -1);
+
+	write_debug(LuaAttackManager, "type=%s", lua_typename(L, type));
+
+	if (type != LUA_TTABLE) {
+		Result.Attacker = Attacker;
+		Result.Target = Target;
+
+		lua_pop(L, 2);
+
+		return Result;
+	}
+
+	return Result;
+	
+	lua_pop(L, 2);
 }
 
 Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx) {
