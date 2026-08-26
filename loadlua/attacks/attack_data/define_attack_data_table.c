@@ -48,6 +48,8 @@ int DefineAttackDataTable(lua_State *L) {
 		{ NULL, NULL },
 	};
 
+	luaL_setfuncs(L, fns, 0);
+
 	if (top <= 1) {
 		// effectively does nothing
 		lua_pushnil(L);

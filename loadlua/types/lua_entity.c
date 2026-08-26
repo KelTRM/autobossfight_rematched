@@ -1,6 +1,15 @@
 #include<lua.h>
 #include"../entity.h"
 
+//```lua
+//entity:GetHealth()          -- returns number of health points
+//entity:GetEnergy()          -- returns energy as a percentage
+//entity:Heal(hp)             -- heals entity by hp, returns amount healed
+//entity:Attack(target,hp)    -- removes hp from target's health
+//entity:Living()             -- returns whether the entity is alive
+//entity:GetEnemies()         -- gets the enemies of the entity
+//```
+
 void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	lua_newtable(L);
 
@@ -13,6 +22,13 @@ void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	Entity->HealingMinimum;
 	Entity->HealingMaximum;
 	Entity->HealthPoints;
+
+	entity:GetHealth()
+	entity:GetEnergy()
+	entity:Heal(hp)
+	entity:Attack(target, hp)
+	entity:Living()
+	entity:GetEnemies()
  -----------------------------------
 */
 
