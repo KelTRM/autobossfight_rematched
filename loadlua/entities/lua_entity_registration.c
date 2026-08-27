@@ -8,8 +8,9 @@
 #include"entity_ldr.h"
 #include"table_validation.h"
 #include<stddef.h>
-#include <stdlib.h>
-#include <string.h>
+#include<stdlib.h>
+#include<string.h>
+#include<assert.h>
 
 void LuaAssertType(lua_State *L, int Type, int Expected) {
 	if (Type != Expected) {
@@ -21,6 +22,7 @@ void LuaAssertType(lua_State *L, int Type, int Expected) {
 }
 
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue) {
+	assert(lua_type(L, -1) == LUA_TTABLE);
 	int Type = lua_getfield(L, -1, Name);
 	
 	const char *str = DefaultValue;
@@ -34,6 +36,7 @@ const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValu
 }
 
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue) {
+	assert(lua_type(L, -1) == LUA_TTABLE);
 	int Type = lua_getfield(L, -1, Name);
 
 	lua_Number n = DefaultValue;

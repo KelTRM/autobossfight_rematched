@@ -1,5 +1,6 @@
 #include<lua.h>
 #include<lauxlib.h>
+#include"../../../debug/debug.h"
 //	Entity_t *Target;
 //	Entity_t *Attacker;
 
@@ -50,6 +51,8 @@ int DefineAttackDataTable(lua_State *L) {
 
 	luaL_setfuncs(L, fns, 0);
 
+	write_debug(DefineAttackDataTable, "recieved top=%d", top);
+
 	if (top <= 1) {
 		// effectively does nothing
 		lua_pushnil(L);
@@ -63,7 +66,18 @@ int DefineAttackDataTable(lua_State *L) {
 			lua_pushliteral(L, "error: expected argument Attack of table");
 			lua_error(L);
 		}
+
+		// target
+		lua_getfield(L, 2, "target");
+		lua_setfield(L, -2, "target");
+
+		// attacker
+		lua_getfield(L, 2, "attacker");
+		lua_setfield(L, -2, "attacker");
 	}
+
+	lua_pushnumber(L, 0);
+	lua_setfield(L, -2, "damage");
 
 	return 1;
 }

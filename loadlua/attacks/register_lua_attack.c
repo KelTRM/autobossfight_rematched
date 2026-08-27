@@ -76,8 +76,10 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 
 	lua_call(L, 2, 1);
 
-	AttackData_t Result;
-	Result = ReadAttackDataTable(L);
+	AttackData_t Result = { 0 };
+	if (lua_type(L, -1) == LUA_TTABLE) {
+		Result = ReadAttackDataTable(L);
+	}
 
 	type = lua_type(L, -1);
 
