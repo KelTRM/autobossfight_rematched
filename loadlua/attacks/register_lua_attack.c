@@ -24,6 +24,7 @@ typedef struct LuaAttack {
 
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
+AttackData_t ReadAttackDataTable(lua_State *L);
 
 AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
@@ -75,7 +76,8 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 
 	lua_call(L, 2, 1);
 
-	AttackData_t Result = { 0 };
+	AttackData_t Result;
+	Result = ReadAttackDataTable(L);
 
 	type = lua_type(L, -1);
 

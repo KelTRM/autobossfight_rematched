@@ -1,5 +1,6 @@
 #include<lua.h>
 #include"../entity.h"
+#include<assert.h>
 
 //```lua
 //entity:GetHealth()          -- returns number of health points
@@ -74,6 +75,9 @@ void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 Entity_t GetEntityFromTable(lua_State *L) {
 	// this code is very DRY (do repeat yourself)
 	Entity_t Entity = { 0 };
+
+	int type = lua_type(L, -1);
+	assert(type == LUA_TTABLE);
 
 	// name
 	lua_getfield(L, -1, "name");
