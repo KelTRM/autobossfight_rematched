@@ -11,28 +11,59 @@
 
 //	AttackAnnouncer Announcer;
 
+void AssertTop(lua_State *L, int top, const char *msg) {
+	int CurrentTop = lua_gettop(L);
+
+	if (top != CurrentTop) {
+		lua_pushstring(L, msg);
+		lua_error(L);
+	}
+}
+
+void SetLuaField(lua_State *L, const char *FieldName, int idx, int RequiredType) {
+	int PassedType = lua_type(L, -1);
+	if (PassedType != RequiredType) {
+		lua_pushfstring(L, "expected type %d. got %d instead",
+				lua_typename(L, RequiredType),
+				lua_typename(L, PassedType));
+		lua_error(L);
+	}
+
+	lua_setfield(L, idx, FieldName);
+}
+
 int AttackData_SetTarget(lua_State *L) {
-	int top = lua_gettop(L);
+	AssertTop(L, 2, "expected AttackData:SetTarget(x)");
+	SetLuaField(L, "target", 1, LUA_TTABLE);
+
 	return 0;
 }
 
 int AttackData_SetAttacker(lua_State *L) {
-	int top = lua_gettop(L);
+	AssertTop(L, 2, "expected AttackData:SetAttacker(x)");
+	SetLuaField(L, "attacker", 1, LUA_TTABLE);
+
 	return 0;
 }
 
 int AttackData_SetDamage(lua_State *L) {
-	int top = lua_gettop(L);
+	AssertTop(L, 2, "expected AttackData:SetDamage(x)");
+	SetLuaField(L, "damage", 1, LUA_TNUMBER);
+
 	return 0;
 }
 
 int AttackData_SetAnnouncer(lua_State *L) {
-	int top = lua_gettop(L);
+	AssertTop(L, 2, "expected AttackData:SetAnnouncer(x)");
+	SetLuaField(L, "announcer", 1, LUA_TFUNCTION);
+
 	return 0;
 }
 
 int AttackData_SetID(lua_State *L) {
-	int top = lua_gettop(L);
+	AssertTop(L, 2, "expected AttackData:SetID(x)");
+	SetLuaField(L, "id", 1, LUA_TNUMBER);
+
 	return 0;
 }
 
