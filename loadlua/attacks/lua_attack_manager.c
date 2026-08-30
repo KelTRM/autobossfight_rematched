@@ -14,9 +14,6 @@ typedef int64_t		BlockID_t;
 // implement plugin attack size handler - done
 // implement interface for adding/removing plugin attacks - half done
 
-#define PLUGIN_DEFINED			0xFFFFFFFFul
-#define INVALID_PLUGIN_ID		0xFFFFFFFFul
-
 /*
  * --- PLUGIN ID MODEL ---
  *
@@ -81,25 +78,20 @@ int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
 Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
 	if (ValidatePlugin(mgr, ID) == 0) return NULL;
 
-//	write_debug(IndexPluginSpace, "valid plugin (limit=%lu attacks)",
-//			mgr->Plugins[ID].MaxAttacks);
-
 	size_t MaxAttacks = mgr->Plugins[ID].MaxAttacks;
 	if (Attack > MaxAttacks) return NULL;
-//	write_debug(IndexPluginSpace, "within limit");
 
 	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
 
 	BlockID_t IndexBlock = (Attack / ATTACK_BLOCK_SIZE) + PluginBlock;
-//	write_debug(IndexPluginSpace, "IndexBlock=%lu, mgr->BlockIdCount=%lu", IndexBlock, mgr->BlockIdCount);
 	if (IndexBlock > mgr->BlockIdCount) return NULL;
-//	write_debug(IndexPluginSpace, "valid block");
 
 	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
+	
+	write_debug(IndexPluginSpace, "Indexing @ ID=%d & idx=%d (block=%d,idx=%d)",
+			ID, Attack, IndexBlock, BlockIndex);
 
-//	write_debug(IndexPluginSpace, "current attack coordinate - %lu:%lu", IndexBlock, BlockIndex);
-
-	return &mgr->Attacks[PluginBlock].Attack[BlockIndex];
+	return &mgr->Attacks[IndexBlock].Attack[BlockIndex];
 }
 
 size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
@@ -110,24 +102,37 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 	if (Attack == NULL)
 		return 0;
 
+	AttackID_t RequestedID = Attack->ID;
+
 	if (Attack->ID != 0) {
 		Attack_t **Requested = IndexPluginSpace(mgr, ID, Attack->ID);
+		write_debug(AddAttackToPlugin, "Requested = %p", Requested);
 		if (Requested == NULL)
 			goto unallocated;
 
 		Attack_t *ExistingAttack = *Requested;
 		if (ExistingAttack != NULL) {
-			if (ExistingAttack->ID != 0) {
+			write_debug(AddAttackToPlugin, "ExistingAttack->ID = %d",
+					ExistingAttack->ID);
+			if (ExistingAttack->ID == RequestedID) {
 				// requested ID taken. go after different spot
 				goto unallocated;
 			}
+
 			*Requested = NULL;
+
 			// a little recursion never hurts
 			AddAttackToPlugin(mgr, ID, Attack);
 			AddAttackToPlugin(mgr, ID, ExistingAttack);
+
+			write_debug(AddAttackToPlugin, "*Requested = %p; Attack = %p",
+					*Requested, Attack);
 		}
 
-		// attack explicitly requests ID. to be respected unless ID is taken
+		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
+				Attack->AttackName, RequestedID, RequestedID);
+			
+		*Requested = Attack;
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
@@ -139,6 +144,9 @@ unallocated: //goto unallocated if existing allocated array exists
 		if (*IdxAttack != NULL) continue;
 		// found new attack id to use
 		
+		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
+				Attack->AttackName, i, RequestedID);
+
 		*IdxAttack = Attack;
 
 		return 1;
@@ -209,7 +217,7 @@ size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t Re
 			Attack_t *RegistrarAttack = (Attack_t*)malloc(sizeof(Attack_t));
 			memcpy(RegistrarAttack, Attack, sizeof(Attack_t));
 
-			RegistrarAttack->ID = ID+1;
+			RegistrarAttack->ID = ID;
 
 			// add the attack
 			AttacksAdded += RegistrarAdd(
