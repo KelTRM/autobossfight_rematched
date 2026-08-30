@@ -82,9 +82,7 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	AttackData_t Result = { 0 };
 	if (type == LUA_TTABLE) {
 		Result = ReadAttackDataTable(L);
-	}
-
-	if (type != LUA_TTABLE) {
+	} else {
 		Result.Attacker = Attacker;
 		Result.Target = Target;
 
