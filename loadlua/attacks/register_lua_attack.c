@@ -82,14 +82,21 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	AttackData_t Result = { 0 };
 	if (type == LUA_TTABLE) {
 		Result = ReadAttackDataTable(L);
-	} else {
-		Result.Attacker = Attacker;
-		Result.Target = Target;
+		
+		Target->Attack		= Result.Target->Attack;
+		Target->Energy		= Result.Target->Energy;
+		Target->HealthPoints	= Result.Target->HealthPoints;
 
-		lua_pop(L, 2);
+		Attacker->Attack	= Result.Attacker->Attack;
+		Attacker->Energy	= Result.Attacker->Energy;
+		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
 
-		return Result;
+		free(Result.Attacker);
+		free(Result.Target);
 	}
+	
+	Result.Attacker = Attacker;
+	Result.Target = Target;
 
 	lua_pop(L, 2);
 
