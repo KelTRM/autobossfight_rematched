@@ -35,6 +35,10 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 
 	assert(Attack->AttackPluginKey != NULL);
 
+	if (Target == NULL || Attacker == NULL) {
+		return (AttackData_t){ 0 };
+	}
+
 	// get the attack table
 	printf("Getting PluginRegistrationsName\n");
 	int type = lua_getglobal(L, PluginRegistrationsName);
