@@ -76,14 +76,13 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 
 	lua_call(L, 2, 1);
 
+	type = lua_type(L, -1);
+	write_debug(LuaAttackManager, "type=%s", lua_typename(L, type));
+	
 	AttackData_t Result = { 0 };
-	if (lua_type(L, -1) == LUA_TTABLE) {
+	if (type == LUA_TTABLE) {
 		Result = ReadAttackDataTable(L);
 	}
-
-	type = lua_type(L, -1);
-
-	write_debug(LuaAttackManager, "type=%s", lua_typename(L, type));
 
 	if (type != LUA_TTABLE) {
 		Result.Attacker = Attacker;
