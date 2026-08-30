@@ -80,15 +80,20 @@ int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
 
 Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
 	if (ValidatePlugin(mgr, ID) == 0) return NULL;
-	
+
+//	write_debug(IndexPluginSpace, "valid plugin (limit=%lu attacks)",
+//			mgr->Plugins[ID].MaxAttacks);
+
 	size_t MaxAttacks = mgr->Plugins[ID].MaxAttacks;
 	if (Attack > MaxAttacks) return NULL;
+//	write_debug(IndexPluginSpace, "within limit");
 
 	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
 
 	BlockID_t IndexBlock = (Attack / ATTACK_BLOCK_SIZE) + PluginBlock;
 //	write_debug(IndexPluginSpace, "IndexBlock=%lu, mgr->BlockIdCount=%lu", IndexBlock, mgr->BlockIdCount);
 	if (IndexBlock > mgr->BlockIdCount) return NULL;
+//	write_debug(IndexPluginSpace, "valid block");
 
 	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
 
@@ -126,7 +131,8 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
-	for (AttackID_t i = 0; i < mgr->Plugins->MaxAttacks; i++) {
+	for (AttackID_t i = 0; i < mgr->Plugins[ID].MaxAttacks; i++) {
+
 		Attack_t **IdxAttack = IndexPluginSpace(mgr, ID, i);
 //		write_debug(AddAttackToPlugin, "indexing id=%lu", i);
 		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
@@ -198,7 +204,7 @@ size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t Re
 			// no need to do anything if no attack
 			if (Attack == NULL) continue;
 
-			write_debug(RegisterPluginAttacks, "registering attack id = %d", Attack->ID);
+//			write_debug(RegisterPluginAttacks, "registering attack id = %d", Attack->ID);
 			
 			Attack_t *RegistrarAttack = (Attack_t*)malloc(sizeof(Attack_t));
 			memcpy(RegistrarAttack, Attack, sizeof(Attack_t));
