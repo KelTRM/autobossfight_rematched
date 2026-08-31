@@ -166,7 +166,7 @@ The entity cannot be directly interacted with, and must be used by the below API
 ```lua
 entity:GetHealth()          -- returns number of health points
 entity:GetEnergy()          -- returns energy as a percentage
-entity:Heal(hp)             -- heals entity by hp, returns amount healed
+entity:Heal(target, hp)     -- heals entity by hp, returns amount healed
 entity:Attack(target,hp)    -- removes hp from target's health
 entity:Living()             -- returns whether the entity is alive
 entity:GetEnemies()         -- gets the enemies of the entity

@@ -88,8 +88,8 @@ Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) 
 
 	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
 	
-	write_debug(IndexPluginSpace, "Indexing @ ID=%d & idx=%d (block=%d,idx=%d)",
-			ID, Attack, IndexBlock, BlockIndex);
+//	write_debug(IndexPluginSpace, "Indexing @ ID=%d & idx=%d (block=%d,idx=%d)",
+//			ID, Attack, IndexBlock, BlockIndex);
 
 	return &mgr->Attacks[IndexBlock].Attack[BlockIndex];
 }
@@ -106,14 +106,14 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 
 	if (Attack->ID != 0) {
 		Attack_t **Requested = IndexPluginSpace(mgr, ID, Attack->ID);
-		write_debug(AddAttackToPlugin, "Requested = %p", Requested);
+//		write_debug(AddAttackToPlugin, "Requested = %p", Requested);
 		if (Requested == NULL)
 			goto unallocated;
 
 		Attack_t *ExistingAttack = *Requested;
 		if (ExistingAttack != NULL) {
-			write_debug(AddAttackToPlugin, "ExistingAttack->ID = %d",
-					ExistingAttack->ID);
+//			write_debug(AddAttackToPlugin, "ExistingAttack->ID = %d",
+//					ExistingAttack->ID);
 			if (ExistingAttack->ID == RequestedID) {
 				// requested ID taken. go after different spot
 				goto unallocated;
@@ -125,12 +125,12 @@ size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
 			AddAttackToPlugin(mgr, ID, Attack);
 			AddAttackToPlugin(mgr, ID, ExistingAttack);
 
-			write_debug(AddAttackToPlugin, "*Requested = %p; Attack = %p",
-					*Requested, Attack);
+//			write_debug(AddAttackToPlugin, "*Requested = %p; Attack = %p",
+//					*Requested, Attack);
 		}
 
-		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
-				Attack->AttackName, RequestedID, RequestedID);
+//		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
+//				Attack->AttackName, RequestedID, RequestedID);
 			
 		*Requested = Attack;
 		return 1;
@@ -144,8 +144,8 @@ unallocated: //goto unallocated if existing allocated array exists
 		if (*IdxAttack != NULL) continue;
 		// found new attack id to use
 		
-		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
-				Attack->AttackName, i, RequestedID);
+//		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
+//				Attack->AttackName, i, RequestedID);
 
 		*IdxAttack = Attack;
 

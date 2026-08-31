@@ -1,6 +1,15 @@
-#include<lua.h>
-#include"../entity.h"
+#include<stdarg.h>
 #include<assert.h>
+#include<lua.h>
+#include<lauxlib.h>
+#include"../entity.h"
+#include"../../debug/debug.h"
+
+#define PROTO_GET_HEALTH	"entity:GetHealth()"
+#define PROTO_GET_ENERGY	"entity:GetEnergy()"
+#define PROTO_HEAL		"entity:Heal(target, health)"
+#define PROTO_ATTACK		"entity:Attack(target, health)"
+#define PROTO_LIVING		"entity:Living()"
 
 //```lua
 //entity:GetHealth()          -- returns number of health points
@@ -10,6 +19,12 @@
 //entity:Living()             -- returns whether the entity is alive
 //entity:GetEnemies()         -- gets the enemies of the entity
 //```
+int Entity_GetHealth(lua_State *L);
+int Entity_GetEnergy(lua_State *L);
+int Entity_Heal(lua_State *L);
+int Entity_Attack(lua_State *L);
+int Entity_Living(lua_State *L);
+int Entity_GetEnemies(lua_State *L);
 
 void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	lua_newtable(L);
@@ -33,12 +48,23 @@ void CreateEntityTable(lua_State *L, Entity_t *Entity) {
  -----------------------------------
 */
 
+	luaL_Reg fns[] = {
+		{ "GetHealth", Entity_GetHealth },
+		{ "GetEnergy", Entity_GetEnergy },
+		{ "Heal", Entity_Heal },
+		{ "Attack", Entity_Attack },
+		{ "Living", Entity_Living },
+		{ NULL, NULL }
+	};
+	luaL_setfuncs(L, fns, 0);
+
 	// name
 	lua_pushstring(L, Entity->Name);
 	lua_setfield(L, -2, "name");
 
 	// color
 	lua_newtable(L);
+
 
 	lua_pushnumber(L, Entity->EntityColor.r);
 	lua_pushnumber(L, Entity->EntityColor.g);
@@ -123,6 +149,113 @@ Entity_t GetEntityFromTable(lua_State *L) {
 	return Entity;
 }
 
+void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...) {
+	int top = lua_gettop(L);
+	write_debug(AssertParameters, "top=%d; ParamCount=%d", top, ParamCount);
+	if (top != ParamCount) {
+		write_debug(AssertParameters, "top(%d)!=ParamCount(%d)", top, ParamCount);
+		lua_pushfstring(L, "expected %s", Prototype);
+		lua_error(L);
+	}
 
+	va_list args;
+	va_start(args, ParamCount);
 
+	for (int i = 1; i <= ParamCount; i++) {
+		int ParamType = va_arg(args, int);
+		int TrueParam = lua_type(L, i);
+
+		if (ParamType != TrueParam) {
+			lua_pushfstring(L, "expected type %s. got %s instead",
+				Prototype,
+				lua_typename(L, ParamType), lua_typename(L, TrueParam
+			));
+			lua_error(L);
+		}
+	}
+
+	va_end(args);
+}
+
+int Entity_GetHealth(lua_State *L) {
+	AssertParameters(L, PROTO_GET_HEALTH, 1,
+			LUA_TTABLE);
+//	int top = lua_gettop(L);
+//	if (top != 1) {
+//		lua_pushliteral(L, "expected entity:GetHealth()");
+//		lua_error(L);
+//	}
+
+//	if (lua_type(L, 1) != LUA_TTABLE) {
+//		lua_pushliteral(L, "expected entity:GetHealth()");
+//		lua_error(L);
+//	}
+
+	return 0;
+}
+
+int Entity_GetEnergy(lua_State *L) {
+	AssertParameters(L, PROTO_GET_ENERGY, 1,
+			LUA_TTABLE);
+	int top = lua_gettop(L);
+	if (top != 1) {
+		lua_pushliteral(L, "expected entity:GetEnergy()");
+		lua_error(L);
+	}
+	return 0;
+}
+
+int Entity_Heal(lua_State *L) {
+	AssertParameters(L, PROTO_HEAL, 3,
+			LUA_TTABLE, LUA_TTABLE, LUA_TNUMBER);
+	return 0;
+}
+
+int Entity_Attack(lua_State *L) {
+	AssertParameters(L, PROTO_ATTACK, 3,
+			LUA_TTABLE, LUA_TTABLE, LUA_TNUMBER);
+
+	int type;
+	type = lua_getfield(L, 2, "hp");
+	if (type != LUA_TNUMBER) {
+		lua_pushliteral(L, "expected entity.hp of type number");
+		lua_error(L);
+	}
+
+	lua_Number hp = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	
+//	type = lua_getfield(L, 1, "attack");
+//	if (type != LUA_TNUMBER) {
+//		lua_pushliteral(L, "expected entity.attack of type number");
+//		lua_error(L);
+//	}
+
+	lua_Number damage = lua_tonumber(L, 3);
+
+	if (damage < 0) damage = 0;
+
+	Health_t HP = hp - damage;
+	if (HP > hp) HP = 0;	// underflow protection
+
+	lua_pushnumber(L, HP);
+	lua_setfield(L, 2, "hp");
+
+	lua_pushnumber(L, hp - HP);
+	return 1;
+}
+
+int Entity_Living(lua_State *L) {
+	int top = lua_gettop(L);
+	if (top != 1) {
+		lua_pushliteral(L, "expected entity:Living()");
+		lua_error(L);
+	}
+	return 0;
+}
+
+//int Entity_GetEnemies(lua_State *L) {
+//	
+//	return 0;
+//}
 
