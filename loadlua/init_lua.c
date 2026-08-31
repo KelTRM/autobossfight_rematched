@@ -1,8 +1,8 @@
-#include <lualib.h>
 #include<stdlib.h>
+#include<string.h>
 #include<lua.h>
+#include<lualib.h>
 #include<lauxlib.h>
-#include <string.h>
 #include"lua_bossfight.h"
 #include"../debug/debug.h"
 #include"../utils/sleep.h"
