@@ -203,12 +203,15 @@ int Entity_GetHealth(lua_State *L) {
 int Entity_GetEnergy(lua_State *L) {
 	AssertParameters(L, PROTO_GET_ENERGY, 1,
 			LUA_TTABLE);
-	int top = lua_gettop(L);
-	if (top != 1) {
-		lua_pushliteral(L, "expected entity:GetEnergy()");
-		lua_error(L);
+
+	int type = lua_getfield(L, 1, "energy");
+
+	if (type != LUA_TNUMBER) {
+		lua_pop(L, 1);
+		lua_pushnil(L);
 	}
-	return 0;
+
+	return 1;
 }
 
 int Entity_Heal(lua_State *L) {
