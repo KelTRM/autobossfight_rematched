@@ -180,6 +180,14 @@ void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...) 
 int Entity_GetHealth(lua_State *L) {
 	AssertParameters(L, PROTO_GET_HEALTH, 1,
 			LUA_TTABLE);
+
+	int type = lua_getfield(L, 1, "hp");
+	if (type != LUA_TNUMBER) {
+		lua_pop(L, 1);
+		lua_pushnil(L);
+	}
+
+	return 1;
 //	int top = lua_gettop(L);
 //	if (top != 1) {
 //		lua_pushliteral(L, "expected entity:GetHealth()");
@@ -190,8 +198,6 @@ int Entity_GetHealth(lua_State *L) {
 //		lua_pushliteral(L, "expected entity:GetHealth()");
 //		lua_error(L);
 //	}
-
-	return 0;
 }
 
 int Entity_GetEnergy(lua_State *L) {
@@ -246,12 +252,21 @@ int Entity_Attack(lua_State *L) {
 }
 
 int Entity_Living(lua_State *L) {
-	int top = lua_gettop(L);
-	if (top != 1) {
-		lua_pushliteral(L, "expected entity:Living()");
-		lua_error(L);
+	AssertParameters(L, PROTO_LIVING, 1, LUA_TTABLE);
+
+	Entity_GetHealth(L);
+
+	if (lua_type(L, -1) == LUA_TNIL) {
+		lua_pop(L, 1);
+		lua_pushboolean(L, 0);
 	}
-	return 0;
+
+	lua_Number hp = lua_tonumber(L, -1);
+	if (hp > 0) hp = 1;
+	else hp = 0;
+
+	lua_pushboolean(L, hp);
+	return 1;
 }
 
 //int Entity_GetEnemies(lua_State *L) {
