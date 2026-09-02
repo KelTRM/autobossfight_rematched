@@ -1,6 +1,9 @@
 #include<stdio.h>
-#include"../ui/console_manager/console.h"
 #include<lua.h>
+#include"../ui/console_manager/console.h"
+
+#define LUA_PRINT_BUFFER	ActiveBuffer
+#define LUA_PRINT_LINE_TERM	"\n"
 
 int LuaPrint(lua_State *L);
 
@@ -22,7 +25,7 @@ int LuaPrint(lua_State *L) {
 		lua_error(L);
 	}
 
-	printf("%s\n", str);
+	bprintf(LUA_PRINT_BUFFER, "%s%s", str, LUA_PRINT_LINE_TERM);
 
 	return 0;
 }
