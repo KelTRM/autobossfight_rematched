@@ -8,6 +8,7 @@
 #include"../utils/sleep.h"
 
 const char *LuaInitFile = "lua/init.lua";
+void LuaSetPrint(lua_State *L);
 
 void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
@@ -22,6 +23,8 @@ void *InitLua(void) {
 
 	LoadBossfightTable(L, 0);
 	luaL_openlibs(L);
+
+	LuaSetPrint(L);
 
 	int err = luaL_dofile(L, LuaInitFile);
 
