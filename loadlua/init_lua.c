@@ -3,12 +3,12 @@
 #include<lua.h>
 #include<lualib.h>
 #include<lauxlib.h>
+#include"lua_print.h"
 #include"lua_bossfight.h"
 #include"../debug/debug.h"
 #include"../utils/sleep.h"
 
 const char *LuaInitFile = "lua/init.lua";
-void LuaSetPrint(lua_State *L);
 
 void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));

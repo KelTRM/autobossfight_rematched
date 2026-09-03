@@ -1,14 +1,6 @@
 #include<stdio.h>
 #include<lua.h>
-#include"../ui/console_manager/console.h"
-
-#define LUA_PRINT_BUFFER	INVALID_BUFFER_HANDLE
-#define LUA_PRINT_LINE_TERM	"\n"
-
-struct PrintConf {
-	BUFHANDLE Buffer;
-	const char *PrintLineTerminator;
-};
+#include"lua_print.h"
 
 int LuaPrint(lua_State *L);
 struct PrintConf GetPrintConfig(lua_State *L);
