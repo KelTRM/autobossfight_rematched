@@ -171,18 +171,39 @@ int RegisterLuaAttacks(lua_State *L) {
 		lua_error(L);
 	}
 
-	int type = lua_getglobal(L, PluginRegistrationsName);
+//	int type = lua_getglobal(L, PluginRegistrationsName);
 
-	if (type == LUA_TNIL) {
-		// define new registered plugin table
-		lua_newtable(L);
-		lua_setglobal(L, PluginRegistrationsName);
-		lua_getglobal(L, PluginRegistrationsName);
-	} else if (type != LUA_TTABLE) {
-		// can be presumed another instance of the name exists. results in failure
-		lua_pushnumber(L, 0);
-		return 1;
+//	if (type == LUA_TNIL) {
+//		// define new registered plugin table
+//		lua_newtable(L);
+//		lua_setglobal(L, PluginRegistrationsName);
+//		lua_getglobal(L, PluginRegistrationsName);
+//	} else if (type != LUA_TTABLE) {
+//		// can be presumed another instance of the name exists. results in failure
+//		lua_pushnumber(L, 0);
+//		return 1;
+//	}
+
+	int type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+	if (type != LUA_TTABLE) {
+		write_debug(ERROR, "REGISTRY.bossfight uninitialized.");
+		exit(-1);
 	}
+
+	type = lua_getfield(L, -1, "plugins");
+	if (type != LUA_TTABLE) {
+		write_debug(Error, "REGISTRY.bossfight.plugins uninitialized.");
+		exit(-1);
+	}
+
+	type = lua_getfield(L, -1, "attack");
+	if (type != LUA_TTABLE) {
+		write_debug(Error, "REGISTRY.bossfight.plugins.attack uninitialized.");
+		exit(-1);
+	}
+
+	lua_remove(L, -2);
+	lua_remove(L, -2);
 
 	lua_newtable(L);
 	lua_getfield(L, 2, "current_entries");

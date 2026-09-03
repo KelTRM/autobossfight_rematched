@@ -7,7 +7,6 @@ void InitRegistry(lua_State *L) {
 
 	// REGISTRY.bossfight.print
 	lua_newtable(L);
-	lua_setfield(L, -2, "print");
 
 	lua_pushinteger(L, LUA_PRINT_BUFFER);
 	lua_setfield(L, -2, "buffer");
@@ -15,6 +14,8 @@ void InitRegistry(lua_State *L) {
 	lua_pushstring(L, LUA_PRINT_LINE_TERM);
 	lua_setfield(L, -2, "print_term");
 
+	lua_setfield(L, -2, "print");
+	
 	// REGISTRY.bossfight.plugins
 	lua_createtable(L, 0, 2);
 
@@ -26,5 +27,7 @@ void InitRegistry(lua_State *L) {
 	lua_newtable(L);
 	lua_setfield(L, -2, "transformation");
 
-	
+	lua_setfield(L, -2, "plugins");
+
+	lua_setfield(L, LUA_REGISTRYINDEX, "bossfight");
 }
