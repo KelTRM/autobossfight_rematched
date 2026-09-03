@@ -9,6 +9,7 @@
 #include"../utils/sleep.h"
 
 const char *LuaInitFile = "lua/init.lua";
+void InitRegistry(lua_State *L);
 
 void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
@@ -20,6 +21,7 @@ void *InitLua(void) {
 //	CreateDefMgr(&State.Entities.Bosses);
 
 	lua_State *L = luaL_newstate();
+	InitRegistry(L);
 
 	LoadBossfightTable(L, 0);
 	luaL_openlibs(L);
