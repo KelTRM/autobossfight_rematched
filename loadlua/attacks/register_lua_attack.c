@@ -25,6 +25,7 @@ typedef struct LuaAttack {
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 AttackData_t ReadAttackDataTable(lua_State *L);
+int GetAttackPluginsTable(lua_State *L);
 
 AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
@@ -40,9 +41,13 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	}
 
 	// get the attack table
-	printf("Getting PluginRegistrationsName\n");
-	int type = lua_getglobal(L, PluginRegistrationsName);
-	assert(type == LUA_TTABLE);
+//	printf("Getting PluginRegistrationsName\n");
+//	int type = lua_getglobal(L, PluginRegistrationsName);
+//	assert(type == LUA_TTABLE);
+
+	int type;
+	type = GetAttackPluginsTable(L);
+	assert(type == 1);
 
 	// Get the plugin
 	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);

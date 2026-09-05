@@ -24,25 +24,33 @@ size_t LoadLuaAttacks(void *LuaState, AttackMgr_t *Manager) {
 	return AttackCount;
 }
 
+int GetAttackPluginsTable(lua_State *L);
+
 size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
 //	int type = lua_getglobal(L, PluginRegistrationsName);
 //	if (type != LUA_TTABLE) return 0;
 
-	int type;
-	type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	if (type != LUA_TTABLE)
-		return 0;
+//	int type;
+//	type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+//	if (type != LUA_TTABLE)
+//		return 0;
 
-	type = lua_getfield(L, -1, "plugins");
-	if (type != LUA_TTABLE)
-		return 0;
+//	type = lua_getfield(L, -1, "plugins");
+//	if (type != LUA_TTABLE)
+//		return 0;
 
-	type = lua_getfield(L, -1, "attack");
-	if (type != LUA_TTABLE)
-		return 0;
+//	type = lua_getfield(L, -1, "attack");
+//	if (type != LUA_TTABLE)
+//		return 0;
 
-	lua_remove(L, -2);
-	lua_remove(L, -2);
+//	lua_remove(L, -2);
+//	lua_remove(L, -2);
+
+	int r = GetAttackPluginsTable(L);
+	if (r == 0) {
+		lua_pop(L, 1);
+		return 0;
+	}
 
 	size_t PluginCount = lua_rawlen(L, -1);
 	for (size_t i = 0; i < PluginCount; i++) {
@@ -50,6 +58,8 @@ size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
 		RegisterPlugin(Manager, L, i+1);
 		lua_pop(L, 1);
 	}
+
+//	lua_pop(L, 1);
 	return PluginCount;
 }
 

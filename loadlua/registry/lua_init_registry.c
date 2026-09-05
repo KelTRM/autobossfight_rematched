@@ -1,5 +1,5 @@
 #include<lua.h>
-#include"lua_print.h"
+#include"../lua_print.h"
 
 void InitRegistry(lua_State *L) {
 	// REGISTRY.bossfight
