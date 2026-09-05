@@ -13,8 +13,6 @@
 #include<string.h>
 #include<lua.h>
 
-const char *PluginRegistrationsName = "__bossfight_registered_plugins";
-
 typedef struct LuaAttack {
 	lua_State *L;
 

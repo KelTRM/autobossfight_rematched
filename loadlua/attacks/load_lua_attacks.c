@@ -7,7 +7,7 @@
 #include<lua_load.h>
 #include <stdlib.h>
 
-extern const char *PluginRegistrationsName;
+// extern const char *PluginRegistrationsName;
 
 size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar);
 size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L);
@@ -27,25 +27,6 @@ size_t LoadLuaAttacks(void *LuaState, AttackMgr_t *Manager) {
 int GetAttackPluginsTable(lua_State *L);
 
 size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
-//	int type = lua_getglobal(L, PluginRegistrationsName);
-//	if (type != LUA_TTABLE) return 0;
-
-//	int type;
-//	type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-//	if (type != LUA_TTABLE)
-//		return 0;
-
-//	type = lua_getfield(L, -1, "plugins");
-//	if (type != LUA_TTABLE)
-//		return 0;
-
-//	type = lua_getfield(L, -1, "attack");
-//	if (type != LUA_TTABLE)
-//		return 0;
-
-//	lua_remove(L, -2);
-//	lua_remove(L, -2);
-
 	int r = GetAttackPluginsTable(L);
 	if (r == 0) {
 		lua_pop(L, 1);
