@@ -34,7 +34,7 @@ void *InitLua(void) {
 		const char *LuaErr = lua_tostring(L, -1);
 
 		write_debug(Lua, "%s", LuaErr);
-		printf("lua error in file %s - %s\n", LuaInitFile, LuaErr);
+//		printf("lua error in file %s - %s\n", LuaInitFile, LuaErr);
 		sleep(1000);
 	} else {
 		write_debug(Lua, "Exited script %s successfully.", LuaInitFile);
