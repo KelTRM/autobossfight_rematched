@@ -18,6 +18,10 @@
 */
 int CreateAttackPlugin(lua_State *L) {
 	int n = lua_gettop(L);
+	if (n != 1) {
+		lua_pushliteral(L, "expected bossfight.attack:CreateAttackPlugin()");
+		lua_error(L);
+	}
 
 //	lua_pushnumber(L, 0);
 //	return 1;

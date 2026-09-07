@@ -23,7 +23,7 @@ void *InitLua(void) {
 	lua_State *L = luaL_newstate();
 	InitRegistry(L);
 
-	LoadBossfightTable(L, 0);
+	LoadBossfightTable(L);
 	luaL_openlibs(L);
 
 	LuaSetPrint(L);

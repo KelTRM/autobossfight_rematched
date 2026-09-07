@@ -22,4 +22,4 @@ enum LuaPerm {
 	PERM_ATTACK=2
 };
 
-void LoadBossfightTable(lua_State *L, int Perms);
+void LoadBossfightTable(lua_State *L);

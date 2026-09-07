@@ -10,7 +10,7 @@
 void DefineAttackTable(lua_State *L);
 
 // pushes bossfight table to top of stack
-void LoadBossfightTable(lua_State *L, int Perms) {
+void LoadBossfightTable(lua_State *L) {
 	lua_newtable(L);
 
 	DefineEntityTable(L);

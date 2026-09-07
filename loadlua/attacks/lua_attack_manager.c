@@ -227,4 +227,6 @@ size_t RegisterPluginAttacks(AttackMgr_t *mgr, Registrar_t *Registrar, size_t Re
 			);
 		}
 	}
+
+	return AttacksAdded;
 }

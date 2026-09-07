@@ -47,7 +47,11 @@ size_t InitAttacks(void *Lua) {
 	assert(BlockCount != 0);
 
 	for (size_t i = 0; i < AttackCount; i++) {
-		RegisteredAttacks += AddAttackToPlugin(&Manager, Plugin, AttacksToRegister[i]);
+		RegisteredAttacks += AddAttackToPlugin(
+			&Manager,
+			Plugin,
+			(Attack_t*)AttacksToRegister[i]
+		);
 	}
 
 	write_debug(InitAttacks, "registered %zu builtins", RegisteredAttacks);
