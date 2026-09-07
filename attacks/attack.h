@@ -19,6 +19,7 @@ typedef struct AttackData {
 	Health_t PriorHealth;
 
 	AttackAnnouncer Announcer;
+	void *LuaAttackData;
 } AttackData_t;
 
 typedef int (*CanAttack)(Attack_t *Self, Entity_t *Attacker);

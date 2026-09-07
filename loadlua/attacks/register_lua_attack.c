@@ -20,6 +20,10 @@ typedef struct LuaAttack {
 	size_t AttackPluginIndex;
 } LuaAttack_t;
 
+typedef struct LuaAttackData {
+	size_t ArrayIdx;
+} LuaAttackData_t;
+
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 AttackData_t ReadAttackDataTable(lua_State *L);
@@ -98,6 +102,9 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		Attacker->Energy	= Result.Attacker->Energy;
 		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
 
+		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
+//		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
+
 		free(Result.Attacker);
 		free(Result.Target);
 	}
@@ -108,6 +115,17 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	lua_pop(L, 2);
 
 	return Result;
+}
+
+LuaAttackData_t AppendAttackData(lua_State *L) {
+	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+	int type = lua_getfield(L, -1, "attack_handlers");
+
+	if (type != LUA_TTABLE) {
+		write_debug(Warning, "Registry inproperly configured."
+				"Could not find table REGISTRY.bossfight.attack_handlers");
+		lua_pop(L, 2);
+	}
 }
 
 Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx) {
