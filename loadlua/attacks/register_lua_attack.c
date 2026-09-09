@@ -121,13 +121,26 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
 	int type = lua_getfield(L, -1, "attack_handlers");
 
+	lua_remove(L, -2);
+
 	LuaAttackData_t Data = { -1 };
 
 	if (type != LUA_TTABLE) {
 		write_debug(Warning, "Registry inproperly configured."
 				"Could not find table REGISTRY.bossfight.attack_handlers");
-		lua_pop(L, 2);
+		lua_pop(L, 1);
+
+		return Data;
 	}
+
+	int len = lua_rawlen(L, -1);
+
+	Data.ArrayIdx = len+1;
+
+	lua_pushvalue(L, -2);
+	lua_rawseti(L, -2, Data.ArrayIdx);
+
+	lua_pop(L, 1);
 
 	return Data;
 }
