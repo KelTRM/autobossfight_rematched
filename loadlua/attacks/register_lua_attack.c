@@ -3,7 +3,7 @@
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
-// #include"lua_attack.h"
+#include"lua_attack.h"
 #include"../../attacks/attack_manager.h"
 #include"../../attacks/attacks.h"
 #include"lua_registration.h"
@@ -13,21 +13,12 @@
 #include<string.h>
 #include<lua.h>
 
-typedef struct LuaAttack {
-	lua_State *L;
-
-	const char *AttackPluginKey;
-	size_t AttackPluginIndex;
-} LuaAttack_t;
-
-typedef struct LuaAttackData {
-	size_t ArrayIdx;
-} LuaAttackData_t;
-
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 AttackData_t ReadAttackDataTable(lua_State *L);
 int GetAttackPluginsTable(lua_State *L);
+
+LuaAttackData_t AppendAttackData(lua_State *L);
 
 AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
@@ -42,12 +33,8 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		return (AttackData_t){ 0 };
 	}
 
-	// get the attack table
-//	printf("Getting PluginRegistrationsName\n");
-//	int type = lua_getglobal(L, PluginRegistrationsName);
-//	assert(type == LUA_TTABLE);
-
 	int type;
+
 	type = GetAttackPluginsTable(L);
 	assert(type == 1);
 
@@ -103,6 +90,7 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
 
 		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
+		AppendAttackData(L);
 //		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
 
 		free(Result.Attacker);
@@ -119,15 +107,15 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 
 LuaAttackData_t AppendAttackData(lua_State *L) {
 	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	int type = lua_getfield(L, -1, "attack_handlers");
+	int type = lua_getfield(L, -1, "attack_data");
 
 	lua_remove(L, -2);
 
-	LuaAttackData_t Data = { -1 };
+	LuaAttackData_t Data = { L, -1 };
 
 	if (type != LUA_TTABLE) {
-		write_debug(Warning, "Registry inproperly configured."
-				"Could not find table REGISTRY.bossfight.attack_handlers");
+		write_debug(Warning, "Registry inproperly configured. "
+				"Could not find table REGISTRY.bossfight.attack_data");
 		lua_pop(L, 1);
 
 		return Data;

@@ -8,6 +8,7 @@ const char *PrevAnnouncerGlobal = "__last_announcer";
 
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
+void LuaAttackAnnouncer(AttackData_t *Attack);
 
 AttackData_t ReadAttackDataTable(lua_State *L) {
 	AttackData_t AttackData = { 0 };
@@ -43,7 +44,11 @@ AttackData_t ReadAttackDataTable(lua_State *L) {
 
 	lua_pop(L, 1);
 
-	AttackData.Announcer = NULL;
+	type = lua_getfield(L, -1, "announcer");
+	
+	if (type == LUA_TFUNCTION) {
+		AttackData.Announcer = LuaAttackAnnouncer;
+	}
 
 	return AttackData;
 }
