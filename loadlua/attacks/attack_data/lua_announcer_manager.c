@@ -24,7 +24,7 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 	if (type != LUA_TTABLE) {
 		write_debug(Error, "Recieved invalid AttackData table.");
 
-		lua_pop(L, 1);
+		lua_pop(L, 2);
 		goto fallback;
 	}
 
@@ -32,12 +32,14 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 	if (type != LUA_TFUNCTION) {
 		write_debug(Error, "Recieved announcer of type other than function.");
 
-		lua_pop(L, 2);
+		lua_pop(L, 3);
 		goto fallback;
 	}
 
 	lua_pushvalue(L, -2);
 	lua_call(L, 1, 0);
+
+	lua_pop(L, 2);
 
 	return;
 
