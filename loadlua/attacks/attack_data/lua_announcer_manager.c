@@ -19,13 +19,25 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 
 	lua_remove(L, -2);
 
-	int type = lua_rawgeti(L, -1, AttackData->ArrayIdx);
+	int type;
+	type = lua_rawgeti(L, -1, AttackData->ArrayIdx);
 	if (type != LUA_TTABLE) {
 		write_debug(Error, "Recieved invalid AttackData table.");
+
+		lua_pop(L, 1);
 		goto fallback;
 	}
 
-	lua_getfield(L, -1, "announcer");
+	type = lua_getfield(L, -1, "announcer");
+	if (type != LUA_TFUNCTION) {
+		write_debug(Error, "Recieved announcer of type other than function.");
+
+		lua_pop(L, 2);
+		goto fallback;
+	}
+
+	lua_pushvalue(L, -2);
+	lua_call(L, 1, 0);
 
 	return;
 
