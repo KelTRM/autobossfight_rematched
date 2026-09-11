@@ -50,5 +50,7 @@ AttackData_t ReadAttackDataTable(lua_State *L) {
 		AttackData.Announcer = LuaAttackAnnouncer;
 	}
 
+	lua_pop(L, 1);
+
 	return AttackData;
 }

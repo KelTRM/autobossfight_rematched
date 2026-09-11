@@ -90,7 +90,9 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
 
 		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
-		AppendAttackData(L);
+
+		LuaAttackData_t AttackData = AppendAttackData(L);
+		memcpy(Result.LuaAttackData, &AttackData, sizeof(LuaAttackData_t));
 //		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
 
 		free(Result.Attacker);
@@ -115,7 +117,7 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 
 	if (type != LUA_TTABLE) {
 		write_debug(Warning, "Registry inproperly configured. "
-				"Could not find table REGISTRY.bossfight.attack_data");
+				"Could not find table REGISTRY.bossfight.attack_handlers");
 		lua_pop(L, 1);
 
 		return Data;
@@ -126,6 +128,10 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 	Data.ArrayIdx = len+1;
 
 	lua_pushvalue(L, -2);
+
+	type = lua_type(L, -1);
+	write_debug(Debug, "Got type=%s", lua_typename(L, type));
+
 	lua_rawseti(L, -2, Data.ArrayIdx);
 
 	lua_pop(L, 1);
