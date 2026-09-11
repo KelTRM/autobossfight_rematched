@@ -5,7 +5,7 @@ void InitRegistry(lua_State *L) {
 	// REGISTRY.bossfight
 	lua_createtable(L, 0, 2);
 
-	// REGISTRY.attack_data
+	// REGISTRY.bossfight.attack_data
 	lua_newtable(L);
 	lua_setfield(L, -2, "attack_data");
 
