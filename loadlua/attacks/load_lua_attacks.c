@@ -5,7 +5,9 @@
 #include "attacks/lua_attack_manager.h"
 #include<lua_bossfight.h>
 #include<lua_load.h>
-#include <stdlib.h>
+#include<stdlib.h>
+
+#define max(a,b)	((a)>(b)?(a):(b))
 
 // extern const char *PluginRegistrationsName;
 
@@ -49,13 +51,21 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 // Plugin array @ top of stack
 size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t Index) {
 	size_t RequiredAttacks=0;
+	AttackID_t MaxID = 0;
 
 	// iterate over plugin to get attack count
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
+		int type = lua_getfield(L, -1, "id");
+		if (type == LUA_TNUMBER)
+			MaxID = max(MaxID, lua_tonumber(L, -1));
+
 		++RequiredAttacks;
-		lua_pop(L, 1);
+		lua_pop(L, 2);
 	}
+
+	RequiredAttacks = max(MaxID, RequiredAttacks);
+	write_debug(Info, "RequiredAttacks=%zu", RequiredAttacks);
 
 	PluginID_t ID;
 	size_t MaxAttacks = AllocateAttackPlugin(Manager, RequiredAttacks, &ID);

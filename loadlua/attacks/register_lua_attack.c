@@ -265,7 +265,7 @@ int RegisterLuaAttacks(lua_State *L) {
 
 	lua_pop(L, 1);
 
-	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
+//	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
 	PushLuaArray(L, -2);
 
 	lua_pushnumber(L, RegistrationCount);
