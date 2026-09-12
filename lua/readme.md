@@ -146,6 +146,24 @@ and a manually defined table may not be valid in future versions.
 The `attack` parameter contains a table including information about the attack being preformed.
 The table contains both a `from` and `target` parameter, each being entities.
 
+# Transformations
+
+Like with attacks, transformations are defined through plugins via
+`bossfight.transformation:NewPlugin()`.
+
+These plugins may be used to register transformations, via `plugin:AddTransformations(table)`
+
+The table for defining a transformation are the following
+```lua
+plugin:AddTransformation({
+    ["name"]="example"      -- The name of the transformation
+    [""]
+})
+```
+
+```lua
+bossfight.transformation:CreatePlugin()
+```
 
 # Types
 
@@ -201,3 +219,5 @@ You may also find some additional announcers in bossfight.announcers, such as
 ### Notes
 
 When the attack heals the target, the Damage value is used to indicate the HP given to the target
+
+
