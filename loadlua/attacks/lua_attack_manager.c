@@ -75,23 +75,27 @@ int ValidatePlugin(AttackMgr_t *mgr, PluginID_t ID) {
 	return 1;
 }
 
+static Attack_t **IndexAttackManager(AttackMgr_t *mgr, AttackID_t ID) {
+	if (ID > mgr->MaxAttackCount)
+		return NULL;
+
+	BlockID_t Block = ID / ATTACK_BLOCK_SIZE;
+	AttackID_t BlockIdx = ID % ATTACK_BLOCK_SIZE;
+
+	return &mgr->Attacks[Block].Attack[BlockIdx];
+}
+
 Attack_t **IndexPluginSpace(AttackMgr_t *mgr, PluginID_t ID, AttackID_t Attack) {
+	if (ID == INVALID_PLUGIN_ID) IndexAttackManager(mgr, Attack);
 	if (ValidatePlugin(mgr, ID) == 0) return NULL;
 
 	size_t MaxAttacks = mgr->Plugins[ID].MaxAttacks;
 	if (Attack > MaxAttacks) return NULL;
 
 	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
+	AttackID_t GlobalStartingID = PluginBlock * ATTACK_BLOCK_SIZE;
 
-	BlockID_t IndexBlock = (Attack / ATTACK_BLOCK_SIZE) + PluginBlock;
-	if (IndexBlock > mgr->BlockIdCount) return NULL;
-
-	uint32_t BlockIndex = Attack % ATTACK_BLOCK_SIZE;
-	
-//	write_debug(IndexPluginSpace, "Indexing @ ID=%d & idx=%d (block=%d,idx=%d)",
-//			ID, Attack, IndexBlock, BlockIndex);
-
-	return &mgr->Attacks[IndexBlock].Attack[BlockIndex];
+	return IndexAttackManager(mgr, GlobalStartingID + Attack);
 }
 
 size_t AddAttackToPlugin(AttackMgr_t *mgr, PluginID_t ID, Attack_t *Attack) {
