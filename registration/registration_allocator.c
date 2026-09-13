@@ -79,6 +79,8 @@ static Registration_t *IndexManager(RegistrationMgr_t *mgr, RegistreeID_t ID) {
 	BlockID_t Block = ID / BLOCK_SIZE;
 	RegistreeID_t BlockIdx = ID % BLOCK_SIZE;
 
+	write_debug(Debug, "Indexing into registration manager @ (%d,%d)", Block, BlockIdx);
+
 	return &mgr->Blocks[Block].Registration[BlockIdx];
 }
 
@@ -105,7 +107,7 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeI
 
 	if (RequestedID != 0) {
 		Registration_t *Requested = IndexPluginSpace(mgr, ID, RequestedID);
-		if (Requested != NULL) {
+		if (Requested->Registration != NULL) {
 			if (Requested->ID == RequestedID) {
 				// requested ID taken. go after different spot
 				goto unallocated;
@@ -120,6 +122,7 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeI
 		}
 			
 		Requested->Registration = Registration;
+		Requested->ID = RequestedID;
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
@@ -129,6 +132,7 @@ unallocated: //goto unallocated if existing allocated array exists
 		// found new id to use
 
 		Registration->Registration = Registration;
+		Registration->ID = RequestedID;
 
 		return 1;
 	}

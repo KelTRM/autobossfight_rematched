@@ -96,20 +96,19 @@ size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index
 		*LuaAttack = ConvertTableToAttack(L, -1, Identifier, Index);
 		
 		lua_pop(L, 1);
-//		write_debug(RegisterPlugin, "got attack identifier = %s", LuaAttack->Identifier);
-//		write_debug(RegisterPlugin, "got attack display name = %s", LuaAttack->AttackName);
-//		Attack_t **Attack = IndexPluginSpace(Manager, ID, LuaAttack->ID);
-//		if (Attack == NULL) continue;
 
 		write_debug(RegisterPlugin, "adding attack from plugin %d @ id=%d", ID, LuaAttack->ID);
-		RegisteredAttacks += AddRegistrationToPlugin(Manager, ID, LuaAttack);
-//		*Attack = LuaAttack;
-//		RegisteredAttacks++;
+		RegisteredAttacks += AddRegistrationToPlugin(
+			Manager,
+			ID,
+			LuaAttack->ID,
+			LuaAttack
+		);
 	}
 
 	return RegisteredAttacks;
 }
 
-size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar) {
-	return RegisterPluginAttacks(mgr, Registrar, 255);
+size_t RegisterAttackPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar) {
+	return RegisterPlugins(mgr, Registrar, 255);
 }

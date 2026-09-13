@@ -1,6 +1,7 @@
 #include"attacks/attacks.h"
 #include"attack_manager.h"
-#include"attacks/lua_attack_manager.h"
+//#include"attacks/lua_attack_manager.h"
+#include<registration_allocator.h>
 #include<lua_load.h>
 #include<registration.h>
 #include<stddef.h>
@@ -22,7 +23,7 @@ const Attack_t *AttacksToRegister[] = {
 Registrar_t AttackRegistrar;
 
 size_t InitAttacks(void *Lua) {
-	AttackMgr_t Manager = OpenAttackAllocator(0);
+	RegistrationMgr_t Manager = OpenPluginAllocator(0);
 
 	// keep around for now
 	InitAttackRegistrar();
@@ -41,16 +42,19 @@ size_t InitAttacks(void *Lua) {
 	write_debug(InitAttacks, "MaxID = %lu", MaxID);
 
 	PluginID_t Plugin;
-	BlockID_t BlockCount = AllocateAttackPlugin(&Manager, MaxID, &Plugin);
+	BlockID_t BlockCount = AllocatePlugin(&Manager, MaxID, &Plugin);
 	
 	assert(Plugin != INVALID_PLUGIN_ID);
 	assert(BlockCount != 0);
 
 	for (size_t i = 0; i < AttackCount; i++) {
-		RegisteredAttacks += AddAttackToPlugin(
+		Attack_t *Attack = (Attack_t*)AttacksToRegister[i];
+		write_debug(Info, "Registering attack %s @ ID %d", Attack->Identifier, Attack->ID);
+		RegisteredAttacks += AddRegistrationToPlugin(
 			&Manager,
 			Plugin,
-			(Attack_t*)AttacksToRegister[i]
+			Attack->ID,
+			Attack
 		);
 	}
 
@@ -59,7 +63,7 @@ size_t InitAttacks(void *Lua) {
 	LoadLuaAttacks(Lua, &Manager);
 
 //	size_t RegistrationCount = RegisterAttackPlugins(Manager, Registrar);
-	RegisterPluginAttacks(&Manager, &AttackRegistrar, 256);
+	RegisterPlugins(&Manager, &AttackRegistrar, 256);
 	
 	BuildAttackList();
 

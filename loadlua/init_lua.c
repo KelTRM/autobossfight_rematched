@@ -15,7 +15,7 @@ void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
 	memset(State, 0, sizeof(*State));
 
-	State->Attacks.mgr = OpenAttackAllocator(0);
+//	State->Attacks.mgr = OpenAttackAllocator(0);
 
 //	CreateDefMgr(&State.Entities.Players);
 //	CreateDefMgr(&State.Entities.Bosses);
