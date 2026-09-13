@@ -1,6 +1,6 @@
 #pragma once
 
-#include "attacks/lua_attack_manager.h"
+#include"../registration/registration_allocator.h"
 #include<stddef.h>
 
 //enum LuaPermissions {
@@ -24,5 +24,5 @@ struct LuaData {
 
 int CheckLuaEntities(void);
 size_t LoadLuaEntities(void *LuaState, DefMgr_t *Players, DefMgr_t *Bosses);
-size_t LoadLuaAttacks(void *LuaState, AttackMgr_t *mgr);
+size_t LoadLuaAttacks(void *LuaState, RegistrationMgr_t *mgr);
 

@@ -1,21 +1,21 @@
-#include <assert.h>
+#include<stdlib.h>
+#include<assert.h>
 #include<lua.h>
-#include"../../registration/registration.h"
+#include"../../registration/registration_allocator.h"
 #include"../../debug/debug.h"
-#include "attacks/lua_attack_manager.h"
+#include"../../attacks/attack.h"
 #include<lua_bossfight.h>
 #include<lua_load.h>
-#include<stdlib.h>
 
 #define max(a,b)	((a)>(b)?(a):(b))
 
 // extern const char *PluginRegistrationsName;
 
-size_t RegisterAttackPlugins(AttackMgr_t *mgr, Registrar_t *Registrar);
-size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L);
-size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t PluginIndex);
+size_t RegisterAttackPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar);
+size_t RegisterLuaPlugins(RegistrationMgr_t *Manager, lua_State *L);
+size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t PluginIndex);
 
-size_t LoadLuaAttacks(void *LuaState, AttackMgr_t *Manager) {
+size_t LoadLuaAttacks(void *LuaState, RegistrationMgr_t *Manager) {
 	struct BossfightLuaState *State = LuaState;
 
 	size_t AttackCount = RegisterLuaPlugins(Manager, State->L);
@@ -28,7 +28,7 @@ size_t LoadLuaAttacks(void *LuaState, AttackMgr_t *Manager) {
 
 int GetAttackPluginsTable(lua_State *L);
 
-size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
+size_t RegisterLuaPlugins(RegistrationMgr_t *Manager, lua_State *L) {
 	int r = GetAttackPluginsTable(L);
 	if (r == 0) {
 		lua_pop(L, 1);
@@ -49,7 +49,7 @@ size_t RegisterLuaPlugins(AttackMgr_t *Manager, lua_State *L) {
 Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx);
 
 // Plugin array @ top of stack
-size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t Index) {
+size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index) {
 	size_t RequiredAttacks=0;
 	AttackID_t MaxID = 0;
 
@@ -68,14 +68,14 @@ size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t Index) {
 	write_debug(Info, "RequiredAttacks=%zu", RequiredAttacks);
 
 	PluginID_t ID;
-	size_t MaxAttacks = AllocateAttackPlugin(Manager, RequiredAttacks, &ID);
+	size_t MaxAttacks = AllocatePlugin(Manager, RequiredAttacks, &ID);
 
 	write_debug(RegisterPlugin, "Recieved plugin with %lu attacks. Got %lu attacks back",
-			RequiredAttacks, MaxAttacks * ATTACK_BLOCK_SIZE);
+			RequiredAttacks, MaxAttacks * BLOCK_SIZE);
 
-	if (MaxAttacks * ATTACK_BLOCK_SIZE < RequiredAttacks) {
+	if (MaxAttacks * BLOCK_SIZE < RequiredAttacks) {
 		// just stick to allocated what can be
-		RequiredAttacks = MaxAttacks * ATTACK_BLOCK_SIZE;
+		RequiredAttacks = MaxAttacks * BLOCK_SIZE;
 	}
 
 	size_t RegisteredAttacks = 0;
@@ -102,7 +102,7 @@ size_t RegisterPlugin(AttackMgr_t *Manager, lua_State *L, PluginID_t Index) {
 //		if (Attack == NULL) continue;
 
 		write_debug(RegisterPlugin, "adding attack from plugin %d @ id=%d", ID, LuaAttack->ID);
-		RegisteredAttacks += AddAttackToPlugin(Manager, ID, LuaAttack);
+		RegisteredAttacks += AddRegistrationToPlugin(Manager, ID, LuaAttack);
 //		*Attack = LuaAttack;
 //		RegisteredAttacks++;
 	}

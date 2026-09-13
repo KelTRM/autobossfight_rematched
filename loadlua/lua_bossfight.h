@@ -2,7 +2,7 @@
 
 #include<lua.h>
 #include"entities/lua_entities.h"
-#include"attacks/lua_attack_manager.h"
+#include"../registration/registration_allocator.h"
 
 struct BossfightLuaState {
 	lua_State *L;
@@ -12,9 +12,9 @@ struct BossfightLuaState {
 	} Entities;
 
 	// struct incase of future additions
-	struct {
-		AttackMgr_t mgr;
-	} Attacks;
+//	struct {
+//		RegistrationMgr_t mgr;
+//	} Attacks;
 };
 
 enum LuaPerm {
