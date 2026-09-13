@@ -19,7 +19,7 @@ target_sources(autobossfight_lua_loader
 		attacks/define_attack_plugin.c
 		attacks/lua_add_attack.c
 		attacks/register_lua_attack.c
-		attacks/lua_attack_manager.c
+#		attacks/lua_attack_manager.c
 		attacks/load_lua_attacks.c
 
 		attacks/attack_data/define_attack_data_table.c

@@ -34,6 +34,11 @@ add_subdirectory(attacks)
 add_subdirectory(transformations)
 add_subdirectory(registration)
 
+target_link_libraries(autobossfight_lua_loader
+	PUBLIC
+		autobossfight_registration_manager
+)
+
 target_link_libraries(autobossfight_debug
 	PUBLIC
 		autobossfight_ui_manager

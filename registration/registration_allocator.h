@@ -23,14 +23,19 @@ struct PluginRegistry {
 	size_t MaxRegistrations;
 };
 
+typedef struct Registration {
+	void *Registration;
+	RegistreeID_t ID;
+} Registration_t;
+
 typedef struct Registrations {
 	struct Block {
-		void *Registration[BLOCK_SIZE];
+		Registration_t Registration[BLOCK_SIZE];
 		uint32_t PluginID;
 	} *Blocks;
 
 	BlockID_t BlockIdCount;
-	size_t MaxAttackCount;
+	size_t MaxRegistrationCount;
 	struct PluginRegistry Plugins[MAX_PLUGINS];
 } RegistrationMgr_t;
 
@@ -50,7 +55,7 @@ RegistrationMgr_t OpenPluginAllocator(size_t MaxRegistrations);
  */
 size_t GetPluginSizeFromID(RegistrationMgr_t *mgr, PluginID_t ID);
 int ValidatePlugin(RegistrationMgr_t *mgr, PluginID_t ID);
-void **IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RegistrationID);
+Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RegistrationID);
 size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Registration);
 size_t AllocatePlugin(RegistrationMgr_t *Manager, size_t RequiredPlugins, PluginID_t *ID);
-size_t RegisterPlugin(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax);
+size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax);

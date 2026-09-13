@@ -1,273 +1,235 @@
 #include<assert.h>
-#include<stdio.h>
-#define USE_STD_STRLEN
-
-// oh fuck this is gonna be a pain.
-// #include"lua_attack.h"
-#include"registration_allocator.h"
-// #include"../../attacks/attacks.h"
-#include"lua_registration.h"
-#include"types/lua_types.h"
-#include"../debug/debug.h"
 #include<stdlib.h>
 #include<string.h>
-#include<lua.h>
+#include"registration_allocator.h"
+#include"registration.h"
+#include"../debug/debug.h"
 
-const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
-lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
-AttackData_t ReadAttackDataTable(lua_State *L);
-int GetAttackPluginsTable(lua_State *L);
+typedef uint32_t	PluginID_t;
+typedef int64_t		BlockID_t;
 
-LuaAttackData_t AppendAttackData(lua_State *L);
+// todos:
+// implement plugin handle system - done
+// implement plugin attack size handler - done
+// implement interface for adding/removing plugin attacks - half done
 
-AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
-	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
-	assert(Attack != NULL);
+/*
+ * --- PLUGIN ID MODEL ---
+ *
+ *  Attack IDs will be allocated within the maximum attack count.
+ *  the IDs will shall be allocated in a first-come first-serve manner by plugins
+ *  The allocated section of IDs will act as a virtual address space within the plugin.
+ *
+ *  The plugins which specifically request an ID get priority, while those which request no specific ID
+ *  will get lower priority. (If they're registered in order of { 0, 1, 0 }, they will get IDs of { 2, 1, 3 })
+ */
 
-	lua_State *L = Attack->L;
-	assert(L != NULL);
+// MaxAttacks = 0 gives default
+RegistrationMgr_t OpenPluginAllocator(size_t MaxAttacks) {
+	if (MaxAttacks == 0)
+		MaxAttacks = MAX_REGISTERS_DEFAULT;
 
-	assert(Attack->AttackPluginKey != NULL);
+	RegistrationMgr_t Manager;
+	Manager.MaxRegistrationCount = ((MaxAttacks-1) / BLOCK_SIZE)+1;
+	Manager.Blocks = calloc(Manager.MaxRegistrationCount, sizeof(struct Block));
 
-	if (Target == NULL || Attacker == NULL) {
-		return (AttackData_t){ 0 };
+	Manager.BlockIdCount = Manager.MaxRegistrationCount / BLOCK_SIZE;
+
+	if (Manager.Blocks == NULL)
+		return (RegistrationMgr_t){ 0 };
+
+	for (size_t i = 0; i < Manager.MaxRegistrationCount; i++) {
+		memset(Manager.Blocks[i].Registration, 0, sizeof(Registration_t) * BLOCK_SIZE);
+		Manager.Blocks[i].PluginID = -1;
 	}
 
-	int type;
-
-	type = GetAttackPluginsTable(L);
-	assert(type == 1);
-
-	// Get the plugin
-	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
-	assert(type == LUA_TTABLE);
-
-	lua_getfield(L, -1, Attack->AttackPluginKey);
-
-	lua_remove(L, -2);
-
-	// attack arg
-	lua_newtable(L);
-
-	// attack.target
-	CreateEntityTable(L, Target);
-	lua_setfield(L, -2, "target");
-
-	// attack.attacker
-	CreateEntityTable(L, Attacker);
-	lua_setfield(L, -2, "attacker");
-
-	type = lua_getfield(L, -2, "attack_handler");
-	if (type != LUA_TFUNCTION) {
-		printf("Not implemented.");
-		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
-				Attack->AttackPluginKey);
-
-		lua_pop(L, 3);
-		return (AttackData_t){ 0 };
-	}
-
-	// self arg
-	lua_pushvalue(L, -3);
-
-	lua_pushvalue(L, -3);
-
-	lua_call(L, 2, 1);
-
-	type = lua_type(L, -1);
-	write_debug(LuaAttackManager, "type=%s", lua_typename(L, type));
-	
-	AttackData_t Result = { 0 };
-	if (type == LUA_TTABLE) {
-		Result = ReadAttackDataTable(L);
-		
-		Target->Attack		= Result.Target->Attack;
-		Target->Energy		= Result.Target->Energy;
-		Target->HealthPoints	= Result.Target->HealthPoints;
-
-		Attacker->Attack	= Result.Attacker->Attack;
-		Attacker->Energy	= Result.Attacker->Energy;
-		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
-
-		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
-
-		LuaAttackData_t AttackData = AppendAttackData(L);
-		memcpy(Result.LuaAttackData, &AttackData, sizeof(LuaAttackData_t));
-//		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
-
-		free(Result.Attacker);
-		free(Result.Target);
-	}
-	
-	Result.Attacker = Attacker;
-	Result.Target = Target;
-
-	lua_pop(L, 2);
-
-	return Result;
+	return Manager;
 }
 
-LuaAttackData_t AppendAttackData(lua_State *L) {
-	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	int type = lua_getfield(L, -1, "attack_data");
-
-	lua_remove(L, -2);
-
-	LuaAttackData_t Data = { L, -1 };
-
-	if (type != LUA_TTABLE) {
-		write_debug(Warning, "Registry inproperly configured. "
-				"Could not find table REGISTRY.bossfight.attack_handlers");
-		lua_pop(L, 1);
-
-		return Data;
-	}
-
-	int len = lua_rawlen(L, -1);
-
-	Data.ArrayIdx = len+1;
-
-	lua_pushvalue(L, -2);
-
-	type = lua_type(L, -1);
-	write_debug(Debug, "Got type=%s", lua_typename(L, type));
-
-	lua_rawseti(L, -2, Data.ArrayIdx);
-
-	lua_pop(L, 1);
-
-	return Data;
+size_t GetPluginSizeFromID(RegistrationMgr_t *mgr, PluginID_t ID) {
+	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED) return 0;
+	return mgr->Plugins[ID].MaxRegistrations;
+//	return 0;
 }
 
-Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx) {
-	idx = lua_absindex(L, idx);
+static PluginID_t GetNewPluginID(RegistrationMgr_t *mgr,
+				BlockID_t FirstBlock,
+				size_t BlockCount,
+				size_t RegistrationCount) {
+	for (PluginID_t i = 0; i < MAX_PLUGINS; i++) {
+		if (mgr->Plugins[i].Registered == PLUGIN_DEFINED) continue;
 
-	// read the table
-	AttackID_t ID = ReadLuaTableNumber(L, "id", 0);
-	lua_Number FirstRound = ReadLuaTableNumber(L, "first_round", 0);
-	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
-
-	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
-
-	// validate the data
-	if (DisplayName == NULL) {
-		lua_pushstring(L, "invalid attack name.");
-		lua_error(L);
+		// PluginID = i
+		mgr->Plugins[i].Registered = PLUGIN_DEFINED;
+		mgr->Plugins[i].MaxRegistrations = RegistrationCount;
+		mgr->Plugins[i].FirstRegisteredBlock = FirstBlock;
+		mgr->Plugins[i].AllocatedBlockCount = BlockCount;
+		return i;
 	}
-
-	if (MinimumEnergy < 0) {
-		lua_pushstring(L, "Invalid value for minimum energy.");
-		lua_error(L);
-	}
-
-	write_debug(ConvertTableToAttack, "Registering attack \"%s\" of { %d, %d, %d }",
-			DisplayName, (int)FirstRound, (int)MinimumEnergy, ID);
-
-	// define the attack's struct
-	Attack_t LuaAttack = { 0 };
-
-	LuaAttack.ID = ID;
-	LuaAttack.FirstAvailableRound = FirstRound;
-	LuaAttack.MinimumEnergy = MinimumEnergy;
-
-	LuaAttack.Attack = LuaAttackManager;
-	LuaAttack.Available = DefaultCanAttack;
-
-	LuaAttack.AppliesToAllies = 0;
-	LuaAttack.AppliesToEnemies = 1;
-	
-	size_t NameLength = strlen(DisplayName);
-
-	LuaAttack.Identifier = NULL;
-	LuaAttack.AttackName = malloc(NameLength + 1);
-
-	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
-
-	LuaAttack_t AttackData = {
-		.L=L,
-		.AttackPluginIndex=PluginIdx,
-		.AttackPluginKey=Key
-	};
-
-	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttack_t));
-	memcpy(LuaAttack.LuaAttackData, &AttackData, sizeof(LuaAttack_t));
-
-	return LuaAttack;
+	return INVALID_PLUGIN_ID;
 }
 
-int RegisterLuaAttacks(lua_State *L) {
-	int args = lua_gettop(L);
+int ValidatePlugin(RegistrationMgr_t *mgr, PluginID_t ID) {
+	if (ID >= MAX_PLUGINS) return 0;
+	if (mgr == NULL) return 0;
+	if (mgr->Plugins[ID].Registered != PLUGIN_DEFINED) return 0;
 
-	if (args != 2) {
-		lua_pushstring(L, "plugin:RegisterLuaAttacks - expected 1 parameter.");
-		lua_error(L);
+	return 1;
+}
+
+static Registration_t *IndexAttackManager(RegistrationMgr_t *mgr, RegistreeID_t ID) {
+	if (ID > mgr->MaxRegistrationCount)
+		return NULL;
+
+	BlockID_t Block = ID / BLOCK_SIZE;
+	RegistreeID_t BlockIdx = ID % BLOCK_SIZE;
+
+	return &mgr->Blocks[Block].Registration[BlockIdx];
+}
+
+Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t Registration) {
+	if (ID == INVALID_PLUGIN_ID) IndexAttackManager(mgr, Registration);
+	if (ValidatePlugin(mgr, ID) == 0) return NULL;
+
+	size_t MaxRegistrations = mgr->Plugins[ID].MaxRegistrations;
+	if (Registration > MaxRegistrations) return NULL;
+
+	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
+	RegistreeID_t GlobalStartingID = PluginBlock * BLOCK_SIZE;
+
+	return IndexAttackManager(mgr, GlobalStartingID + Registration);
+}
+
+size_t AddAttackToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RequestedID, void *Registration) {
+	// make sure the plugin exists
+	if (ValidatePlugin(mgr, ID) == 0) return 0;
+
+	// confirm attack exists
+	if (Registration == NULL)
+		return 0;
+
+//	RegistreeID_t RequestedID = Attack->ID;
+
+	if (RequestedID != 0) {
+		Registration_t *Requested = IndexPluginSpace(mgr, ID, RequestedID);
+		if (Requested != NULL) {
+//			write_debug(AddAttackToPlugin, "ExistingAttack->ID = %d",
+//					ExistingAttack->ID);
+			if (Requested->ID == RequestedID) {
+				// requested ID taken. go after different spot
+				goto unallocated;
+			}
+
+			void *Registration = Requested->Registration;
+			Requested->Registration = NULL;
+
+			// a little recursion never hurts
+			AddAttackToPlugin(mgr, ID, RequestedID, Registration);
+			AddAttackToPlugin(mgr, ID, 0, Registration);
+		}
+
+//		write_debug(AddAttackToPlugin, "Assigning attack %s to ID %d (req=%d)",
+//				Attack->AttackName, RequestedID, RequestedID);
+			
+		Requested->Registration = Registration;
+		return 1;
+	}
+unallocated: //goto unallocated if existing allocated array exists
+	for (RegistreeID_t i = 0; i < mgr->Plugins[ID].MaxRegistrations; i++) {
+
+		Registration_t *IdxAttack = IndexPluginSpace(mgr, ID, i);
+		// found new id to use
+
+		IdxAttack->Registration = Registration;
+
+		return 1;
 	}
 
-//	int type = lua_getglobal(L, PluginRegistrationsName);
+	// couldn't find free attack here.
+	return 0;
+}
 
-//	if (type == LUA_TNIL) {
-//		// define new registered plugin table
-//		lua_newtable(L);
-//		lua_setglobal(L, PluginRegistrationsName);
-//		lua_getglobal(L, PluginRegistrationsName);
-//	} else if (type != LUA_TTABLE) {
-//		// can be presumed another instance of the name exists. results in failure
-//		lua_pushnumber(L, 0);
-//		return 1;
+size_t AllocateAttackPlugin(RegistrationMgr_t *Manager, size_t RequiredPlugins, PluginID_t *ID) {
+	if (ID == NULL) return 0;
+	size_t RequiredBlocks = ((RequiredPlugins-1) / BLOCK_SIZE)+1;
+	size_t FreeBlocksFound = 0;
+	int64_t FirstFreeBlock = -1;
+
+	for (size_t i = 0; i < Manager->MaxRegistrationCount; i++) {
+		struct Block *Block = &Manager->Blocks[i];
+		if (Block->PluginID == (uint32_t)-1) {
+			if (FirstFreeBlock == -1)
+				FirstFreeBlock = i;
+			FreeBlocksFound++;
+
+			if (FreeBlocksFound >= RequiredBlocks) {
+				break;
+			}
+		} else {
+			FirstFreeBlock = -1;
+			FreeBlocksFound = 0;
+		}
+	}
+
+	if (FreeBlocksFound < RequiredBlocks) {
+		return 0;
+	}
+
+	PluginID_t PluginID = GetNewPluginID(Manager,
+					FirstFreeBlock,
+					RequiredBlocks,
+					RequiredPlugins);
+
+
+	for (size_t i = 0; i < FreeBlocksFound; i++) {
+		struct Block *Block = &Manager->Blocks[FirstFreeBlock+i];
+		Block->PluginID = PluginID;
+	}
+
+	*ID = PluginID;
+	return FreeBlocksFound;
+}
+
+// for plugging into old attack management system
+size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax) {
+	size_t RegistrationsAdded = 0;
+
+	for (RegistreeID_t ID = 0; ID < mgr->MaxRegistrationCount; ID++) {
+		if (ID >= RegistrarMax) break;
+
+		Registration_t *Registration = IndexAttackManager(mgr, ID);
+		RegistrarAdd(
+			Registrar,
+			Registration->Registration,
+			Registration->ID
+		);
+	}
+//	for (BlockID_t i = 0; i < mgr->BlockIdCount; i++) {
+//		for (size_t j = 0; j < BLOCK_SIZE; j++) {
+//			RegistreeID_t ID = (i*BLOCK_SIZE)+j;
+//			// stop if the max is exceeded
+//			if (ID >= RegistrarMax) return RegistrationsAdded;
+//
+//			Registration_t *Registrations = mgr->Blocks[i].Registration[j];
+//
+//			// no need to do anything if no attack
+//			if (Attack == NULL) continue;
+//
+//			write_debug(RegisterPluginAttacks, "registering attack id = %d", Attack->ID);
+//			
+//			Attack_t *RegistrarAttack = (Attack_t*)malloc(sizeof(Attack_t));
+//			memcpy(RegistrarAttack, Attack, sizeof(Attack_t));
+//
+//			RegistrarAttack->ID = ID;
+//
+//			// add the attack
+//			AttacksAdded += RegistrarAdd(
+//				Registrar,
+//				RegistrarAttack,
+//				RegistrarAttack->ID
+//			);
+//		}
 //	}
 
-	int type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	if (type != LUA_TTABLE) {
-		write_debug(ERROR, "REGISTRY.bossfight uninitialized.");
-		exit(-1);
-	}
-
-	type = lua_getfield(L, -1, "plugins");
-	if (type != LUA_TTABLE) {
-		write_debug(Error, "REGISTRY.bossfight.plugins uninitialized.");
-		exit(-1);
-	}
-
-	type = lua_getfield(L, -1, "attack");
-	if (type != LUA_TTABLE) {
-		write_debug(Error, "REGISTRY.bossfight.plugins.attack uninitialized.");
-		exit(-1);
-	}
-
-	lua_remove(L, -2);
-	lua_remove(L, -2);
-
-	lua_newtable(L);
-	lua_getfield(L, 2, "current_entries");
-
-	size_t RegistrationCount = 0;
-	size_t RegistrationsProvided = lua_rawlen(L, -1);
-
-	int top = lua_gettop(L);
-
-	for (size_t i = 1; i <= RegistrationsProvided; i++) {
-		assert(top == lua_gettop(L));
-		// get the registration
-		lua_rawgeti(L, -1, i);
-
-		// get the identifier
-		const char *Ident = ReadLuaTableString(L, "int_name", NULL);
-		if (Ident == NULL)
-			continue;
-
-		lua_setfield(L, -3, Ident);
-		RegistrationCount++;
-
-		// clear the registration
-		lua_pushnil(L);
-		lua_rawseti(L, -2, i);
-	}
-
-	lua_pop(L, 1);
-
-//	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
-	PushLuaArray(L, -2);
-
-	lua_pushnumber(L, RegistrationCount);
-	return 1;
+	return RegistrationsAdded;
 }
