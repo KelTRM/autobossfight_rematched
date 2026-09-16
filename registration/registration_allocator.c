@@ -138,7 +138,6 @@ unallocated: //goto unallocated if existing allocated array exists
 	for (RegistreeID_t i = 0; i < mgr->Plugins[ID].MaxRegistrations; i++) {
 
 		Registration_t *Reg = IndexPluginSpace(mgr, ID, i);
-//		write_debug(Debug, "Setting %d,%d=%p", ID, i);
 		if (Reg->Registration != NULL) continue;
 		// found new id to use
 
