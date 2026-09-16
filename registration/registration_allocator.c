@@ -137,12 +137,14 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Regi
 unallocated: //goto unallocated if existing allocated array exists
 	for (RegistreeID_t i = 0; i < mgr->Plugins[ID].MaxRegistrations; i++) {
 
-		Registration_t *Registration = IndexPluginSpace(mgr, ID, i);
+		Registration_t *Reg = IndexPluginSpace(mgr, ID, i);
+//		write_debug(Debug, "Setting %d,%d=%p", ID, i);
+		if (Reg->Registration != NULL) continue;
 		// found new id to use
 
-		Registration->Registration = Registration;
-		Registration->OffsetID = OffsetID;
-		Registration->RegistrationSize = RegistrationSize;
+		Reg->Registration = Registration;
+		Reg->OffsetID = OffsetID;
+		Reg->RegistrationSize = RegistrationSize;
 
 		return 1;
 	}
