@@ -6,6 +6,7 @@
 #include"../../attacks/attack.h"
 #include<lua_bossfight.h>
 #include<lua_load.h>
+#include"../../utils/offset.h"
 
 #define max(a,b)	((a)>(b)?(a):(b))
 
@@ -101,8 +102,8 @@ size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index
 		RegisteredAttacks += AddRegistrationToPlugin(
 			Manager,
 			ID,
-			LuaAttack->ID,
-			LuaAttack
+			LuaAttack,
+			Offset(Attack_t, ID)
 		);
 	}
 

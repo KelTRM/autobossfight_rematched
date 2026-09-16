@@ -25,7 +25,8 @@ struct PluginRegistry {
 
 typedef struct Registration {
 	void *Registration;
-	RegistreeID_t ID;
+//	RegistreeID_t ID;
+	void *OffsetID;
 } Registration_t;
 
 typedef struct Registrations {
@@ -56,6 +57,6 @@ RegistrationMgr_t OpenPluginAllocator(size_t MaxRegistrations);
 size_t GetPluginSizeFromID(RegistrationMgr_t *mgr, PluginID_t ID);
 int ValidatePlugin(RegistrationMgr_t *mgr, PluginID_t ID);
 Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RegistrationID);
-size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RequestedID, void *Registration);
+size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Registration, void *OffsetID);
 size_t AllocatePlugin(RegistrationMgr_t *Manager, size_t RequiredPlugins, PluginID_t *ID);
 size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax);

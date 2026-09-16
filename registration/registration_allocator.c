@@ -4,6 +4,7 @@
 #include"registration_allocator.h"
 #include"registration.h"
 #include"../debug/debug.h"
+#include"../utils/offset.h"
 
 typedef uint32_t	PluginID_t;
 typedef int64_t		BlockID_t;
@@ -97,9 +98,11 @@ Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, Registre
 	return IndexManager(mgr, GlobalStartingID + Registration);
 }
 
-size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RequestedID, void *Registration) {
+size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Registration, void *OffsetID) {
 	// make sure the plugin exists
 	if (ValidatePlugin(mgr, ID) == 0) return 0;
+
+	RegistreeID_t *RequestedID = GetDataAtOffset(Registration, OffsetID, RegistreeID_t);
 
 //	write_debug(Debug, "Writing Plugin %d (ID=%d)", ID, RequestedID);
 
@@ -107,10 +110,13 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeI
 	if (Registration == NULL)
 		return 0;
 
-	if (RequestedID != 0) {
-		Registration_t *Requested = IndexPluginSpace(mgr, ID, RequestedID);
+	if (*RequestedID != 0) {
+		Registration_t *Requested = IndexPluginSpace(mgr, ID, *RequestedID);
 		if (Requested->Registration != NULL) {
-			if (Requested->ID == RequestedID) {
+			RegistreeID_t *RequestedsID = GetDataAtOffset(Requested,
+								Requested->OffsetID,
+								RegistreeID_t);
+			if (*RequestedsID == *RequestedID) {
 				// requested ID taken. go after different spot
 				goto unallocated;
 			}
@@ -119,12 +125,12 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeI
 			Requested->Registration = NULL;
 
 			// a little recursion never hurts
-			AddRegistrationToPlugin(mgr, ID, RequestedID, Registration);
-			AddRegistrationToPlugin(mgr, ID, 0, Registration);
+			AddRegistrationToPlugin(mgr, ID, Registration, OffsetID);
+			AddRegistrationToPlugin(mgr, ID, Requested->Registration, Requested->OffsetID);
 		}
 			
 		Requested->Registration = Registration;
-		Requested->ID = RequestedID;
+		Requested->OffsetID = OffsetID;
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
@@ -134,7 +140,7 @@ unallocated: //goto unallocated if existing allocated array exists
 		// found new id to use
 
 		Registration->Registration = Registration;
-		Registration->ID = RequestedID;
+		Registration->OffsetID = OffsetID;
 
 		return 1;
 	}
@@ -196,7 +202,7 @@ size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t Re
 		if (Registration == NULL) continue;
 		if (Registration->Registration == NULL) continue;
 
-		write_debug(Debug, "Registering @ ID %d (req=%d)", ID, Registration->ID);
+//		write_debug(Debug, "Registering @ ID %d (req=%d)", ID, Registration->ID);
 
 		RegistrarAdd(
 			Registrar,

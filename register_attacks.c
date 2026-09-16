@@ -7,6 +7,7 @@
 #include<stddef.h>
 #include<assert.h>
 #include"debug/debug.h"
+#include "utils/offset.h"
 
 const Attack_t *AttacksToRegister[] = {
 	&NothingAttack,
@@ -53,8 +54,8 @@ size_t InitAttacks(void *Lua) {
 		RegisteredAttacks += AddRegistrationToPlugin(
 			&Manager,
 			Plugin,
-			Attack->ID,
-			Attack
+			Attack,
+			Offset(Attack_t, ID)
 		);
 	}
 
