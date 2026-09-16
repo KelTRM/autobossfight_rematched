@@ -79,7 +79,7 @@ static Registration_t *IndexManager(RegistrationMgr_t *mgr, RegistreeID_t ID) {
 	BlockID_t Block = ID / BLOCK_SIZE;
 	RegistreeID_t BlockIdx = ID % BLOCK_SIZE;
 
-	write_debug(Debug, "Indexing into registration manager @ (%d,%d)", Block, BlockIdx);
+//	write_debug(Debug, "Indexing into registration manager @ (%d,%d)", Block, BlockIdx);
 
 	return &mgr->Blocks[Block].Registration[BlockIdx];
 }
@@ -100,6 +100,8 @@ Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, Registre
 size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, RegistreeID_t RequestedID, void *Registration) {
 	// make sure the plugin exists
 	if (ValidatePlugin(mgr, ID) == 0) return 0;
+
+//	write_debug(Debug, "Writing Plugin %d (ID=%d)", ID, RequestedID);
 
 	// confirm registration exists
 	if (Registration == NULL)
@@ -186,14 +188,20 @@ size_t AllocatePlugin(RegistrationMgr_t *Manager, size_t RequiredPlugins, Plugin
 size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t RegistrarMax) {
 	size_t RegistrationsAdded = 0;
 
-	for (RegistreeID_t ID = 0; ID < mgr->MaxRegistrationCount; ID++) {
+	for (RegistreeID_t ID = 1; ID < mgr->MaxRegistrationCount; ID++) {
 		if (ID >= RegistrarMax) break;
 
 		Registration_t *Registration = IndexManager(mgr, ID);
+
+		if (Registration == NULL) continue;
+		if (Registration->Registration == NULL) continue;
+
+		write_debug(Debug, "Registering @ ID %d (req=%d)", ID, Registration->ID);
+
 		RegistrarAdd(
 			Registrar,
 			Registration->Registration,
-			Registration->ID
+			ID
 		);
 	}
 

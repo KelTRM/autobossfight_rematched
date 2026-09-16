@@ -3,6 +3,7 @@
 #include<stddef.h>
 #include<stdlib.h>
 #include<string.h>
+#include"../debug/debug.h"
 //#include<ui.h>
 
 // How many attacks can be registered at once
@@ -37,6 +38,8 @@ size_t InitRegistrar(size_t MaxRegistrations, Registrar_t *Registrar) {
 
 int RegistrarAdd(Registrar_t *Registrar, void *Registree, RegistreeID_t RegistreeID) {
 	if (Registrar == NULL) return 0;	// Don't add a registree if it's NULL
+
+	write_debug(Debug, "ID=%d, Registree=%p", RegistreeID, Registree);
 
 	// Don't add if it conflicts with another of the same ID
 	if (Registrar->RegistrationMap[RegistreeID] != NULL) {
