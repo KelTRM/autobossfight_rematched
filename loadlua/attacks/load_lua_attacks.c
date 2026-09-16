@@ -103,7 +103,8 @@ size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index
 			Manager,
 			ID,
 			LuaAttack,
-			Offset(Attack_t, ID)
+			Offset(Attack_t, ID),
+			sizeof(Attack_t)
 		);
 	}
 

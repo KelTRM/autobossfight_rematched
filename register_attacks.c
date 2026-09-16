@@ -55,7 +55,8 @@ size_t InitAttacks(void *Lua) {
 			&Manager,
 			Plugin,
 			Attack,
-			Offset(Attack_t, ID)
+			Offset(Attack_t, ID),
+			sizeof(Attack_t)
 		);
 	}
 

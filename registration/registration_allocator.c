@@ -98,7 +98,7 @@ Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, Registre
 	return IndexManager(mgr, GlobalStartingID + Registration);
 }
 
-size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Registration, void *OffsetID) {
+size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Registration, void *OffsetID, size_t RegistrationSize) {
 	// make sure the plugin exists
 	if (ValidatePlugin(mgr, ID) == 0) return 0;
 
@@ -125,12 +125,13 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Regi
 			Requested->Registration = NULL;
 
 			// a little recursion never hurts
-			AddRegistrationToPlugin(mgr, ID, Registration, OffsetID);
-			AddRegistrationToPlugin(mgr, ID, Requested->Registration, Requested->OffsetID);
+			AddRegistrationToPlugin(mgr, ID, Registration, OffsetID, RegistrationSize);
+			AddRegistrationToPlugin(mgr, ID, Requested->Registration, Requested->OffsetID, Requested->RegistrationSize);
 		}
 			
 		Requested->Registration = Registration;
 		Requested->OffsetID = OffsetID;
+		Requested->RegistrationSize = RegistrationSize;
 		return 1;
 	}
 unallocated: //goto unallocated if existing allocated array exists
@@ -141,6 +142,7 @@ unallocated: //goto unallocated if existing allocated array exists
 
 		Registration->Registration = Registration;
 		Registration->OffsetID = OffsetID;
+		Registration->RegistrationSize = RegistrationSize;
 
 		return 1;
 	}
@@ -204,9 +206,22 @@ size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t Re
 
 //		write_debug(Debug, "Registering @ ID %d (req=%d)", ID, Registration->ID);
 
+		void *CopiedRegistration = malloc(Registration->RegistrationSize);
+		memcpy(
+			CopiedRegistration,
+			Registration->Registration,
+			Registration->RegistrationSize
+		);
+
+		RegistreeID_t *ItemID = GetDataAtOffset(CopiedRegistration,
+							Registration->OffsetID,
+							RegistreeID_t);
+
+		*ItemID = ID;
+
 		RegistrarAdd(
 			Registrar,
-			Registration->Registration,
+			CopiedRegistration,
 			ID
 		);
 	}
