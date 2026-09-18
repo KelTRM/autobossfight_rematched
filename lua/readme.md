@@ -94,7 +94,7 @@ THIS PURELY EXISTS TO SHOW HOW IT SHOULD WORK, BUT MAY NOT STAY INTO A FINAL FOR
 ## AttackPlugin
 
 An attack may be added by a lua script by using an `AttackPlugin`.
-which may be created using `bossfight:CreateAttackPlugin()`, which returns a table containing the plugin.
+which may be created using `bossfight:attack:NewPlugin()`, which returns a table containing the plugin.
 
 The `AttackPlugin` contains a method to add an attack to the plugin: `AttackPlugin:AddAttack(string, table)`
 
@@ -161,7 +161,7 @@ plugin:AddTransformation({
     ["upkeep"]=10               -- The cost to continue using the transformation
     ["multiplier"]=1            -- A multiplier for attack damage. For use by the default handler
     ["on_damage"]=function()end -- Called apon user's attack. Modifies damage. Use nil for default 
-    ["on_upkeep"]=function()end -- Called apon transformation upkeep. Use nil for default
+    ["on_upkeep"]=function()end -- Called apon
 })
 ```
 
