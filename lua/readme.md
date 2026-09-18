@@ -156,8 +156,12 @@ These plugins may be used to register transformations, via `plugin:AddTransforma
 The table for defining a transformation are the following
 ```lua
 plugin:AddTransformation({
-    ["name"]="example"      -- The name of the transformation
-    [""]
+    ["name"]="example"          -- The name of the transformation
+    ["cost"]=10                 -- The cost to transform
+    ["upkeep"]=10               -- The cost to continue using the transformation
+    ["multiplier"]=1            -- A multiplier for attack damage. For use by the default handler
+    ["on_damage"]=function()end -- Called apon user's attack. Modifies damage. Use nil for default 
+    ["on_upkeep"]=function()end -- Called apon transformation upkeep. Use nil for default
 })
 ```
 
