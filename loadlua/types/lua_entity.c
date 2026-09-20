@@ -53,6 +53,7 @@ void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	luaL_Reg fns[] = {
 		{ "GetHealth", Entity_GetHealth },
 		{ "GetEnergy", Entity_GetEnergy },
+		{ "DrainEnergy", Entity_DrainEnergy },
 		{ "Heal", Entity_Heal },
 		{ "Attack", Entity_Attack },
 		{ "Living", Entity_Living },
