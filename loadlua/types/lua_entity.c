@@ -12,6 +12,9 @@
 #define PROTO_ATTACK		"entity:Attack(target, health)"
 #define PROTO_LIVING		"entity:Living()"
 
+#define SetNumberField(name, value, idx)	lua_pushnumber(L, value);	\
+						lua_setfield(L, idx, name)
+
 //```lua
 //entity:GetHealth()          -- returns number of health points
 //entity:GetEnergy()          -- returns energy as a percentage
@@ -31,25 +34,6 @@ int Entity_GetEnemies(lua_State *L);
 void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	lua_newtable(L);
 
-/*	FIELDS TO ADD
- -----------------------------------
-	Entity->Name;
-	Entity->EntityColor;
-	Entity->Attack;
-	Entity->Energy;
-	Entity->HealingMinimum;
-	Entity->HealingMaximum;
-	Entity->HealthPoints;
-
-	entity:GetHealth()
-	entity:GetEnergy()
-	entity:Heal(hp)
-	entity:Attack(target, hp)
-	entity:Living()
-	entity:GetEnemies()
- -----------------------------------
-*/
-
 	luaL_Reg fns[] = {
 		{ "GetHealth", Entity_GetHealth },
 		{ "GetEnergy", Entity_GetEnergy },
@@ -68,36 +52,17 @@ void CreateEntityTable(lua_State *L, Entity_t *Entity) {
 	// color
 	lua_newtable(L);
 
-
-	lua_pushnumber(L, Entity->EntityColor.r);
-	lua_pushnumber(L, Entity->EntityColor.g);
-	lua_pushnumber(L, Entity->EntityColor.b);
-
-	lua_setfield(L, -4, "r");
-	lua_setfield(L, -3, "g");
-	lua_setfield(L, -2, "b");
+	SetNumberField("r", Entity->EntityColor.r, -2);
+	SetNumberField("g", Entity->EntityColor.g, -2);
+	SetNumberField("b", Entity->EntityColor.b, -2);
 
 	lua_setfield(L, -2, "color");
 
-	// attack
-	lua_pushnumber(L, Entity->Attack);
-	lua_setfield(L, -2, "attack");
-
-	// energy
-	lua_pushnumber(L, Entity->Energy);
-	lua_setfield(L, -2, "energy");
-
-	// healing_minimum
-	lua_pushnumber(L, Entity->HealingMinimum);
-	lua_setfield(L, -2, "healing_minimum");
-
-	// healing_maximum
-	lua_pushnumber(L, Entity->HealingMaximum);
-	lua_setfield(L, -2, "healing_maximum");
-	
-	// hp
-	lua_pushnumber(L, Entity->HealthPoints);
-	lua_setfield(L, -2, "hp");
+	SetNumberField("attack", Entity->Attack, -2);
+	SetNumberField("energy", Entity->Energy, -2);
+	SetNumberField("healing_minimum", Entity->HealingMinimum, -2);
+	SetNumberField("healing_maximum", Entity->HealingMaximum, -2);
+	SetNumberField("hp", Entity->HealthPoints, -2);
 }
 
 // gets entity from top of table, converts it to C entity
