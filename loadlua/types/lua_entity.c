@@ -15,6 +15,8 @@
 #define SetNumberField(name, value, idx)	lua_pushnumber(L, value);	\
 						lua_setfield(L, idx, name)
 
+int GetTempEntity(lua_State *L, int idx, Entity_t *Entity);
+
 //```lua
 //entity:GetHealth()          -- returns number of health points
 //entity:GetEnergy()          -- returns energy as a percentage
@@ -23,6 +25,8 @@
 //entity:Living()             -- returns whether the entity is alive
 //entity:GetEnemies()         -- gets the enemies of the entity
 //```
+
+
 int Entity_GetHealth(lua_State *L);
 int Entity_GetEnergy(lua_State *L);
 int Entity_DrainEnergy(lua_State *L);
@@ -267,4 +271,13 @@ int Entity_Living(lua_State *L) {
 //	
 //	return 0;
 //}
+
+int Entity_ToString(lua_State *L) {
+	AssertParameters(L, "tostring(v)", 1, LUA_TTABLE);
+
+	Entity_t Entity;
+	GetTempEntity(L, 1, &Entity);
+
+
+}
 
