@@ -169,6 +169,27 @@ plugin:AddTransformation({
 bossfight.transformation:CreatePlugin()
 ```
 
+The functions `on_damage` and `on_upkeep` are the implementation of the transformation.
+While these can be manually implemented, it's worth noting that they each have
+default implementations. The default for `on_damage` multiplies the damage by `multiplier`, while
+the default for `on_upkeep` removes `upkeep` energy from the user.
+
+If you want more complex parameters than this, then you may implemnent them yourselves,
+as shown below
+
+```lua
+function on_upkeep(self, user)
+    -- user: Entity (The entity using the transformation)
+    user:DrainEnergy(self.upkeep)
+end
+
+function on_damage(self, user, base)
+    -- user: Entity (The entity using the transformation)
+    -- base: number (the base damage being done)
+    return base * self.multiplier
+end
+```
+
 # Types
 
 All following types are contructed from tables,
@@ -188,6 +209,7 @@ The entity cannot be directly interacted with, and must be used by the below API
 ```lua
 entity:GetHealth()          -- returns number of health points
 entity:GetEnergy()          -- returns energy as a percentage
+entity:DrainEnergy(energy)  -- drains the entity's energy
 entity:Heal(target, hp)     -- heals entity by hp, returns amount healed
 entity:Attack(target,hp)    -- removes hp from target's health
 entity:Living()             -- returns whether the entity is alive
