@@ -2,11 +2,12 @@
 #include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
-#include"../entity.h"
+#include"../../entity.h"
 #include"../../debug/debug.h"
 
 #define PROTO_GET_HEALTH	"entity:GetHealth()"
 #define PROTO_GET_ENERGY	"entity:GetEnergy()"
+#define PROTO_DRAIN_ENERGY	"entity:DrainEnergy(energy)"
 #define PROTO_HEAL		"entity:Heal(target, health)"
 #define PROTO_ATTACK		"entity:Attack(target, health)"
 #define PROTO_LIVING		"entity:Living()"
@@ -21,6 +22,7 @@
 //```
 int Entity_GetHealth(lua_State *L);
 int Entity_GetEnergy(lua_State *L);
+int Entity_DrainEnergy(lua_State *L);
 int Entity_Heal(lua_State *L);
 int Entity_Attack(lua_State *L);
 int Entity_Living(lua_State *L);
@@ -212,6 +214,29 @@ int Entity_GetEnergy(lua_State *L) {
 	}
 
 	return 1;
+}
+
+int Entity_DrainEnergy(lua_State *L) {
+	AssertParameters(L, PROTO_DRAIN_ENERGY, 2,
+			LUA_TTABLE, LUA_TNUMBER);
+
+	int type = lua_getfield(L, 1, "energy");
+	if (type != LUA_TNUMBER) {
+		lua_pushliteral(L, "expected entity.energy of type number");
+	}
+
+	lua_Number Energy = lua_tonumber(L, 2);
+	lua_Number DrainAmount = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+
+	Energy -= DrainAmount;
+	
+	if (Energy < 0) Energy = 0;
+	lua_pushnumber(L, Energy);
+
+	lua_setfield(L, 1, "energy");
+
+	return 0;
 }
 
 int Entity_Heal(lua_State *L) {
