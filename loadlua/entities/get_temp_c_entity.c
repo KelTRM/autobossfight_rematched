@@ -33,4 +33,6 @@ int GetTempEntity(lua_State *L, int idx, Entity_t *Entity) {
 	if (type != LUA_TNUMBER) return pop0(L);
 	Entity->EntityColor.b = lua_tonumber(L, -1);
 	lua_pop(L, 1);
+
+	return 1;
 }

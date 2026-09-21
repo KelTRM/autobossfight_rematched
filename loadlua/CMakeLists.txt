@@ -14,6 +14,7 @@ target_sources(autobossfight_lua_loader
 		entities/register_lua_entities.c
 		entities/lua_add_entity.c
 		entities/define_entity_table.c
+		entities/get_temp_c_entity.c
 
 		attacks/define_attack_table.c
 		attacks/define_attack_plugin.c
