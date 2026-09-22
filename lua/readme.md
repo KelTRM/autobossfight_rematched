@@ -117,18 +117,18 @@ The only things worth noting are the details of `CanAttack` and `AttackHandler`,
 which will be described in the section below
 
 Once all your attacks have been added to the `AttackPlugin`, you must register the plugin with the bossfight.
-This may be done with `bossfight.attack:RegisterAttackPlugin(AttackPlugin)`
+This may be done with `bossfight.attack:RegisterPlugin(AttackPlugin)`
 
 Below is an example of this process.
 ```lua
 -- Create the plugin
-local plugin = bossfight.attack:CreateAttackPlugin()
+local plugin = bossfight.attack:NewPlugin()
 
 -- Add the attacks to the plugin
 plugin:AddAttack(AttackTable)
 
 -- Register the plugin
-bossfight.attack:RegisterAttackPlugin(plugin)
+bossfight.attack:RegisterPlugin(plugin)
 
 -- Attack "example" should now be visible
 ```
@@ -155,6 +155,8 @@ These plugins may be used to register transformations, via `plugin:AddTransforma
 
 The table for defining a transformation are the following
 ```lua
+local plugin=bossfight.transformation:NewPlugin()
+
 plugin:AddTransformation({
     ["name"]="example"          -- The name of the transformation
     ["cost"]=10                 -- The cost to transform
@@ -166,7 +168,6 @@ plugin:AddTransformation({
 ```
 
 ```lua
-bossfight.transformation:CreatePlugin()
 ```
 
 The functions `on_damage` and `on_upkeep` are the implementation of the transformation.
@@ -189,6 +190,9 @@ function on_damage(self, user, base)
     return base * self.multiplier
 end
 ```
+
+Also, like with attacks: The plugins must be registered.
+A transformation plugin may be registered with `transformation:RegisterPlugin()`
 
 # Types
 

@@ -24,7 +24,7 @@ void DefineAttackTable(lua_State *L) {
 
 	luaL_Reg fns[] = {
 		{ "NewPlugin", CreateAttackPlugin },
-		{ "RegisterAttackPlugin", RegisterLuaAttacks },
+		{ "RegisterPlugin", RegisterLuaAttacks },
 		{ "AttackData", DefineAttackDataTable },
 		{ NULL, NULL }
 	};
