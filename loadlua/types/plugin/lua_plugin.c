@@ -59,3 +59,10 @@ int CreateLuaPlugin(lua_State *L) {
 	lua_setfield(L, -2, "entries");
 	return 1;
 }
+
+// 2 upvalues:
+// string - Determines table name for where to store the registered plugin
+// table - The plugin being registered.
+int RegisterPlugin(lua_State *L) {
+	
+}
