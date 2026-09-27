@@ -35,6 +35,7 @@ target_sources(autobossfight_lua_loader
 		
 		registry/lua_init_registry.c
 		registry/get_attack_plugins_table.c
+		registry/get_registry_table.c
 
 		transformations/init_lua_transformations.c
 
