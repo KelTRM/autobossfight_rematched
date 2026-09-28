@@ -4,6 +4,7 @@
 #include"../../../debug/debug.h"
 
 AttackData_t ReadAttackDataTable(lua_State *L);
+int GetRegistryTable(lua_State *L, const char *Location);
 
 void LuaAttackAnnouncer(AttackData_t *Attack) {
 	LuaAttackData_t *AttackData = Attack->LuaAttackData;
@@ -11,13 +12,17 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 		goto fallback;
 
 	lua_State *L = AttackData->L;
+	int top = lua_gettop(L);
 
 //	ReadAttackDataTable(L);
 
-	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	lua_getfield(L, -1, "attack_data");
+//	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+//	lua_getfield(L, -1, "attack_data");
+	int Success = GetRegistryTable(L, "bossfight.attack_data");
+	if (!Success)
+		goto fallback;
 
-	lua_remove(L, -2);
+//	lua_remove(L, -2);
 
 	int type;
 	type = lua_rawgeti(L, -1, AttackData->ArrayIdx);
@@ -36,6 +41,7 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 		goto fallback;
 	}
 
+
 	lua_pushvalue(L, -2);
 	lua_call(L, 1, 0);
 
@@ -44,6 +50,7 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 	return;
 
 fallback:
+	lua_settop(L, top);
 	write_debug(Info, "There was an error trying to run the lua attack manager. "
 			"Falling back to default.");
 	DefaultAnnouncer(Attack);
