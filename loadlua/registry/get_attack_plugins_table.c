@@ -16,7 +16,7 @@ int IndexTable(lua_State *L, int Index, const char *Field, int *FailChain, int E
 int GetRegistryTable(lua_State *L, const char *Location);
 
 int GetAttackPluginsTable(lua_State *L) {
-	int fail = 0;
+//	int fail = 0;
 
 //	IndexTable(L, LUA_REGISTRYINDEX, "bossfight", &fail, LUA_TTABLE);
 //	IndexTable(L, -1, "plugins", &fail, LUA_TTABLE);
