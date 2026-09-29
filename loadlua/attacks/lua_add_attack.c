@@ -36,7 +36,7 @@ int AddAttack(lua_State *L) {
 	lua_Number EarliestRound = ReadLuaTableNumber(L, "EarliestRound", 0);
 	lua_Number ID = ReadLuaTableNumber(L, "id", 0);
 
-	write_debug(AddAttack, "Recieved attack of value { %s, %d, %d, %d }",
+	write_verbose(Debug, "Recieved attack of value { %s, %d, %d, %d }",
 			AttackDispName, (int)RequiredEnergy, (int)EarliestRound, (int)ID);
 
 

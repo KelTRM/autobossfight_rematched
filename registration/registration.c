@@ -39,7 +39,7 @@ size_t InitRegistrar(size_t MaxRegistrations, Registrar_t *Registrar) {
 int RegistrarAdd(Registrar_t *Registrar, void *Registree, RegistreeID_t RegistreeID) {
 	if (Registrar == NULL) return 0;	// Don't add a registree if it's NULL
 
-	write_debug(Debug, "ID=%d, Registree=%p", RegistreeID, Registree);
+	write_verbose(Info, "ID=%d, Registree=%p", RegistreeID, Registree);
 
 	// Don't add if it conflicts with another of the same ID
 	if (Registrar->RegistrationMap[RegistreeID] != NULL) {

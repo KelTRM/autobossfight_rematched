@@ -51,7 +51,7 @@ lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number Default
 int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 	size_t BossCount = lua_rawlen(L, ArrayIdx);
 
-	write_debug(LuaBossRegistration, "Registering %zu bosses...", BossCount);
+	write_log(Lua, "Registering %zu bosses...", BossCount);
 
 	for (size_t i = 1; i <= BossCount; i++) {
 		int Type = lua_rawgeti(L, ArrayIdx, i);
@@ -67,7 +67,7 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 		char *NewName = malloc(strlen(Name)+1);
 		strncpy(NewName, Name, strlen(Name)+1);
 
-		write_debug(LuaBossRegistration, "Found boss { %s, %d }", NewName, (int)HP);
+		write_verbose(Lua, "Found boss { %s, %d }", NewName, (int)HP);
 
 		struct BossDefinition Boss = { .Name=NewName, .HP=HP };
 
@@ -82,7 +82,7 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 	size_t PlayerCount = lua_rawlen(L, ArrayIdx);
 
-	write_debug(LuaBossRegistration, "Registering %zu players...", PlayerCount);
+	write_log(Lua, "Registering %zu players...", PlayerCount);
 
 	for (size_t i = 1; i <= PlayerCount; i++) {
 		int Type = lua_rawgeti(L, ArrayIdx, i);
@@ -101,7 +101,7 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		char *NewName = malloc(strlen(Name)+1);
 		strncpy(NewName, Name, strlen(Name)+1);
 
-		write_debug(LuaBossRegistration, "Found player { %s, %d }", NewName, (int)HP);
+		write_verbose(Lua, "Found player { %s, %d }", NewName, (int)HP);
 
 		struct PlayerDefinition Player = {
 			.Name=NewName, .HP=HP,

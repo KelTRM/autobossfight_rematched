@@ -33,11 +33,11 @@ void *InitLua(void) {
 	if (err != LUA_OK) {
 		const char *LuaErr = lua_tostring(L, -1);
 
-		write_debug(Lua, "%s", LuaErr);
-//		printf("lua error in file %s - %s\n", LuaInitFile, LuaErr);
+		write_log(Lua, "%s", LuaErr);
+		printf("%s\n", LuaErr);
 		sleep(1000);
 	} else {
-		write_debug(Lua, "Exited script %s successfully.", LuaInitFile);
+		write_log(Lua, "Exited script %s successfully.", LuaInitFile);
 	}
 
 	State->L = L;

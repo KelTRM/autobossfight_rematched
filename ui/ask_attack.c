@@ -50,7 +50,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 //	}
 
 	printf("\nCurrent round: %d\n\nIt's currently %s's turn.\n", Round, CurrentPlayer->Name);
-	write_debug(Info, "Currently playing - %s", CurrentPlayer->Name);
+	write_log(Info, "Currently playing - %s", CurrentPlayer->Name);
 
 	if (GetEnemyAtIndex(CurrentPlayer, 0) == NULL) {
 		// easter egg
@@ -95,13 +95,13 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 		if (Attack->Available(Attack, CurrentPlayer) == 0) {
 			printf("Attack %s is not yet available.\n", Attack->AttackName);
 
-			write_debug(Info, "Player %s failed to perform attack %s.", CurrentPlayer->Name, Attack->AttackName);
+			write_log(Info, "Player %s failed to perform attack %s.", CurrentPlayer->Name, Attack->AttackName);
 
 			sleep(1000);
 			continue;
 		}
 
-		write_debug(Info, "Player %s has selected attack %s.",
+		write_verbose(Info, "Player %s has selected attack %s.",
 				CurrentPlayer->Name, Attack->AttackName);
 
 		printf("You have chosen attack '%s'.\n", Attack->AttackName);
@@ -110,7 +110,7 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			CopyBuffer(INVALID_BUFFER_HANDLE, b);
 
 			//char *Result;
-			write_debug(Info, "Confirming attack...", "");
+			write_verbose(Info, "Confirming attack...", "");
 			Prompt("Are you sure you want to use this attack?", &Result, 0);
 
 			CopyBuffer(b, INVALID_BUFFER_HANDLE);
@@ -119,12 +119,12 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			DeleteBuffer(b);
 
 			if (Result[0] == 'y') {
-				write_debug(Info, "Player has confirmed attack %s", Attack->AttackName);
+				write_log(Info, "Player has confirmed attack %s", Attack->AttackName);
 
 				ChosenAttack = AttackID-1;
 				break;
 			} else if (Result[0] == 'n') {
-				write_debug(Info, "Player has rejected attack %s", Attack->AttackName);
+				write_verbose(Info, "Player has rejected attack %s", Attack->AttackName);
 				break;
 			} else continue;
 		}

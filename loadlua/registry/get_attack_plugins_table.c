@@ -13,24 +13,30 @@ int IndexTable(lua_State *L, int Index, const char *Field, int *FailChain, int E
 	return *FailChain;
 }
 
+int GetRegistryTable(lua_State *L, const char *Location);
+
 int GetAttackPluginsTable(lua_State *L) {
 	int fail = 0;
 
-	IndexTable(L, LUA_REGISTRYINDEX, "bossfight", &fail, LUA_TTABLE);
-	IndexTable(L, -1, "plugins", &fail, LUA_TTABLE);
-	IndexTable(L, -1, "attack", &fail, LUA_TTABLE);
-
-	if (fail != 0) {
-		lua_pop(L, 3-fail);
-		write_debug(Warning, "Failed to index bossfight.plugins.attack."
-					"Is the registry initialized? Error code %d", fail);
-
+//	IndexTable(L, LUA_REGISTRYINDEX, "bossfight", &fail, LUA_TTABLE);
+//	IndexTable(L, -1, "plugins", &fail, LUA_TTABLE);
+//	IndexTable(L, -1, "attack", &fail, LUA_TTABLE);
+	if (!GetRegistryTable(L, "bossfight.plugins.attack")) {
 		lua_pushnil(L);
 		return 0;
 	}
 
-	lua_remove(L, -2);
-	lua_remove(L, -2);
+	//if (fail != 0) {
+	//	lua_pop(L, 3-fail);
+	//	write_log(Warning, "Failed to index bossfight.plugins.attack."
+	//				"Is the registry initialized? Error code %d", fail);
+	//
+	//	lua_pushnil(L);
+	//	return 0;
+	//}
+
+	//lua_remove(L, -2);
+	//lua_remove(L, -2);
 
 	return 1;
 }

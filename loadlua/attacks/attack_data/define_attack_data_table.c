@@ -82,7 +82,7 @@ int DefineAttackDataTable(lua_State *L) {
 
 	luaL_setfuncs(L, fns, 0);
 
-	write_debug(DefineAttackDataTable, "recieved top=%d", top);
+	write_verbose(Debug, "recieved top=%d", top);
 
 	if (top <= 1) {
 		// effectively does nothing

@@ -20,17 +20,17 @@ void InitEntities(void *Lua) {
 //	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
 	size_t LoadedEntities = LoadLuaEntities(Lua, &Players, &Bosses);
 //	LoadLuaEntities(&Players, &Bosses);
-	write_debug(InitEntities, "Loaded %zu entity definitions from lua.", LoadedEntities);
+	write_verbose(Info, "Loaded %zu entity definitions from lua.", LoadedEntities);
 
 	if (LoadedEntities == 0) {
-		write_debug(InitEntities, "No entities loaded. exiting...");
+		write_log(Error, "No entities loaded. exiting...");
 		exit(-1);
 	}
 
 	PlayerCount = Players.DefinitionCount;
 	BossCount = Bosses.DefinitionCount;
 
-	write_debug(InitEntities, "read %zu players & %zu bosses", PlayerCount, BossCount);
+	write_log(Info, "read %zu players & %zu bosses", PlayerCount, BossCount);
 
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));

@@ -1,6 +1,7 @@
 #pragma once
 
 #include"../ui/ui.h"
+#include"flags.h"
 
 #ifdef NDEBUG
 
@@ -22,7 +23,15 @@ int DebugWrite(const char *Source, const char *restrict format, ...);
 #define define_debug_flush_location(file)	AttachBufferFile(DebugBuffer, file, 1)
 #define flush_debug()				FlushBuffer(DebugBuffer)
 
-#define write_debug(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE, __VA_ARGS__)
-// #define write_debug(DEBUG_MODE, format, ...)	bprintf(DebugBuffer, "[%s] " format "\n", #DEBUG_MODE, __VA_ARGS__)
+//#define write_debug(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE, __VA_ARGS__)
+
+#ifdef VERBOSE_LOG
+#define write_verbose(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE"<verbose>", __VA_ARGS__)
+#else
+#define write_verbose(DEBUG_MODE, ...)
+#endif
+
+#define write_log(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE, __VA_ARGS__)
+
 
 #endif

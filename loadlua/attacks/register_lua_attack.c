@@ -60,22 +60,20 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	type = lua_getfield(L, -2, "attack_handler");
 	if (type != LUA_TFUNCTION) {
 		printf("Not implemented.");
-		write_debug(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
+		write_verbose(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
 				Attack->AttackPluginKey);
 
 		lua_pop(L, 3);
 		return (AttackData_t){ 0 };
 	}
 
-	// self arg
-	lua_pushvalue(L, -3);
-
-	lua_pushvalue(L, -3);
+	lua_pushvalue(L, -3);	// target
+	lua_pushvalue(L, -3);	// attacker
 
 	lua_call(L, 2, 1);
 
 	type = lua_type(L, -1);
-	write_debug(LuaAttackManager, "type=%s", lua_typename(L, type));
+	write_verbose(Lua, "type=%s", lua_typename(L, type));
 	
 	AttackData_t Result = { 0 };
 	if (type == LUA_TTABLE) {
@@ -107,21 +105,34 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	return Result;
 }
 
-LuaAttackData_t AppendAttackData(lua_State *L) {
-	lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	int type = lua_getfield(L, -1, "attack_data");
+int GetRegistryTable(lua_State *L, const char *Location);
 
-	lua_remove(L, -2);
+LuaAttackData_t AppendAttackData(lua_State *L) {
+	//lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+	int type;// = lua_getfield(L, -1, "attack_data");
 
 	LuaAttackData_t Data = { L, -1 };
 
-	if (type != LUA_TTABLE) {
-		write_debug(Warning, "Registry inproperly configured. "
+	int result = GetRegistryTable(L, "bossfight.attack_data");
+	if (!result) {
+		write_verbose(Warning, "Registry inproperly configured. "
 				"Could not find table REGISTRY.bossfight.attack_handlers");
 		lua_pop(L, 1);
 
 		return Data;
+
 	}
+
+//	lua_remove(L, -2);
+
+
+//	if (type != LUA_TTABLE) {
+//		write_debug(Warning, "Registry inproperly configured. "
+//				"Could not find table REGISTRY.bossfight.attack_handlers");
+//		lua_pop(L, 1);
+//
+//		return Data;
+//	}
 
 	int len = lua_rawlen(L, -1);
 
@@ -130,7 +141,7 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 	lua_pushvalue(L, -2);
 
 	type = lua_type(L, -1);
-	write_debug(Debug, "Got type=%s", lua_typename(L, type));
+	write_verbose(Debug, "Got type=%s", lua_typename(L, type));
 
 	lua_rawseti(L, -2, Data.ArrayIdx);
 
@@ -160,7 +171,7 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 		lua_error(L);
 	}
 
-	write_debug(ConvertTableToAttack, "Registering attack \"%s\" of { %d, %d, %d }",
+	write_verbose(Debug, "Registering attack \"%s\" of { %d, %d, %d }",
 			DisplayName, (int)FirstRound, (int)MinimumEnergy, ID);
 
 	// define the attack's struct
@@ -208,7 +219,7 @@ int RegisterLuaAttacks(lua_State *L) {
 	int Result = GetRegistryTable(L, "bossfight.plugins.attack");
 
 	if (!Result) {
-		write_debug(Error, "REGISTRY.bossfight.plugins.attack uninitialized.");
+		write_log(Error, "REGISTRY.bossfight.plugins.attack uninitialized.");
 		exit(-1);
 	}
 

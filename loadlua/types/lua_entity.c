@@ -12,8 +12,11 @@
 #define PROTO_ATTACK		"entity:Attack(target, health)"
 #define PROTO_LIVING		"entity:Living()"
 
-#define SetNumberField(name, value, idx)	lua_pushnumber(L, value);	\
-						lua_setfield(L, idx, name)
+#define SetNumberField(name, value, idx)	\
+	do { lua_pushnumber(L, value); lua_setfield(L, idx, name); } while(0)
+#define GetNumberField(name, idx, where)						\
+	do { if (lua_getfield(L, idx, name) != LUA_TNUMBER) { lua_pop(L, 1); break; } 	\
+		where = lua_tonumber(L, -1); lua_pop(L,1); } while (0);
 
 int GetTempEntity(lua_State *L, int idx, Entity_t *Entity);
 
@@ -98,34 +101,39 @@ Entity_t GetEntityFromTable(lua_State *L) {
 	lua_pop(L, 2);
 
 	// attack
-	lua_getfield(L, -1, "attack");
-	Entity.Attack = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+//	lua_getfield(L, -1, "attack");
+//	Entity.Attack = lua_tonumber(L, -1);
+//	lua_pop(L, 1);
+	GetNumberField("attack",		-1, Entity.Attack);
+	GetNumberField("energy",		-1, Entity.Energy);
+	GetNumberField("healing_maximum",	-1, Entity.HealingMaximum);
+	GetNumberField("healing_minimum",	-1, Entity.HealingMinimum);
+	GetNumberField("hp",			-1, Entity.HealthPoints);
 
-	lua_getfield(L, -1, "energy");
-	Entity.Energy = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+//	lua_getfield(L, -1, "energy");
+//	Entity.Energy = lua_tonumber(L, -1);
+//	lua_pop(L, 1);
 
-	lua_getfield(L, -1, "healing_minimum");
-	Entity.HealingMinimum = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+//	lua_getfield(L, -1, "healing_minimum");
+//	Entity.HealingMinimum = lua_tonumber(L, -1);
+//	lua_pop(L, 1);
 
-	lua_getfield(L, -1, "healing_maximum");
-	Entity.HealingMaximum = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+//	lua_getfield(L, -1, "healing_maximum");
+//	Entity.HealingMaximum = lua_tonumber(L, -1);
+//	lua_pop(L, 1);
 
-	lua_getfield(L, -1, "hp");
-	Entity.HealthPoints = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+//	lua_getfield(L, -1, "hp");
+//	Entity.HealthPoints = lua_tonumber(L, -1);
+//	lua_pop(L, 1);
 
 	return Entity;
 }
 
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...) {
 	int top = lua_gettop(L);
-	write_debug(AssertParameters, "top=%d; ParamCount=%d", top, ParamCount);
+	write_verbose(Debug, "top=%d; ParamCount=%d", top, ParamCount);
 	if (top != ParamCount) {
-		write_debug(AssertParameters, "top(%d)!=ParamCount(%d)", top, ParamCount);
+		write_verbose(Debug, "top(%d)!=ParamCount(%d)", top, ParamCount);
 		lua_pushfstring(L, "expected %s", Prototype);
 		lua_error(L);
 	}

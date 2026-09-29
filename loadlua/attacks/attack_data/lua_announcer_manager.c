@@ -8,11 +8,12 @@ int GetRegistryTable(lua_State *L, const char *Location);
 
 void LuaAttackAnnouncer(AttackData_t *Attack) {
 	LuaAttackData_t *AttackData = Attack->LuaAttackData;
+	lua_State *L = AttackData->L;
+	int top = lua_gettop(L);
+
 	if (AttackData == NULL)
 		goto fallback;
 
-	lua_State *L = AttackData->L;
-	int top = lua_gettop(L);
 
 //	ReadAttackDataTable(L);
 
@@ -27,17 +28,17 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 	int type;
 	type = lua_rawgeti(L, -1, AttackData->ArrayIdx);
 	if (type != LUA_TTABLE) {
-		write_debug(Error, "Recieved invalid AttackData table.");
+		write_log(Error, "Recieved invalid AttackData table.");
 
-		lua_pop(L, 2);
+//		lua_pop(L, 2);
 		goto fallback;
 	}
 
 	type = lua_getfield(L, -1, "announcer");
 	if (type != LUA_TFUNCTION) {
-		write_debug(Error, "Recieved announcer of type other than function.");
+		write_log(Error, "Recieved announcer of type other than function.");
 
-		lua_pop(L, 3);
+//		lua_pop(L, 3);
 		goto fallback;
 	}
 
@@ -51,7 +52,7 @@ void LuaAttackAnnouncer(AttackData_t *Attack) {
 
 fallback:
 	lua_settop(L, top);
-	write_debug(Info, "There was an error trying to run the lua attack manager. "
-			"Falling back to default.");
+	write_log(Info, "There was an error trying to run the lua attack manager. "
+				"Falling back to default.");
 	DefaultAnnouncer(Attack);
 }
