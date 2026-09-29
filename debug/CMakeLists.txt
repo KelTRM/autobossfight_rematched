@@ -7,3 +7,9 @@ target_sources(autobossfight_debug
 	PRIVATE
 		debug.c
 )
+
+target_compile_definitions(autobossfight_debug
+	PUBLIC
+		$<$<BOOL:{VERBOSE}>:VERBOSE_LOG>
+		$<$<BOOL:{IMMEDIATE_TRANSFORM}>:TRANSFORM_IMMEDIATE>
+)

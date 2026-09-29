@@ -3,9 +3,15 @@
 
 // Default flags for debug build
 
-// #define DISABLE_LUA_ATTACKS		// Disables all lua attacks
-#define TRANSFORM_IMMEDIATE		// Allow transforming round 1
+// Allow transforming round 1
+#ifndef TRANSFORM_IMMEDIATE
+#define TRANSFORM_IMMEDIATE
+#endif
+
+// Enable verbose logging
+#ifndef VERBOSE_LOG
 #define VERBOSE_LOG			// Enable verbose logging
+#endif
 
 #else
 
