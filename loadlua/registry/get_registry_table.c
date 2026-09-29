@@ -16,7 +16,7 @@ int GetRegistryTable(lua_State *L, const char *Location) {
 
 	char *Start = Text;
 	for (size_t i = 0; i <= Length; i++) {
-		write_debug(Debug, "@ char '%c' (%d)", Text[i], Text[i]);
+//		write_debug(Debug, "@ char '%c' (%d)", Text[i], Text[i]);
 		if (Text[i] == '.' || Text[i] == '\0') {
 			Text[i] = '\0';
 
@@ -36,6 +36,7 @@ int GetRegistryTable(lua_State *L, const char *Location) {
 	return 1;
 
 error:
+	write_debug(Error, "Failed to read from table @ registry location %s. Failed to find table in field %s", Location, Start);
 	free(Text);
 
 	lua_settop(L, top);
