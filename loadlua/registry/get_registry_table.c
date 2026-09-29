@@ -32,14 +32,10 @@ int GetRegistryTable(lua_State *L, const char *Location) {
 		}
 	}
 
-	write_debug(Debug, "top moved by %d", lua_gettop(L) - top);
-
 	free(Text);
-	write_debug(Debug, "Successfully indexed %s", Location);
 	return 1;
 
 error:
-	write_debug(Error, "Failed to read from table @ registry location %s. Failed to find table in field %s", Location, Start);
 	free(Text);
 
 	lua_settop(L, top);

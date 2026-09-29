@@ -61,9 +61,9 @@ int CreateLuaPlugin(lua_State *L) {
 }
 
 // 2 upvalues:
-// string - Determines table name for where to store the registered plugin
 // table - The plugin being registered.
+// string - Determines table name for where to store the registered plugin
 int RegisterPlugin(lua_State *L) {
-	(void)L;
+	
 	return 0;
 }
