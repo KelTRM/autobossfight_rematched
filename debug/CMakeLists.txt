@@ -10,6 +10,7 @@ target_sources(autobossfight_debug
 
 target_compile_definitions(autobossfight_debug
 	PUBLIC
-		$<$<BOOL:{VERBOSE}>:VERBOSE_LOG>
-		$<$<BOOL:{IMMEDIATE_TRANSFORM}>:TRANSFORM_IMMEDIATE>
+		$<$<BOOL:${VERBOSE}>:VERBOSE_LOG>
+		$<$<BOOL:${IMMEDIATE_TRANSFORM}>:TRANSFORM_IMMEDIATE>
+		$<$<BOOL:${LOG_LINE}>:LOG_LINE_FILE>
 )
