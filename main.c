@@ -36,7 +36,7 @@ int main(void) {
 	SwitchBuffer(b);
 
 	init_debug();
-	define_debug_flush_location(fopen("DEBUG.txt", "w"));
+	define_debug_flush_location(fopen(LOGFILE_LOCATION, "w"));
 
 	// should initialize the lua state
 	void *Lua = InitLua();

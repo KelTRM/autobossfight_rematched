@@ -16,9 +16,9 @@
 #endif
 
 // Show file:line numbers in log
-#ifndef LOG_LINE_FILE
+//#ifndef LOG_LINE_FILE
 #define LOG_LINE_FILE
-#endif
+//#endif
 
 #else
 
