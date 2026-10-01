@@ -10,6 +10,9 @@
 #define init_debug()
 #define write_debug(DEBUG_MODE, format, ...)
 #define define_debug_flush_location(file)
+#define write_log(DEBUG_MODE, ...)
+#define write_verbose(DEBUG_MODE, ...)
+#define flush_debug()
 
 #else
 

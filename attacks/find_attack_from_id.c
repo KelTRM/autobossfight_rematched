@@ -11,9 +11,10 @@ Attack_t *GetAttackFromID_str(const char *id) {
 	
 	Attack_t *Attack;
 	while ((Attack = StepAttackIterator(&Iterator)) != NULL) {
-		if (Attack->Identifier == NULL)
+		if (Attack->Identifier == NULL) {
 			write_verbose(GetAttackFromID, "note: attack %s missing identifier.",
 						Attack->AttackName);
+		}
 		int cmp = strcmp(Attack->Identifier, id);
 
 		if (cmp == 0)

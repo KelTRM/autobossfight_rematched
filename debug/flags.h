@@ -11,17 +11,18 @@
 #endif
 
 // Enable verbose logging
-#ifndef VERBOSE_LOG
-#define VERBOSE_LOG				// Enable verbose logging
-#endif
+//#ifndef VERBOSE_LOG
+//#define VERBOSE_LOG				// Enable verbose logging
+//#endif
 
 // Show file:line numbers in log
-//#ifndef LOG_LINE_FILE
+#ifndef LOG_LINE_FILE
 #define LOG_LINE_FILE
-//#endif
+#endif
 
 #else
 
 // Default flags for release build
 
 #endif
+
