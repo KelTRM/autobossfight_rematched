@@ -94,7 +94,6 @@ Entity_t GetEntityFromTable(lua_State *L) {
 
 	lua_pop(L, 1);
 
-	// attack
 	GetNumberField("attack",		-1, Entity.Attack);
 	GetNumberField("energy",		-1, Entity.Energy);
 	GetNumberField("healing_maximum",	-1, Entity.HealingMaximum);
