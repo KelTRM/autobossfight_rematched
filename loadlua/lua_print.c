@@ -4,6 +4,7 @@
 
 int LuaPrint(lua_State *L);
 struct PrintConf GetPrintConfig(lua_State *L);
+int GetRegistryTable(lua_State *L, const char *Location);
 
 void LuaSetPrint(lua_State *L) {
 	lua_pushcclosure(L, LuaPrint, 0);
@@ -39,11 +40,16 @@ struct PrintConf GetPrintConfig(lua_State *L) {
 	};
 
 	// get registry options
-	type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	if (type != LUA_TTABLE) { lua_pop(L, 1); return conf; }
+//	type = lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+//	if (type != LUA_TTABLE) { lua_pop(L, 1); return conf; }
 	
-	type = lua_getfield(L, -1, "print");
-	if (type != LUA_TTABLE) { lua_pop(L, 2); return conf; }
+//	type = lua_getfield(L, -1, "print");
+//	if (type != LUA_TTABLE) { lua_pop(L, 2); return conf; }
+
+	if (!GetRegistryTable(L, "bossfight.print")) {
+		lua_pop(L, 1);
+		return conf;
+	}
 
 	type = lua_getfield(L, -1, "buffer");
 	if (type == LUA_TNUMBER) conf.Buffer = lua_tonumber(L, -1);
@@ -51,7 +57,7 @@ struct PrintConf GetPrintConfig(lua_State *L) {
 
 	type = lua_getfield(L, -1, "print_term");
 	if (type == LUA_TSTRING) conf.PrintLineTerminator = lua_tostring(L, -1);
-	lua_pop(L, 1);
+	lua_pop(L, 2);
 	
 	return conf;
 }

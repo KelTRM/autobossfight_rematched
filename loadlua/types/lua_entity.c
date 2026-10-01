@@ -88,43 +88,18 @@ Entity_t GetEntityFromTable(lua_State *L) {
 	// color
 	lua_getfield(L, -1, "color");
 
-	lua_getfield(L, -1, "r");
-	Entity.EntityColor.r = lua_tonumber(L, -1);
-	lua_pop(L, 1);
+	GetNumberField("r", -1, Entity.EntityColor.r);
+	GetNumberField("g", -1, Entity.EntityColor.g);
+	GetNumberField("b", -1, Entity.EntityColor.b);
 
-	lua_getfield(L, -2, "g");
-	Entity.EntityColor.g = lua_tonumber(L, -1);
 	lua_pop(L, 1);
-
-	lua_getfield(L, -3, "b");
-	Entity.EntityColor.b = lua_tonumber(L, -1);
-	lua_pop(L, 2);
 
 	// attack
-//	lua_getfield(L, -1, "attack");
-//	Entity.Attack = lua_tonumber(L, -1);
-//	lua_pop(L, 1);
 	GetNumberField("attack",		-1, Entity.Attack);
 	GetNumberField("energy",		-1, Entity.Energy);
 	GetNumberField("healing_maximum",	-1, Entity.HealingMaximum);
 	GetNumberField("healing_minimum",	-1, Entity.HealingMinimum);
 	GetNumberField("hp",			-1, Entity.HealthPoints);
-
-//	lua_getfield(L, -1, "energy");
-//	Entity.Energy = lua_tonumber(L, -1);
-//	lua_pop(L, 1);
-
-//	lua_getfield(L, -1, "healing_minimum");
-//	Entity.HealingMinimum = lua_tonumber(L, -1);
-//	lua_pop(L, 1);
-
-//	lua_getfield(L, -1, "healing_maximum");
-//	Entity.HealingMaximum = lua_tonumber(L, -1);
-//	lua_pop(L, 1);
-
-//	lua_getfield(L, -1, "hp");
-//	Entity.HealthPoints = lua_tonumber(L, -1);
-//	lua_pop(L, 1);
 
 	return Entity;
 }

@@ -13,6 +13,7 @@
 #include<string.h>
 #include<lua.h>
 
+void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 AttackData_t ReadAttackDataTable(lua_State *L);
@@ -209,12 +210,8 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 int GetRegistryTable(lua_State *L, const char *Location);
 
 int RegisterLuaAttacks(lua_State *L) {
-	int args = lua_gettop(L);
-
-	if (args != 2) {
-		lua_pushstring(L, "plugin:RegisterLuaAttacks - expected 1 parameter.");
-		lua_error(L);
-	}
+	AssertParameters(L, "plugin.attack:RegisterPlugin(plugin)", 2,
+				LUA_TTABLE, LUA_TTABLE);
 
 	int Result = GetRegistryTable(L, "bossfight.plugins.attack");
 
