@@ -194,7 +194,24 @@ int Entity_DrainEnergy(lua_State *L) {
 int Entity_Heal(lua_State *L) {
 	AssertParameters(L, PROTO_HEAL, 3,
 			LUA_TTABLE, LUA_TTABLE, LUA_TNUMBER);
-	return 0;
+
+	int type = lua_getfield(L, 2, "hp");
+	if (type != LUA_TNUMBER) {
+		lua_pushliteral(L, "expected hp of type number");
+		lua_error(L);
+	}
+
+	lua_Number NewHp = lua_tonumber(L, -1) +	// HP
+			   lua_tonumber(L, 3);		// Heal amount
+	
+	lua_pushnumber(L, NewHp);
+	lua_setfield(L, 2, "hp");
+
+	lua_pop(L, 1);
+
+	lua_pushnumber(L, 3);
+
+	return 1;
 }
 
 int Entity_Attack(lua_State *L) {
