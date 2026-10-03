@@ -1,5 +1,24 @@
+#include<stdlib.h>
+#include<stdarg.h>
 #include<lua.h>
 #include<lauxlib.h>
+#include"../../../debug/debug.h"
+
+void AssertUpvalues(lua_State *L, size_t Count, ...) {
+	va_list args;
+	va_start(args, Count);
+
+	for (size_t i = 1; i <= Count; i++) {
+		int Expected = va_arg(args, int);
+		int Recieved = lua_type(L, lua_upvalueindex(i));
+		if (Expected != Recieved) {
+			write_log(Fatal, "Malformed upvalues passed at idx %d.", i);
+			write_log(Info, "Malformed upvalue expected type %s. But recieved type %s.",
+					lua_typename(L, Expected), lua_typename(L, Recieved));
+			exit(-1);
+		}
+	}
+}
 
 int AddPluginEntry(lua_State *L) {
 	int top = lua_gettop(L);
@@ -42,15 +61,16 @@ int AddPluginEntry(lua_State *L) {
 // Anything that's nil will take the default value.
 // Anything that shares a type with the default will override, and anything else will create an error.
 int CreateLuaPlugin(lua_State *L) {
-	int idx = lua_upvalueindex(1);
-	if (lua_type(L, idx) != LUA_TTABLE) {
-		lua_pushliteral(L, "invalid upvalues on CreateLuaPlugin.");
-		lua_error(L);
-	}
+//	int idx = lua_upvalueindex(1);
+//	if (lua_type(L, idx) != LUA_TTABLE) {
+//		lua_pushliteral(L, "invalid upvalues on CreateLuaPlugin.");
+//		lua_error(L);
+//	}
+	AssertUpvalues(L, 1, LUA_TTABLE);
 
 	lua_newtable(L);
 
-	lua_pushvalue(L, idx);
+	lua_pushvalue(L, lua_upvalueindex(1));
 	lua_pushcclosure(L, AddPluginEntry, 1);
 
 	lua_setfield(L, -2, "NewEntry");

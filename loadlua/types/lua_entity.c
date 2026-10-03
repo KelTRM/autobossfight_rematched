@@ -276,6 +276,7 @@ int Entity_ToString(lua_State *L) {
 
 	Entity_t Entity;
 	GetTempEntity(L, 1, &Entity);
+	// FINISH LATER
 
 	return 0;
 }
