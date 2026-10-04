@@ -17,13 +17,12 @@ int DefineAttackDataTable(lua_State *L);
 }
 */
 
-// local attacks=bossfight:CreateAttackPlugin();
+int CreateLuaPlugin(lua_State *L);
 
 void DefineAttackTable(lua_State *L) {
-//	printf("Test\n");
-
 	luaL_Reg fns[] = {
-		{ "NewPlugin", CreateAttackPlugin },
+//		{ "NewPlugin", CreateAttackPlugin },
+//		{ "NewPlugin", CreateLuaPlugin },
 		{ "RegisterPlugin", RegisterLuaAttacks },
 		{ "AttackData", DefineAttackDataTable },
 		{ NULL, NULL }
@@ -31,4 +30,18 @@ void DefineAttackTable(lua_State *L) {
 
 	lua_newtable(L);
 	luaL_setfuncs(L, fns, 0);
+
+	lua_newtable(L);
+
+	lua_newtable(L);
+	lua_pushstring(L, "lmfaooooo");
+	lua_setfield(L, -2, "value");
+
+	lua_pushboolean(L, 2);
+	lua_setfield(L, -2, "has_default");
+
+	lua_setfield(L, -2, "CanAttack");
+
+	lua_pushcclosure(L, CreateLuaPlugin, 1);
+	lua_setfield(L, -2, "NewPlugin");
 }

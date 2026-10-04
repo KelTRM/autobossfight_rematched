@@ -20,12 +20,19 @@ void AssertUpvalues(lua_State *L, size_t Count, ...) {
 	}
 }
 
+void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
+
 int AddPluginEntry(lua_State *L) {
 	int top = lua_gettop(L);
-	if (top != 2) {
-		lua_pushliteral(L, "Invalid parameters for plugin:NewEntry");
-		lua_error(L);
-	}
+
+//	if (top != 2) {
+//		lua_pushliteral(L, "Invalid parameters for plugin:NewEntry");
+//		lua_error(L);
+//	}
+
+	AssertParameters(L, "plugin:NewEntry", 3,
+				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
+	AssertUpvalues(L, 1, LUA_TTABLE);
 
 	// assume upvalues to be correct, as they should only come from CreateLuaPlugin
 	int table = lua_upvalueindex(1);
@@ -33,24 +40,63 @@ int AddPluginEntry(lua_State *L) {
 
 	lua_pushnil(L);
 	while (lua_next(L, table) != 0) {
-		const char *Keyname = luaL_checkstring(L, -2);
-		int RequiredType = lua_type(L, -1);
+		int KeyType = lua_type(L, -1);
 
-		int ActualType = lua_getfield(L, 2, Keyname);
-		if (ActualType == LUA_TNIL) {
-			lua_getfield(L, table, Keyname);
-			lua_setfield(L, -5, Keyname);
-		} else if (ActualType == RequiredType) {
-			lua_getfield(L, 2, Keyname);
-			lua_setfield(L, -5, Keyname);
-		} else {
-			lua_pushfstring(L, "Unexpected type %s of value %s (expected %s)",
-						lua_typename(L, ActualType), Keyname,
-						lua_typename(L, RequiredType));
-			lua_error(L);
+		switch (KeyType) {
+//			case LUA_TNIL: {
+//				// push the key twice
+//				lua_pushvalue(L, -3);
+//				lua_pushvalue(L, -4);
+//
+//				// move the value from the format table into the 
+//				lua_gettable(L, table);
+//				lua_settable(L, -5);
+//			} break;
+			case LUA_TTABLE: {
+				// template.key
+				int RequiredType = lua_getfield(L, -1, "value");
+
+				lua_getfield(L, -2, "has_default");
+				int HasDefault = lua_toboolean(L, -1);
+				lua_pop(L, 1);
+
+				// entry.key
+				lua_pushvalue(L, -3);
+				write_verbose(Debug, "key=%s", lua_tostring(L, -1));
+				int ActualType = lua_gettable(L, 3);
+
+				lua_pop(L, 1);
+				if (HasDefault) {
+					if (ActualType != RequiredType) {
+						lua_pushfstring(L, "Expected type %s. Recieved %s instead.",
+								lua_typename(L, RequiredType),
+								lua_typename(L, ActualType));
+						lua_error(L);
+					}
+
+
+				}
+			} break;
+			default: {
+				write_log(Error, "Expected key %s of type table. got %s instead.",
+						lua_tostring(L, -3),
+						lua_typename(L, -1));
+			}; break;
 		}
+//		if (ActualType == LUA_TNIL) {
+//			lua_getfield(L, table, Keyname);
+//			lua_setfield(L, -5, Keyname);
+//		} else if (ActualType == RequiredType) {
+//			lua_getfield(L, 2, Keyname);
+//			lua_setfield(L, -5, Keyname);
+//		} else {
+//			lua_pushfstring(L, "Unexpected type %s of value %s (expected %s)",
+//						lua_typename(L, ActualType), Keyname,
+//						lua_typename(L, RequiredType));
+//			lua_error(L);
+//		}
 
-		lua_pop(L, 2);
+		lua_pop(L, 1);
 	}
 	return 0;
 }
@@ -61,11 +107,6 @@ int AddPluginEntry(lua_State *L) {
 // Anything that's nil will take the default value.
 // Anything that shares a type with the default will override, and anything else will create an error.
 int CreateLuaPlugin(lua_State *L) {
-//	int idx = lua_upvalueindex(1);
-//	if (lua_type(L, idx) != LUA_TTABLE) {
-//		lua_pushliteral(L, "invalid upvalues on CreateLuaPlugin.");
-//		lua_error(L);
-//	}
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
 	lua_newtable(L);
@@ -83,7 +124,7 @@ int CreateLuaPlugin(lua_State *L) {
 // 2 upvalues:
 // table - The plugin being registered.
 // string - Determines table name for where to store the registered plugin
-int RegisterPlugin(lua_State *L) {
+int RegisterLuaPlugin(lua_State *L) {
 	(void)L;
 	return 0;
 }
