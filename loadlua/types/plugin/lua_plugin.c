@@ -97,18 +97,6 @@ int AddPluginEntry(lua_State *L) {
 						lua_typename(L, -1));
 			}; break;
 		}
-//		if (ActualType == LUA_TNIL) {
-//			lua_getfield(L, table, Keyname);
-//			lua_setfield(L, -5, Keyname);
-//		} else if (ActualType == RequiredType) {
-//			lua_getfield(L, 2, Keyname);
-//			lua_setfield(L, -5, Keyname);
-//		} else {
-//			lua_pushfstring(L, "Unexpected type %s of value %s (expected %s)",
-//						lua_typename(L, ActualType), Keyname,
-//						lua_typename(L, RequiredType));
-//			lua_error(L);
-//		}
 
 		lua_pop(L, 1);
 	}
