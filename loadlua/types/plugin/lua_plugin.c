@@ -21,7 +21,9 @@ void AssertUpvalues(lua_State *L, size_t Count, ...) {
 }
 
 [[noreturn]] void TypeError(lua_State *L, int Expected, int Required) {
-	lua_pushfstring(L, "Expected type %s. Got %s instead.", Expected, Required);
+	lua_pushfstring(L, "Expected type %s. Got %s instead.",
+				lua_typename(L, Expected),
+				lua_typename(L, Required));
 	lua_error(L);
 
 	// should never be reached. it's for the [[noreturn]] warning
