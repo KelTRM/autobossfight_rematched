@@ -20,15 +20,18 @@ void AssertUpvalues(lua_State *L, size_t Count, ...) {
 	}
 }
 
+[[noreturn]] void TypeError(lua_State *L, int Expected, int Required) {
+	lua_pushfstring(L, "Expected type %s. Got %s instead.", Expected, Required);
+	lua_error(L);
+
+	// should never be reached. it's for the [[noreturn]] warning
+	while (1) {}
+}
+
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 
 int AddPluginEntry(lua_State *L) {
 	int top = lua_gettop(L);
-
-//	if (top != 2) {
-//		lua_pushliteral(L, "Invalid parameters for plugin:NewEntry");
-//		lua_error(L);
-//	}
 
 	AssertParameters(L, "plugin:NewEntry", 3,
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
@@ -62,19 +65,28 @@ int AddPluginEntry(lua_State *L) {
 
 				// entry.key
 				lua_pushvalue(L, -3);
-				write_verbose(Debug, "key=%s", lua_tostring(L, -1));
 				int ActualType = lua_gettable(L, 3);
 
 				lua_pop(L, 1);
 				if (HasDefault) {
 					if (ActualType != RequiredType) {
-						lua_pushfstring(L, "Expected type %s. Recieved %s instead.",
-								lua_typename(L, RequiredType),
-								lua_typename(L, ActualType));
-						lua_error(L);
+						TypeError(L, RequiredType, ActualType);
+//						lua_pushfstring(L, "Expected type %s. Recieved %s instead.",
+//								lua_typename(L, RequiredType),
+//								lua_typename(L, ActualType));
+//						lua_error(L);
 					}
-
-
+				} else {
+					if (ActualType == LUA_TNIL) {
+						lua_pushvalue(L, -2);
+					} else if (ActualType == RequiredType) {
+						lua_pushvalue(L, -1);
+					} else {
+						TypeError(L, RequiredType, ActualType);
+//						lua_pushfstring(L, "Expected type %s. Recieved type %s.",
+//								lua_typename(L, RequiredType),
+//								lua_typename(L, ActualType));
+					}
 				}
 			} break;
 			default: {
