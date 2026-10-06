@@ -94,7 +94,8 @@ int AddPluginEntry(lua_State *L) {
 			default: {
 				write_log(Error, "Expected key %s of type table. got %s instead.",
 						lua_tostring(L, -3),
-						lua_typename(L, -1));
+						lua_typename(L, lua_type(L, -1)));
+				TypeError(L, LUA_TTABLE, lua_type(L, -1));
 			}; break;
 		}
 
