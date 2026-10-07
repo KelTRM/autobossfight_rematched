@@ -73,10 +73,6 @@ int AddPluginEntry(lua_State *L) {
 				if (HasDefault) {
 					if (ActualType != RequiredType) {
 						TypeError(L, RequiredType, ActualType);
-//						lua_pushfstring(L, "Expected type %s. Recieved %s instead.",
-//								lua_typename(L, RequiredType),
-//								lua_typename(L, ActualType));
-//						lua_error(L);
 					}
 				} else {
 					if (ActualType == LUA_TNIL) {
@@ -85,9 +81,6 @@ int AddPluginEntry(lua_State *L) {
 						lua_pushvalue(L, -1);
 					} else {
 						TypeError(L, RequiredType, ActualType);
-//						lua_pushfstring(L, "Expected type %s. Recieved type %s.",
-//								lua_typename(L, RequiredType),
-//								lua_typename(L, ActualType));
 					}
 				}
 			} break;
