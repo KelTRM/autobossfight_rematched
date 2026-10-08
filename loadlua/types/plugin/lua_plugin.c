@@ -47,38 +47,38 @@ int AddPluginEntry(lua_State *L) {
 	while (lua_next(L, table) != 0) {
 		int KeyType = lua_type(L, -1);
 
-		if (KeyType == LUA_TTABLE) {
-			// template.key
-			int RequiredType = lua_getfield(L, -1, "value");
-
-			lua_getfield(L, -2, "has_default");
-			int HasDefault = lua_toboolean(L, -1);
-			lua_pop(L, 1);
-
-			// entry.key
-			lua_pushvalue(L, -3);
-			int ActualType = lua_gettable(L, 3);
-
-			lua_pop(L, 1);
-
-			if (HasDefault) {
-				if (ActualType != RequiredType) {
-					TypeError(L, RequiredType, ActualType);
-				}
-			} else {
-				if (ActualType == LUA_TNIL) {
-					lua_pushvalue(L, -2);
-				} else if (ActualType == RequiredType) {
-					lua_pushvalue(L, -1);
-				} else {
-					TypeError(L, RequiredType, ActualType);
-				}
-			}
-		} else {
+		if (KeyType != LUA_TTABLE) {
 			write_log(Error, "Expected key %s of type table. got %s instead.",
 					lua_tostring(L, -3),
 					lua_typename(L, lua_type(L, -1)));
 			TypeError(L, LUA_TTABLE, lua_type(L, -1));
+		}
+
+		// template.key
+		int RequiredType = lua_getfield(L, -1, "value");
+
+		lua_getfield(L, -2, "has_default");
+		int HasDefault = lua_toboolean(L, -1);
+		lua_pop(L, 1);
+
+		// entry.key
+		lua_pushvalue(L, -3);
+		int ActualType = lua_gettable(L, 3);
+
+		lua_pop(L, 1);
+
+		if (HasDefault) {
+			if (ActualType != RequiredType) {
+				TypeError(L, RequiredType, ActualType);
+			}
+		} else {
+			if (ActualType == LUA_TNIL) {
+				lua_pushvalue(L, -2);
+			} else if (ActualType == RequiredType) {
+				lua_pushvalue(L, -1);
+			} else {
+				TypeError(L, RequiredType, ActualType);
+			}
 		}
 
 		lua_pop(L, 1);
