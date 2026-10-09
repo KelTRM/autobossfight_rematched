@@ -4,6 +4,21 @@
 #include<lauxlib.h>
 #include"../../../debug/debug.h"
 
+// takes table from idx, returns if there's a default
+// if DefaultType isn't NULL, sets it to the type of the value, and pushes the value
+int ValueHasDefault(lua_State *L, int idx, int *DefaultType) {
+	lua_getfield(L, idx, "has_default");
+	int res = lua_toboolean(L, -1);
+	lua_pop(L, 1);
+
+	if (DefaultType != NULL) {
+		*DefaultType = lua_getfield(L, idx, "value");
+//		lua_pop(L, 1);
+	}
+
+	return res;
+}
+
 void AssertUpvalues(lua_State *L, size_t Count, ...) {
 	va_list args;
 	va_start(args, Count);
@@ -55,12 +70,11 @@ int AddPluginEntry(lua_State *L) {
 		}
 
 		// template.key
-		int RequiredType = lua_getfield(L, -1, "value");
+//		int RequiredType = lua_getfield(L, -1, "value");
 
-		lua_getfield(L, -2, "has_default");
-		int HasDefault = lua_toboolean(L, -1);
-		lua_pop(L, 1);
-
+		int RequiredType;
+		int HasDefault = ValueHasDefault(L, -1, &RequiredType);
+	
 		// entry.key
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
