@@ -37,6 +37,7 @@ add_subdirectory(registration)
 target_link_libraries(autobossfight_lua_loader
 	PUBLIC
 		autobossfight_registration_manager
+		autobossfight_debug
 )
 
 target_link_libraries(autobossfight_debug

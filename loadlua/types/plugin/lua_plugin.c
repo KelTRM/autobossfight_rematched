@@ -1,5 +1,6 @@
 #include<stdlib.h>
 #include<stdarg.h>
+#include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
 #include"../../../debug/debug.h"
@@ -62,6 +63,9 @@ int AddPluginEntry(lua_State *L) {
 	while (lua_next(L, table) != 0) {
 		int KeyType = lua_type(L, -1);
 
+		write_verbose(Debug, "Checking entry of key=%s.",
+				lua_tostring(L, -2));
+
 		if (KeyType != LUA_TTABLE) {
 			write_log(Error, "Expected key %s of type table. got %s instead.",
 					lua_tostring(L, -3),
@@ -78,24 +82,27 @@ int AddPluginEntry(lua_State *L) {
 		// entry.key
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
+//		lua_pop(L, 1);
 
-		lua_pop(L, 1);
-
-		if (HasDefault) {
+		if (!HasDefault) {
 			if (ActualType != RequiredType) {
-				TypeError(L, RequiredType, ActualType);
-			}
-		} else {
-			if (ActualType == LUA_TNIL) {
-				lua_pushvalue(L, -2);
-			} else if (ActualType == RequiredType) {
-				lua_pushvalue(L, -1);
-			} else {
 				TypeError(L, RequiredType, ActualType);
 			}
 		}
 
-		lua_pop(L, 1);
+		lua_pushvalue(L, -4);
+		
+		if (ActualType == LUA_TNIL) {
+			lua_pushvalue(L, -2);
+		} else if (ActualType == RequiredType) {
+			lua_pushvalue(L, -1);
+		} else {
+			TypeError(L, RequiredType, ActualType);
+		}
+
+		lua_settable(L, -5);
+
+		lua_pop(L, 3);
 	}
 	return 0;
 }
