@@ -221,7 +221,8 @@ int RegisterLuaAttacks(lua_State *L) {
 	}
 
 	lua_newtable(L);
-	lua_getfield(L, 2, "current_entries");
+//	lua_getfield(L, 2, "current_entries");
+	lua_getfield(L, 2, "entries");
 
 	size_t RegistrationCount = 0;
 	size_t RegistrationsProvided = lua_rawlen(L, -1);

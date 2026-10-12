@@ -57,6 +57,7 @@ int AddPluginEntry(lua_State *L) {
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
+
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
 
@@ -74,16 +75,12 @@ int AddPluginEntry(lua_State *L) {
 			TypeError(L, LUA_TTABLE, lua_type(L, -1));
 		}
 
-		// template.key
-//		int RequiredType = lua_getfield(L, -1, "value");
-
 		int RequiredType;
 		int HasDefault = ValueHasDefault(L, -1, &RequiredType);
 	
 		// entry.key
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
-//		lua_pop(L, 1);
 
 		if (!HasDefault) {
 			if (ActualType != RequiredType) {
@@ -110,11 +107,17 @@ int AddPluginEntry(lua_State *L) {
 
 	lua_pop(L, 1);
 
+	lua_getfield(L, 1, "entries");
+
 	lua_pushvalue(L, 2);
 	write_verbose(Debug, "Writing entry of %d values to entry %s",
 				ValCount, lua_tostring(L, -1));
-	lua_pushvalue(L, -2);
-	lua_settable(L, 1);
+	lua_pushvalue(L, -3);
+	lua_settable(L, -3);
+
+	lua_pop(L, 1);
+
+	assert(top == lua_gettop(L));
 	return 0;
 }
 
@@ -124,6 +127,7 @@ int AddPluginEntry(lua_State *L) {
 // Anything that's nil will take the default value.
 // Anything that shares a type with the default will override, and anything else will create an error.
 int CreateLuaPlugin(lua_State *L) {
+	int top = lua_gettop(L);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
 	lua_newtable(L);
@@ -135,6 +139,8 @@ int CreateLuaPlugin(lua_State *L) {
 
 	lua_newtable(L);
 	lua_setfield(L, -2, "entries");
+
+	assert(top+1 == lua_gettop(L));
 	return 1;
 }
 
