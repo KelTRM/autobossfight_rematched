@@ -51,11 +51,12 @@ void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 int AddPluginEntry(lua_State *L) {
 	int top = lua_gettop(L);
 
+	int ValCount = 0;
+
 	AssertParameters(L, "plugin:NewEntry", 3,
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
-	// assume upvalues to be correct, as they should only come from CreateLuaPlugin
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
 
@@ -100,10 +101,20 @@ int AddPluginEntry(lua_State *L) {
 			TypeError(L, RequiredType, ActualType);
 		}
 
+		write_verbose(Debug, "Copying key of %s to table", lua_tostring(L, -2));
 		lua_settable(L, -5);
+		ValCount++;
 
 		lua_pop(L, 3);
 	}
+
+	lua_pop(L, 1);
+
+	lua_pushvalue(L, 2);
+	write_verbose(Debug, "Writing entry of %d values to entry %s",
+				ValCount, lua_tostring(L, -1));
+	lua_pushvalue(L, -2);
+	lua_settable(L, 1);
 	return 0;
 }
 
