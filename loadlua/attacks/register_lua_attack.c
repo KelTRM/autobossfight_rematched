@@ -226,6 +226,7 @@ int RegisterLuaAttacks(lua_State *L) {
 
 	size_t RegistrationCount = 0;
 	size_t RegistrationsProvided = lua_rawlen(L, -1);
+	write_verbose(Debug, "RegistrationsProvided=%d", RegistrationsProvided);
 
 	int top = lua_gettop(L);
 

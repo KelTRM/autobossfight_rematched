@@ -57,6 +57,8 @@ int AddPluginEntry(lua_State *L) {
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
+	lua_getfield(L, 2, "entries");
+
 
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
@@ -65,7 +67,7 @@ int AddPluginEntry(lua_State *L) {
 	while (lua_next(L, table) != 0) {
 		int KeyType = lua_type(L, -1);
 
-		write_verbose(Debug, "Checking entry of key=%s.",
+		write_verbose(Debug, "Checking entry of key=%s",
 				lua_tostring(L, -2));
 
 		if (KeyType != LUA_TTABLE) {
@@ -105,17 +107,16 @@ int AddPluginEntry(lua_State *L) {
 		lua_pop(L, 3);
 	}
 
+	int len = lua_rawlen(L, -2);
+	lua_rawseti(L, -2, len+1);
 	lua_pop(L, 1);
+	
+//	lua_pushvalue(L, 2);
+//	write_verbose(Debug, "Writing entry of %d values to entry %s",
+//				ValCount, lua_tostring(L, -1));
+//	lua_pushvalue(L, -3);
+//	lua_settable(L, -3);
 
-	lua_getfield(L, 1, "entries");
-
-	lua_pushvalue(L, 2);
-	write_verbose(Debug, "Writing entry of %d values to entry %s",
-				ValCount, lua_tostring(L, -1));
-	lua_pushvalue(L, -3);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1);
 
 	assert(top == lua_gettop(L));
 	return 0;
