@@ -90,6 +90,7 @@ int AddPluginEntry(lua_State *L) {
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
 
+		write_verbose(Debug, "HasDefault = %d", HasDefault);
 		if (!HasDefault) {
 			if (ActualType != RequiredType) {
 				TypeError(L, RequiredType, ActualType);

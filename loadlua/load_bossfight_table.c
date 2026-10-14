@@ -8,6 +8,7 @@
 //};
 
 void DefineAttackTable(lua_State *L);
+void DefineTransformationTable(lua_State *L);
 
 // pushes bossfight table to top of stack
 void LoadBossfightTable(lua_State *L) {
@@ -20,6 +21,9 @@ void LoadBossfightTable(lua_State *L) {
 
 	DefineAttackTable(L);
 	lua_setfield(L, -2, "attack");
+
+	DefineTransformationTable(L);
+	lua_setfield(L, -2, "transformation");
 
 	lua_setglobal(L, "bossfight");
 }
