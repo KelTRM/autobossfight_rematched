@@ -1,5 +1,9 @@
 #pragma once
 
+#include<lua.h>
+
+int CreateLuaPlugin(lua_State *L);
+
 #define PluginField(L, key, type, pushvalue, has_default, lua_name) do{	\
 	lua_newtable((L));						\
 	lua_pushboolean((L), (has_default));				\
