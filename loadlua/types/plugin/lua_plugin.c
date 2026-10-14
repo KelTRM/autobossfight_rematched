@@ -7,16 +7,18 @@
 
 // takes table from idx, returns if there's a default
 // if DefaultType isn't NULL, sets it to the type of the value, and pushes the value
-int ValueHasDefault(lua_State *L, int idx, int *DefaultType) {
+int ValueHasDefault(lua_State *L, int idx, int *RequiredType) {
 	lua_getfield(L, idx, "has_default");
 	int res = lua_toboolean(L, -1);
+
 	lua_pop(L, 1);
 
-	if (DefaultType != NULL) {
-		*DefaultType = lua_getfield(L, idx, "value");
-//		lua_pop(L, 1);
+	if (RequiredType != NULL) {
+		lua_getfield(L, idx, "type");
+		*RequiredType = lua_tointeger(L, -1);
+		lua_pop(L, 1);
 	}
-
+	
 	return res;
 }
 
@@ -57,11 +59,13 @@ int AddPluginEntry(lua_State *L) {
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
-	lua_getfield(L, 2, "entries");
-
+	int tp=lua_getfield(L, 1, "entries");
+	write_verbose(Debug, "type=%s", lua_typename(L, tp));
 
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
+
+	write_verbose(Debug, "top=%d", lua_gettop(L));
 
 	lua_pushnil(L);
 	while (lua_next(L, table) != 0) {
@@ -78,13 +82,13 @@ int AddPluginEntry(lua_State *L) {
 		}
 
 		int RequiredType;
-		int HasDefault = ValueHasDefault(L, -1, &RequiredType);
+		int Default = ValueHasDefault(L, -1, &RequiredType);
 	
 		// entry.key
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
 
-		if (!HasDefault) {
+		if (Default == LUA_TNONE) {
 			if (ActualType != RequiredType) {
 				TypeError(L, RequiredType, ActualType);
 			}
@@ -100,15 +104,22 @@ int AddPluginEntry(lua_State *L) {
 			TypeError(L, RequiredType, ActualType);
 		}
 
-		write_verbose(Debug, "Copying key of %s to table", lua_tostring(L, -2));
+		write_verbose(Debug, "Copying key of %s to table with type %s",
+				lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
 		lua_settable(L, -5);
 		ValCount++;
 
+		write_verbose(Debug, "(pre) top=%d", lua_gettop(L));
 		lua_pop(L, 3);
+		write_verbose(Debug, "(post)top=%d", lua_gettop(L));
 	}
 
-	int len = lua_rawlen(L, -2);
-	lua_rawseti(L, -2, len+1);
+//	int len = lua_rawlen(L, -2);
+	write_verbose(Debug, "Setting type %s @ idx=%d to value of type %s with top=%d",
+			lua_typename(L, lua_type(L, -2)), 1,
+			lua_typename(L, lua_type(L, -1)),
+			lua_gettop(L));
+	lua_rawseti(L, -2, 1);
 	lua_pop(L, 1);
 	
 //	lua_pushvalue(L, 2);

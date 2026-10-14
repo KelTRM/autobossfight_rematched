@@ -45,3 +45,19 @@ void DefineAttackTable(lua_State *L) {
 	lua_pushcclosure(L, CreateLuaPlugin, 1);
 	lua_setfield(L, -2, "NewPlugin");
 }
+
+#define Field(L, type, pushvalue, has_default) do{	\
+	lua_newtable((L));				\
+	lua_pushboolean((L), (has_default));		\
+	lua_setfield((L), -2, "default_type");		\
+	pushvalue;					\
+	lua_setfield((L), -2, "value");			\
+	lua_pushinteger((L), (type));			\
+	lua_setfield((L), -2, "type");			\
+} while(0)
+
+void GetAttackUptable(lua_State *L) {
+	lua_newtable(L);
+
+	Field(L, LUA_TFUNCTION, lua_pushnil(L), 1);
+}
