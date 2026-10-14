@@ -33,17 +33,6 @@ void DefineAttackTable(lua_State *L) {
 	lua_newtable(L);
 	luaL_setfuncs(L, fns, 0);
 
-//	lua_newtable(L);
-
-//	lua_newtable(L);
-//	lua_pushstring(L, "lmfaooooo");
-//	lua_setfield(L, -2, "value");
-
-//	lua_pushboolean(L, 2);
-//	lua_setfield(L, -2, "has_default");
-
-//	lua_setfield(L, -2, "CanAttack");
-
 	GetAttackUptable(L);
 	lua_pushcclosure(L, CreateLuaPlugin, 1);
 	lua_setfield(L, -2, "NewPlugin");
@@ -52,7 +41,7 @@ void DefineAttackTable(lua_State *L) {
 #define Field(L, key, type, pushvalue, has_default, lua_name) do{	\
 	lua_newtable((L));						\
 	lua_pushboolean((L), (has_default));				\
-	lua_setfield((L), -2, "default_type");				\
+	lua_setfield((L), -2, "has_default");				\
 	pushvalue;							\
 	lua_setfield((L), -2, "value");					\
 	lua_pushinteger((L), (type));					\
@@ -65,10 +54,10 @@ void DefineAttackTable(lua_State *L) {
 void GetAttackUptable(lua_State *L) {
 	lua_newtable(L);
 
-	Field(L, "AttackName",	LUA_TSTRING,  lua_pushstring(L, "nil"),0, "disp_name");
-	Field(L, "RequiredEnergy",	LUA_TNUMBER,  lua_pushinteger(L,0), 1,    "minimum_energy");
-	Field(L, "EarliestRound",	LUA_TNUMBER,  lua_pushinteger(L,0), 1,    "first_round");
-	Field(L, "CanAttack",	LUA_TFUNCTION,lua_pushnil(L), 1,	     "can_attack");
-	Field(L, "AttackHandler",	LUA_TFUNCTION,lua_pushnil(L), 1,	     "attack_handler");
-	Field(L, "id",		LUA_TNUMBER,  lua_pushinteger(L,0), 1,    "id");
+	Field(L, "AttackName",     LUA_TSTRING,  lua_pushnil(L),		0,"disp_name");
+	Field(L, "RequiredEnergy", LUA_TNUMBER,  lua_pushinteger(L,0),	1,"minimum_energy");
+	Field(L, "EarliestRound",  LUA_TNUMBER,  lua_pushinteger(L,0),	1,"first_round");
+	Field(L, "CanAttack",      LUA_TFUNCTION,lua_pushnil(L),		1,"can_attack");
+	Field(L, "AttackHandler",  LUA_TFUNCTION,lua_pushnil(L),		1,"attack_handler");
+	Field(L, "id",	      LUA_TNUMBER,  lua_pushinteger(L,0),	1,"id");
 }

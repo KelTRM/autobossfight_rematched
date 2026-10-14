@@ -84,13 +84,13 @@ int AddPluginEntry(lua_State *L) {
 		}
 
 		int RequiredType;
-		int Default = ValueHasDefault(L, -1, &RequiredType);
+		int HasDefault = ValueHasDefault(L, -1, &RequiredType);
 	
 		// entry.key
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
 
-		if (Default == LUA_TNONE) {
+		if (!HasDefault) {
 			if (ActualType != RequiredType) {
 				TypeError(L, RequiredType, ActualType);
 			}
