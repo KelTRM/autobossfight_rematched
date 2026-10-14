@@ -18,6 +18,8 @@ int ValueHasDefault(lua_State *L, int idx, int *RequiredType) {
 		*RequiredType = lua_tointeger(L, -1);
 		lua_pop(L, 1);
 	}
+
+	lua_getfield(L, idx, "value");
 	
 	return res;
 }
@@ -94,19 +96,21 @@ int AddPluginEntry(lua_State *L) {
 			}
 		}
 
-		lua_pushvalue(L, -4);
+		int type = lua_getfield(L, -3, "name");
+		if (type != LUA_TSTRING) TypeError(L, LUA_TSTRING, type);
+//		lua_pushvalue(L, -4);
 		
 		if (ActualType == LUA_TNIL) {
-			lua_pushvalue(L, -2);
+			lua_pushvalue(L, -3);
 		} else if (ActualType == RequiredType) {
-			lua_pushvalue(L, -1);
+			lua_pushvalue(L, -2);
 		} else {
 			TypeError(L, RequiredType, ActualType);
 		}
 
 		write_verbose(Debug, "Copying key of %s to table with type %s",
-				lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
-		lua_settable(L, -5);
+			lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
+		lua_settable(L, -7);
 		ValCount++;
 
 		write_verbose(Debug, "(pre) top=%d", lua_gettop(L));
@@ -114,6 +118,8 @@ int AddPluginEntry(lua_State *L) {
 		write_verbose(Debug, "(post)top=%d", lua_gettop(L));
 	}
 
+	lua_pushvalue(L, 2);
+	lua_setfield(L, -2, "int_name");
 //	int len = lua_rawlen(L, -2);
 	write_verbose(Debug, "Setting type %s @ idx=%d to value of type %s with top=%d",
 			lua_typename(L, lua_type(L, -2)), 1,
