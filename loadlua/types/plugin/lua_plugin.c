@@ -71,8 +71,8 @@ int AddPluginEntry(lua_State *L) {
 	while (lua_next(L, table) != 0) {
 		int KeyType = lua_type(L, -1);
 
-		write_verbose(Debug, "Checking entry of key=%s",
-				lua_tostring(L, -2));
+//		write_verbose(Debug, "Checking entry of key=%s",
+//				lua_tostring(L, -2));
 
 		if (KeyType != LUA_TTABLE) {
 			write_log(Error, "Expected key %s of type table. got %s instead.",
@@ -113,6 +113,9 @@ int AddPluginEntry(lua_State *L) {
 
 		lua_pop(L, 3);
 	}
+
+	write_verbose(Debug, "Assigned %d values to entry '%s'",
+				ValCount, lua_tostring(L, 2));
 
 	lua_pushvalue(L, 2);
 	lua_setfield(L, -2, "int_name");
