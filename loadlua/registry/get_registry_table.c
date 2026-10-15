@@ -21,7 +21,7 @@ int GetRegistryTable(lua_State *L, const char *Location) {
 			Text[i] = '\0';
 
 			int type = lua_getfield(L, -1, Start);
-			write_verbose(Debug, "Reading field %s", Start);
+//			write_verbose(Debug, "Reading field %s", Start);
 			if (type != LUA_TTABLE)
 				goto error;
 
