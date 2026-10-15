@@ -61,13 +61,11 @@ int AddPluginEntry(lua_State *L) {
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
-	int tp=lua_getfield(L, 1, "entries");
-	write_verbose(Debug, "type=%s", lua_typename(L, tp));
+	lua_getfield(L, 1, "entries");
 
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
 
-	write_verbose(Debug, "top=%d", lua_gettop(L));
 
 	lua_pushnil(L);
 	while (lua_next(L, table) != 0) {
@@ -90,7 +88,6 @@ int AddPluginEntry(lua_State *L) {
 		lua_pushvalue(L, -3);
 		int ActualType = lua_gettable(L, 3);
 
-		write_verbose(Debug, "HasDefault = %d", HasDefault);
 		if (!HasDefault) {
 			if (ActualType != RequiredType) {
 				TypeError(L, RequiredType, ActualType);
@@ -114,27 +111,14 @@ int AddPluginEntry(lua_State *L) {
 		lua_settable(L, -7);
 		ValCount++;
 
-		write_verbose(Debug, "(pre) top=%d", lua_gettop(L));
 		lua_pop(L, 3);
-		write_verbose(Debug, "(post)top=%d", lua_gettop(L));
 	}
 
 	lua_pushvalue(L, 2);
 	lua_setfield(L, -2, "int_name");
-//	int len = lua_rawlen(L, -2);
-	write_verbose(Debug, "Setting type %s @ idx=%d to value of type %s with top=%d",
-			lua_typename(L, lua_type(L, -2)), 1,
-			lua_typename(L, lua_type(L, -1)),
-			lua_gettop(L));
+
 	lua_rawseti(L, -2, 1);
 	lua_pop(L, 1);
-	
-//	lua_pushvalue(L, 2);
-//	write_verbose(Debug, "Writing entry of %d values to entry %s",
-//				ValCount, lua_tostring(L, -1));
-//	lua_pushvalue(L, -3);
-//	lua_settable(L, -3);
-
 
 	assert(top == lua_gettop(L));
 	return 0;
