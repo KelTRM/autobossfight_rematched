@@ -1,4 +1,5 @@
 #include<lua.h>
+#include"lua_plugin.h"
 #include"../../../debug/debug.h"
 
 #define LUA_PLUGINS_ADDR	"bossfight.plugins"
@@ -6,8 +7,6 @@
 void AssertUpvalues(lua_State *L, size_t Count, ...);
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 int GetRegistryTable(lua_State *L, const char *Location);
-
-[[noreturn]] void TypeError(lua_State *L, int Expected, int Required);
 
 // Takes 1 upvalue denoting which plugin table to use
 // Takes 1 parameter for the value to register
@@ -38,6 +37,4 @@ int RegisterPlugin(lua_State *L) {
 					lua_typename(L, type));
 		TypeError(L, LUA_TTABLE, type);
 	}
-
-
 }

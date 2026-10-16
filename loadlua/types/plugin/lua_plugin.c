@@ -4,6 +4,7 @@
 #include<lua.h>
 #include<lauxlib.h>
 #include"../../../debug/debug.h"
+#include"lua_plugin.h"
 
 // takes table from idx, returns if there's a default
 // if DefaultType isn't NULL, sets it to the type of the value, and pushes the value
@@ -40,7 +41,7 @@ void AssertUpvalues(lua_State *L, size_t Count, ...) {
 	}
 }
 
-[[noreturn]] void TypeError(lua_State *L, int Expected, int Required) {
+sagn_noreturn void TypeError(lua_State *L, int Expected, int Required) {
 	lua_pushfstring(L, "Expected type %s. Got %s instead.",
 				lua_typename(L, Expected),
 				lua_typename(L, Required));
