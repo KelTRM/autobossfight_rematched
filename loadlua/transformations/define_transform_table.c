@@ -34,6 +34,6 @@ void GetTransformUptable(lua_State *L) {
 	PluginField(L, "cost",	LUA_TNUMBER, lua_pushnil(L), 0, "cost");
 	PluginField(L, "upkeep",	LUA_TNUMBER, lua_pushnil(L), 0, "upkeep");
 	PluginField(L, "multiplier",	LUA_TNUMBER, lua_pushnil(L), 0, "multiplier");
-	PluginField(L, "on_damage",	LUA_TNUMBER, lua_pushnil(L), 1, "on_damage");
-	PluginField(L, "on_upkeep",	LUA_TNUMBER, lua_pushnil(L), 1, "on_upkeep");
+	PluginField(L, "on_damage",	LUA_TFUNCTION, lua_pushnil(L), 1, "on_damage");
+	PluginField(L, "on_upkeep",	LUA_TFUNCTION, lua_pushnil(L), 1, "on_upkeep");
 }
