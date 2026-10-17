@@ -16,6 +16,9 @@ int RegisterPlugin(lua_State *L) {
 
 	// don't care about formatting. just assume it to be correct and let the user suffer if it's fucked up. It'd be their fault anyways
 	
+	// plugin table
+	lua_newtable(L);
+
 	int res = GetRegistryTable(L, LUA_PLUGINS_ADDR);
 	if (!res) {
 		write_log(Error, "Failed to load plugins table. Is the registry configured correctly?");
@@ -37,4 +40,9 @@ int RegisterPlugin(lua_State *L) {
 					lua_typename(L, type));
 		TypeError(L, LUA_TTABLE, type);
 	}
+
+	// remove the plugin table
+	lua_remove(L, -2);
+
+	// add the input entries to the plugin table
 }
