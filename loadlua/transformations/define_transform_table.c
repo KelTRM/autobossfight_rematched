@@ -3,6 +3,7 @@
 #include"../types/plugin/lua_plugin.h"
 
 void GetTransformUptable(lua_State *L);
+int RegisterPlugin(lua_State *L);
 
 void DefineTransformationTable(lua_State *L) {
 	luaL_Reg Funcs[] = {
@@ -15,6 +16,10 @@ void DefineTransformationTable(lua_State *L) {
 	GetTransformUptable(L);
 	lua_pushcclosure(L, CreateLuaPlugin, 1);
 	lua_setfield(L, -2, "NewPlugin");
+
+	lua_pushstring(L, "transformation");
+	lua_pushcclosure(L, RegisterPlugin, 1);
+	lua_setfield(L, -2, "RegisterPlugin");
 }
 //    ["name"]="example"          -- The name of the transformation
 //    ["cost"]=10                 -- The cost to transform
