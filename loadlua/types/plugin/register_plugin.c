@@ -8,6 +8,13 @@ void AssertUpvalues(lua_State *L, size_t Count, ...);
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 int GetRegistryTable(lua_State *L, const char *Location);
 
+#define TypeAssert(name, expected, recieved)	do {					\
+	if ((expected) == (recieved)) break;						\
+	write_log(Error, "Expected %s of type %s. Recieved type %s instead",		\
+			(name), lua_typename(L, (expected)), lua_typename(L, (recieved)));	\
+	TypeError(L, (expected), (recieved));						\
+} while(0)
+
 // Takes 1 upvalue denoting which plugin table to use
 // Takes 1 parameter for the value to register
 int RegisterPlugin(lua_State *L) {
@@ -16,33 +23,65 @@ int RegisterPlugin(lua_State *L) {
 
 	// don't care about formatting. just assume it to be correct and let the user suffer if it's fucked up. It'd be their fault anyways
 	
-	// plugin table
-	lua_newtable(L);
 
 	int res = GetRegistryTable(L, LUA_PLUGINS_ADDR);
 	if (!res) {
-		write_log(Error, "Failed to load plugins table. Is the registry configured correctly?");
+		write_log(Error, "Failed to load plugins table. "
+				"Is the registry configured correctly?");
+		TypeError(L, LUA_TTABLE, LUA_TNONE);
 	}
 
-	if (lua_type(L, -1) != LUA_TTABLE) {
-		write_log(Error, "Expected table REGISTRY." LUA_PLUGINS_ADDR " of type table. "
-				"Recieved type %s instead", lua_typename(L, lua_type(L, -1)));
-		TypeError(L, LUA_TTABLE, lua_type(L, -1));
-	}
+	TypeAssert("REGISTRY." LUA_PLUGINS_ADDR, LUA_TTABLE, lua_type(L, -1));
 
 	lua_pushvalue(L, lua_upvalueindex(1));
 	int type = lua_gettable(L, -2);
 
-	if (type != LUA_TTABLE) {
-		write_log(Error, "Expected table REGISTRY." LUA_PLUGINS_ADDR ".%s "
-				"of type table. Recieved type %s instead",
-					lua_tostring(L, lua_upvalueindex(1)),
-					lua_typename(L, type));
-		TypeError(L, LUA_TTABLE, type);
-	}
+	TypeAssert(lua_tostring(L, lua_upvalueindex(1)), LUA_TTABLE, type);
 
-	// remove the plugin table
 	lua_remove(L, -2);
+	
+	// plugin table
+	lua_newtable(L);
 
 	// add the input entries to the plugin table
+	type = lua_getfield(L, 2, "entries");
+
+	int Registrations = 0;
+
+	// shouldn't need to worry about integer overflows (especially at 2^63), but
+	// it's an int to be sure. Pretty sure it ain't a problem anyways since the
+	// lua API uses 32-bit integers for the lua_rawlen result anyways but better be
+	// safe than sorry I guess.
+	int Entries = lua_rawlen(L, -1);
+	for (ssize_t i = 1; i <= Entries; i++) {
+		type = lua_rawgeti(L, -1, i);
+		if (type != LUA_TTABLE) {
+			write_verbose(Info, "Skipping non-table entry @ index %zi.", i);
+			lua_pop(L, 1);
+			continue;
+		}
+
+		type = lua_getfield(L, -1, "int_name");
+		if (type != LUA_TSTRING) {
+			write_verbose(Warning, "Malformed entry table @ idx=%d. Skipping", i);
+			lua_pop(L, 2);
+			continue;
+		}
+
+		Registrations++;
+
+		lua_pushvalue(L, -2);
+		lua_settable(L, -5);
+
+		lua_pop(L, 1);
+	}
+
+	lua_pop(L, 1);
+
+	int PluginIdx = lua_rawlen(L, -2) + 1;
+	lua_rawseti(L, -2, PluginIdx);
+	lua_pop(L, 1);
+
+	lua_pushinteger(L, Registrations);
+	return 1;
 }

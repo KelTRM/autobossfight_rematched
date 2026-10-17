@@ -14,7 +14,7 @@
 
 size_t RegisterAttackPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar);
 size_t RegisterLuaPlugins(RegistrationMgr_t *Manager, lua_State *L);
-size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t PluginIndex);
+size_t RegisterAttackPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t PluginIndex);
 
 size_t LoadLuaAttacks(void *LuaState, RegistrationMgr_t *Manager) {
 	struct BossfightLuaState *State = LuaState;
@@ -39,7 +39,7 @@ size_t RegisterLuaPlugins(RegistrationMgr_t *Manager, lua_State *L) {
 	size_t PluginCount = lua_rawlen(L, -1);
 	for (size_t i = 0; i < PluginCount; i++) {
 		lua_rawgeti(L, -1, i+1);
-		RegisterPlugin(Manager, L, i+1);
+		RegisterAttackPlugin(Manager, L, i+1);
 		lua_pop(L, 1);
 	}
 
@@ -50,7 +50,7 @@ size_t RegisterLuaPlugins(RegistrationMgr_t *Manager, lua_State *L) {
 Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx);
 
 // Plugin array @ top of stack
-size_t RegisterPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index) {
+size_t RegisterAttackPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t Index) {
 	size_t RequiredAttacks=0;
 	AttackID_t MaxID = 0;
 

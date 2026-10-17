@@ -6,6 +6,7 @@
 
 int RegisterLuaAttacks(lua_State *L);
 int DefineAttackDataTable(lua_State *L);
+int RegisterPlugin(lua_State *L);
 
 /*
  * -- ATTACK TABLE --
@@ -23,7 +24,7 @@ void GetAttackUptable(lua_State *L);
 
 void DefineAttackTable(lua_State *L) {
 	luaL_Reg fns[] = {
-		{ "RegisterPlugin", RegisterLuaAttacks },
+//		{ "RegisterPlugin", RegisterLuaAttacks },
 		{ "AttackData", DefineAttackDataTable },
 		{ NULL, NULL }
 	};
@@ -34,6 +35,10 @@ void DefineAttackTable(lua_State *L) {
 	GetAttackUptable(L);
 	lua_pushcclosure(L, CreateLuaPlugin, 1);
 	lua_setfield(L, -2, "NewPlugin");
+
+	lua_pushstring(L, "attack");
+	lua_pushcclosure(L, RegisterPlugin, 1);
+	lua_setfield(L, -2, "RegisterPlugin");
 }
 
 void GetAttackUptable(lua_State *L) {
