@@ -51,12 +51,13 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	
 	Transformation_t *Transformation = AskTransformation();
 
+	const char *Name = Transformation->TransformationName;
 	if (Transformation->Cost > Target->Energy) {
-		printf("Insufficient energy to use form [%s]\n", Transformation->Name);
+		printf("Insufficient energy to use form [%s]\n", Name);
 		return NothingAttack.Attack(Self, Target, Attacker);
 	}
 	
-	printf("Using transformation %s.\n", Transformation->Name);
+	printf("Using transformation %s.\n", Name);
 
 	Target->EntityTransformation = Transformation;
 	RemoveEnergy(Target, Transformation->Cost);
@@ -65,6 +66,6 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 }
 
 static void Announcer(AttackData_t *d) {
-	printf("%s transformed into %s.\n",
-			d->Target->Name, d->Target->EntityTransformation->Name);
+	printf("%s transformed into %s.\n", d->Target->Name,
+			d->Target->EntityTransformation->TransformationName);
 }

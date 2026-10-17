@@ -18,7 +18,7 @@ Transformation_t *AskTransformation(void) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
 		MaxFormLength = max(
 			MaxFormLength,
-			strlen(CurrentTransformation->Name)
+			strlen(CurrentTransformation->TransformationName)
 		);
 	}
 
@@ -29,7 +29,7 @@ Transformation_t *AskTransformation(void) {
 		
 		char *FormBuffer = alloca(MaxFormLength+3);
 		snprintf(FormBuffer, MaxFormLength+3,
-				"[%s]", CurrentTransformation->Name);
+				"[%s]", CurrentTransformation->TransformationName);
 
 		char *FormDisp = PadRight(FormBuffer, MaxFormLength+2, ' ');
 		bprintf(Buffer, "To use form %s use %lu -- %s (%lu cost. %lu%% upkeep)\n",

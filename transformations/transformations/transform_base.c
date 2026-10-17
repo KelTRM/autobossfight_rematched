@@ -4,6 +4,7 @@
 
 #define TRANSFORMATION_ID		1
 #define TRANSFORMATION_NAME		"Base"
+#define TRANSFORMATION_IDENTIFIER	"base"
 #define TRANSFORMATION_DESCRIPTION	"Default form - Does nothing"
 
 #define TRANSFORMATION_COST		0
@@ -14,7 +15,8 @@
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
 const Transformation_t BaseTransformation = {
-	.Name=TRANSFORMATION_NAME,
+	.TransformationName=TRANSFORMATION_NAME,
+	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,
 
 	.Cost=TRANSFORMATION_COST,

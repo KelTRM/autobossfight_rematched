@@ -4,6 +4,7 @@
 
 #define TRANSFORMATION_ID		2
 #define TRANSFORMATION_NAME		"Super"
+#define TRANSFORMATION_IDENTIFIER	"super"
 #define TRANSFORMATION_DESCRIPTION	"Does 2x damage"
 
 #define TRANSFORMATION_COST		20
@@ -14,7 +15,8 @@
 static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
 const Transformation_t SuperTransformation = {
-	.Name=TRANSFORMATION_NAME,
+	.TransformationName=TRANSFORMATION_NAME,
+	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,
 
 	.Cost=TRANSFORMATION_COST,
