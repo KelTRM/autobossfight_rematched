@@ -10,6 +10,8 @@
 //	PluginField(L, "on_damage",	LUA_TNUMBER, lua_pushnil(L), 1, "on_damage");
 //	PluginField(L, "on_upkeep",	LUA_TNUMBER, lua_pushnil(L), 1, "on_upkeep");
 
+
+
 Transformation_t GetTransformationFromTable(lua_State *L, int idx) {
 	Transformation_t Transformation = { 0 };
 

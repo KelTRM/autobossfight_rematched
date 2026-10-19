@@ -30,4 +30,8 @@ sagn_noreturn void TypeError(lua_State *L, int Expected, int Required);
 	lua_setfield((L), -2, key);					\
 } while(0)
 
-
+struct LuaPluginLocation {
+	lua_State *L;
+	int PluginID;
+	const char *PluginKey;
+};
