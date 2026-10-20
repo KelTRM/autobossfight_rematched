@@ -90,6 +90,7 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 		}
 	}
 
+	return Registrations;
 }
 
 int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Location);
