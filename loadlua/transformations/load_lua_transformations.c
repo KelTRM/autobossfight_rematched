@@ -80,6 +80,13 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 				offsetof(Transformation_t, ID),
 				sizeof(tbl)
 			);
+
+			if (Count == 0) {
+				free(tbl.LuaData);
+			}
+
+			EntryCount += Count;
+			lua_pop(L, 1);
 		}
 	}
 
