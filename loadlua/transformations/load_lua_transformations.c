@@ -85,7 +85,7 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 				free(tbl.LuaData);
 			}
 
-			EntryCount += Count;
+			Registrations += Count;
 			lua_pop(L, 1);
 		}
 	}
