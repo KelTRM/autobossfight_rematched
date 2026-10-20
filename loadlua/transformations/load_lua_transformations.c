@@ -77,7 +77,7 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
 				Plugin, &t,
-				offsetof(Transformation_t, ID),
+				(void*)offsetof(Transformation_t, ID),
 				sizeof(tbl)
 			);
 
