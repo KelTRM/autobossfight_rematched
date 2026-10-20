@@ -8,6 +8,7 @@
 #include"../../attacks/attacks.h"
 #include"lua_registration.h"
 #include"types/lua_types.h"
+#include"../types/plugin/lua_plugin.h"
 #include"../debug/debug.h"
 #include<stdlib.h>
 #include<string.h>
@@ -18,6 +19,7 @@ const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValu
 lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
 AttackData_t ReadAttackDataTable(lua_State *L);
 int GetAttackPluginsTable(lua_State *L);
+int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Location);
 
 LuaAttackData_t AppendAttackData(lua_State *L);
 
@@ -34,18 +36,25 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		return (AttackData_t){ 0 };
 	}
 
-	int type;
+//	int type;
 
-	type = GetAttackPluginsTable(L);
-	assert(type == 1);
+//	type = GetAttackPluginsTable(L);
+//	assert(type == 1);
 
 	// Get the plugin
-	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
-	assert(type == LUA_TTABLE);
+//	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
+//	assert(type == LUA_TTABLE);
 
-	lua_getfield(L, -1, Attack->AttackPluginKey);
+//	lua_getfield(L, -1, Attack->AttackPluginKey);
 
-	lua_remove(L, -2);
+//	lua_remove(L, -2);
+
+	struct LuaPluginLocation Location = {
+		.L=L,
+		.PluginID=Attack->AttackPluginIndex,
+		.PluginKey=Attack->AttackPluginKey
+	};
+	GetPluginEntry("attack", &Location);
 
 	// attack arg
 	lua_newtable(L);
@@ -58,7 +67,7 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	CreateEntityTable(L, Attacker);
 	lua_setfield(L, -2, "attacker");
 
-	type = lua_getfield(L, -2, "attack_handler");
+	int type = lua_getfield(L, -2, "attack_handler");
 	if (type != LUA_TFUNCTION) {
 		printf("Not implemented.");
 		write_verbose(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
