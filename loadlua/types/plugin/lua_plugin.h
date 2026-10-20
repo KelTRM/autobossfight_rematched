@@ -1,6 +1,7 @@
 #pragma once
 
 #include<lua.h>
+#include"../../../debug/debug.h"
 
 int CreateLuaPlugin(lua_State *L);
 
@@ -35,3 +36,11 @@ struct LuaPluginLocation {
 	int PluginID;
 	const char *PluginKey;
 };
+
+#define TypeAssert(name, expected, recieved)	do {						\
+	if ((expected) == (recieved)) break;							\
+	write_log(Error, "Expected %s of type %s. Recieved type %s instead",			\
+			(name), lua_typename(L, (expected)), lua_typename(L, (recieved)));	\
+	TypeError(L, (expected), (recieved));							\
+} while(0)
+

@@ -8,13 +8,6 @@ void AssertUpvalues(lua_State *L, size_t Count, ...);
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 int GetRegistryTable(lua_State *L, const char *Location);
 
-#define TypeAssert(name, expected, recieved)	do {					\
-	if ((expected) == (recieved)) break;						\
-	write_log(Error, "Expected %s of type %s. Recieved type %s instead",		\
-			(name), lua_typename(L, (expected)), lua_typename(L, (recieved)));	\
-	TypeError(L, (expected), (recieved));						\
-} while(0)
-
 // Takes 1 upvalue denoting which plugin table to use
 // Takes 1 parameter for the value to register
 int RegisterPlugin(lua_State *L) {
