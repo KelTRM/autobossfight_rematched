@@ -23,7 +23,7 @@ uint64_t Round = 0;
 
 //void InitPlayers(void);
 int InitAttacks(void *Lua);
-size_t InitTransformations(void);
+size_t InitTransformations(void *Lua);
 
 void *InitLua(void);
 void InitEntities(void *Lua);
@@ -47,7 +47,7 @@ int main(void) {
 	int Attacks = InitAttacks(Lua);
 	printf("Initialized %d attacks.\n", Attacks);
 
-	int Transformations = InitTransformations();
+	int Transformations = InitTransformations(Lua);
 	printf("Initialized %d transformations.\n", Transformations);
 
 	int Turn = 0;

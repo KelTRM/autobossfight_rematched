@@ -1,3 +1,5 @@
+#define USE_STD_STRLEN
+
 #include<lua.h>
 #include<stdlib.h>
 #include<stddef.h>
@@ -25,9 +27,11 @@
 int GetRegistryTable(lua_State *L, const char *Location);
 Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const char *Name);
 
+size_t CopyTransformation(Transformation_t *From, Transformation_t *To);
+
 size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
-	struct LuaPluginLocation *State = LuaState;
-	lua_State *L = State->L;
+	struct BossfightLuaState *Lua = LuaState;
+	lua_State *L = Lua->L;
 
 	GetRegistryTable(L, "bossfight.plugins.transformation");
 	size_t PluginCount = lua_rawlen(L, -1);
@@ -42,19 +46,21 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 
 		int EntryCount = 0;
 		int MaxID = 0;
-
 		lua_pushnil(L);
+	
+		type = lua_type(L, -2);
+		write_verbose(Debug, "type(-2)=%s", lua_typename(L, type));
+
 		while (lua_next(L, -2) != 0) {
+			type = lua_type(L, -1);
 			EntryCount++;
 
 			type = lua_getfield(L, -1, "id");
-			if (type != LUA_TNUMBER) {
-				lua_pop(L, 1);
-				continue;
-			};
+			if (type == LUA_TNUMBER) {
+				lua_Integer id = lua_tointeger(L, -1);
+				if (MaxID < id) MaxID = id;
+			}
 
-			lua_Integer id = lua_tointeger(L, -1);
-			if (MaxID < id) MaxID = id;
 			lua_pop(L, 2);
 		}
 
@@ -71,8 +77,15 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 				L, i,
 				lua_tostring(L, -2)
 			);
+
 			Transformation_t *t = malloc(sizeof(Transformation_t));
-			memcpy(t, &tbl, sizeof(tbl));
+//			memcpy(t, &tbl, sizeof(tbl));
+			CopyTransformation(&tbl, t);
+
+			write_verbose(Debug, "ptr=%p, got copy of transformation \"%s\" (%s)",
+					t, t->TransformationName, t->Identifier);
+
+			t->FormDescription = "lua";
 
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
@@ -81,8 +94,14 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 				sizeof(tbl)
 			);
 
+			write_verbose(Debug, "Registered %d forms from Transformation %s",
+					Count, tbl.Identifier);
+
+			free(tbl.LuaData);
 			if (Count == 0) {
-				free(tbl.LuaData);
+				free(t->LuaData);
+				free(t->TransformationName);
+				free(t->Identifier);
 			}
 
 			Registrations += Count;
@@ -114,6 +133,10 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 	GetFieldWithType(L, -1, "name", LUA_TSTRING);
 	Form.TransformationName = (char*)lua_tostring(L, -1);
 	lua_pop(L, 1);
+	
+	GetFieldWithType(L, -1, "int_name", LUA_TSTRING);
+	Form.Identifier = (char*)lua_tostring(L, -1);
+	lua_pop(L, 1);
 
 	GetFieldWithType(L, -1, "cost", LUA_TNUMBER);
 	Form.Cost = lua_tonumber(L, -1);
@@ -121,14 +144,41 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 
 	GetFieldWithType(L, -1, "upkeep", LUA_TNUMBER);
 	Form.Upkeep = lua_tonumber(L, -1);
-	lua_pop(L, -1);
+	lua_pop(L, 1);
 
 	GetFieldWithType(L, -1, "multiplier", LUA_TNUMBER);
 	Form.TransformationMultiplier = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 
+	lua_pop(L, 1);
+
+	write_verbose(Debug, "got entry of { %s,%s,%d,%d,%d }",
+		Form.Identifier, Form.TransformationName,
+		Form.Cost, Form.Upkeep, Form.TransformationMultiplier);
+
 	Form.LuaData = malloc(sizeof(struct LuaPluginLocation));
 	memcpy(Form.LuaData, &Location, sizeof(Location));
 
+//	Form.LuaData = &Location;
+
 	return Form;
+}
+
+// Creates a hard copy of a transformation
+size_t CopyTransformation(Transformation_t *From, Transformation_t *To) {
+	if (To == NULL || From == NULL)
+		return 0;
+	memcpy(To, From, sizeof(Transformation_t));
+	
+	To->TransformationName = malloc(strlen(From->TransformationName)+1);
+	strcpy(To->TransformationName, From->TransformationName);
+
+	To->Identifier = malloc(strlen(From->Identifier)+1);
+	strcpy(To->Identifier, From->Identifier);
+
+	To->LuaData = malloc(sizeof(struct LuaPluginLocation));
+	memcpy(To->LuaData, From->LuaData, sizeof(struct LuaPluginLocation));
+
+
+	return sizeof(Transformation_t);
 }

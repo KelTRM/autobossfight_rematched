@@ -1,9 +1,15 @@
 #include"../attacks.h"
+#include"../../debug/flags.h"
 #include<ui.h>
 
 // easy-to-use attack parameters
 #define ATTACK_MINIMUM_ENERGY		0
+
+#ifndef TRANSFORM_IMMEDIATE
 #define ATTACK_FIRST_AVAILABLE_ROUND	5
+#else
+#define ATTACK_FIRST_AVAILABLE_ROUND	0
+#endif
 #define ATTACK_NAME			"Transform"
 #define ATTACK_IDENTIFIER		"transform"
 

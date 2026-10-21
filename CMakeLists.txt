@@ -50,6 +50,7 @@ target_link_libraries(autobossfight_transformations
 		autobossfight_debug
 		autobossfight_ui_manager
 		autobossfight_registration_manager
+		autobossfight_lua_loader
 )
 
 target_link_libraries(autobossfight_attack_mgr
@@ -65,4 +66,9 @@ target_link_libraries(autobossfight_rematched
 		autobossfight_ui_manager
 		autobossfight_attack_mgr
 		autobossfight_transformations
+)
+
+target_link_libraries(autobossfight_registration_manager
+	PUBLIC
+		autobossfight_debug
 )

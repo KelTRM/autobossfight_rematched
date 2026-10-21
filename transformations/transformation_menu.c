@@ -5,6 +5,7 @@
 #include<strings.h>
 #include"transformation_manager.h"
 #include"../utils/sleep.h"
+#include"../debug/debug.h"
 
 Transformation_t *AskTransformation(void) {
 	BUFHANDLE MainBuffer = ActiveBuffer;
@@ -16,6 +17,7 @@ Transformation_t *AskTransformation(void) {
 	size_t MaxFormLength = 0;
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
+		write_verbose(Debug, "Iterating over %s", CurrentTransformation->TransformationName);
 		MaxFormLength = max(
 			MaxFormLength,
 			strlen(CurrentTransformation->TransformationName)
@@ -26,7 +28,8 @@ Transformation_t *AskTransformation(void) {
 
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
-		
+		write_verbose(Debug, "got ptr=%p", CurrentTransformation);
+
 		char *FormBuffer = alloca(MaxFormLength+3);
 		snprintf(FormBuffer, MaxFormLength+3,
 				"[%s]", CurrentTransformation->TransformationName);
@@ -34,10 +37,15 @@ Transformation_t *AskTransformation(void) {
 		char *FormDisp = PadRight(FormBuffer, MaxFormLength+2, ' ');
 		bprintf(Buffer, "To use form %s use %lu -- %s (%lu cost. %lu%% upkeep)\n",
 			FormDisp,
+//			CurrentTransformation->TransformationName,
 			CurrentTransformation->ID,
-			CurrentTransformation->FormDescription,
-			CurrentTransformation->Cost,
-			CurrentTransformation->Upkeep
+//			1,
+//			CurrentTransformation->FormDescription,
+			NULL,
+			0,
+			0
+//			CurrentTransformation->Cost,
+//			CurrentTransformation->Upkeep
 		);
 
 		free(FormDisp);
