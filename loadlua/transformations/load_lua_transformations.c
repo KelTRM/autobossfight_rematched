@@ -7,8 +7,9 @@
 #include"../../transformations/transformation_manager.h"
 #include"../../registration/registration_allocator.h"
 #include"../lua_bossfight.h"
-#include "strings.h"
-#include "types/plugin/lua_plugin.h"
+#include"strings.h"
+#include"types/plugin/lua_plugin.h"
+#include"../../utils/offset.h"
 
 //	PluginField(L, "name",		LUA_TSTRING, lua_pushnil(L), 0, "name");
 //	PluginField(L, "cost",		LUA_TNUMBER, lua_pushnil(L), 0, "cost");
@@ -89,8 +90,9 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
-				Plugin, &t,
-				(void*)offsetof(Transformation_t, ID),
+				Plugin, t,
+//				(void*)offsetof(Transformation_t, ID),
+				Offset(Transformation_t, ID),
 				sizeof(tbl)
 			);
 
