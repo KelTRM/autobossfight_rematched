@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<alloca.h>
 #include<ui.h>
-#include<strings.h>
+#include"strings.h"
 #include"transformation_manager.h"
 #include"../utils/sleep.h"
 #include"../debug/debug.h"
@@ -15,40 +15,45 @@ Transformation_t *AskTransformation(void) {
 	Transformation_t *CurrentTransformation;
 
 	size_t MaxFormLength = 0;
+
+	TransformationID_t MaxID = 0;
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
-		write_verbose(Debug, "Iterating over %s", CurrentTransformation->TransformationName);
 		MaxFormLength = max(
 			MaxFormLength,
 			strlen(CurrentTransformation->TransformationName)
 		);
+
+		MaxID = max(MaxID, CurrentTransformation->ID);
 	}
 
 	Iterator = OpenTransformationIterator();
+	MaxID = CalculateDigitsInNumber(MaxID);
 
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
-		write_verbose(Debug, "got ptr=%p", CurrentTransformation);
 
 		char *FormBuffer = alloca(MaxFormLength+3);
 		snprintf(FormBuffer, MaxFormLength+3,
 				"[%s]", CurrentTransformation->TransformationName);
 
 		char *FormDisp = PadRight(FormBuffer, MaxFormLength+2, ' ');
-		bprintf(Buffer, "To use form %s use %lu -- %s (%lu cost. %lu%% upkeep)\n",
-			FormDisp,
-//			CurrentTransformation->TransformationName,
-			CurrentTransformation->ID,
-//			1,
-//			CurrentTransformation->FormDescription,
-			NULL,
-			0,
-			0
-//			CurrentTransformation->Cost,
-//			CurrentTransformation->Upkeep
+
+		char *IdBuffer = alloca(MaxID+1);
+		snprintf(IdBuffer, MaxID+3, "%lu",
+				CurrentTransformation->ID);
+
+		char *IdStr = PadLeft(IdBuffer, MaxID, ' ');
+
+		bprintf(Buffer, "To use form %s use %s -- %s (%lu cost. %lu%% upkeep)\n",
+			FormDisp, IdStr,
+			CurrentTransformation->FormDescription,
+			CurrentTransformation->Cost,
+			CurrentTransformation->Upkeep
 		);
 
 		free(FormDisp);
+		free(IdStr);
 	}
 
 	SwitchBuffer(Buffer);
