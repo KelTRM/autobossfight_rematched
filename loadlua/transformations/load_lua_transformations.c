@@ -5,10 +5,12 @@
 #include<stddef.h>
 #include<string.h>
 #include"../../transformations/transformation_manager.h"
+#include"../../transformations/default_transformation.h"
 #include"../../registration/registration_allocator.h"
 #include"../lua_bossfight.h"
 #include"strings.h"
 #include"types/plugin/lua_plugin.h"
+#include"types/lua_types.h"
 #include"../../utils/offset.h"
 
 //	PluginField(L, "name",		LUA_TSTRING, lua_pushnil(L), 0, "name");
@@ -69,8 +71,11 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 
 		PluginID_t Plugin;
 		size_t Blocks = AllocatePlugin(Manager, MaxID, &Plugin);
-		write_verbose(Debug, "Got plugin @ idx=%zu with %zu blocks & PluginID=%ld.",
-				i, Blocks, Plugin);
+		if (Blocks == 0) {
+			// well fuck
+			lua_pop(L, 1);
+			break;
+		}
 
 		lua_pushnil(L);
 		while (lua_next(L, -2) != 0) {
@@ -91,7 +96,6 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
 				Plugin, t,
-//				(void*)offsetof(Transformation_t, ID),
 				Offset(Transformation_t, ID),
 				sizeof(tbl)
 			);
@@ -118,6 +122,8 @@ int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Lo
 
 //typedef Health_t (*GetTransformedAttack_t)(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 //typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
+
+Health_t LuaGetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
 
 Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const char *Name) {
 	struct LuaPluginLocation Location = {
@@ -149,10 +155,23 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 	lua_pop(L, 1);
 
 	GetFieldWithType(L, -1, "multiplier", LUA_TNUMBER);
-	Form.TransformationMultiplier = lua_tonumber(L, -1);
+	Form.TransformationMultiplier = (double)(lua_tonumber(L, -1) * ATTACK_MULTIPLIER_BASE);
 	lua_pop(L, 1);
 
+	int type = lua_getfield(L, -1, "on_damage");
+
+	Form.GetDamage = DefaultGetDamage;
+	if (type == LUA_TFUNCTION)
+		Form.GetDamage = LuaGetDamage;
 	lua_pop(L, 1);
+
+	type = lua_getfield(L, -1, "on_upkeep");
+
+	Form.MaintainTransformation = DefaultMaintainTransformation;
+	if (type == LUA_TFUNCTION)
+		Form.GetDamage = LuaGetDamage;
+//	lua_pop(L, 1);
+	lua_pop(L, 2);
 
 	write_verbose(Debug, "got entry of { %s,%s,%d,%d,%d }",
 		Form.Identifier, Form.TransformationName,
@@ -160,6 +179,7 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 
 	Form.LuaData = malloc(sizeof(struct LuaPluginLocation));
 	memcpy(Form.LuaData, &Location, sizeof(Location));
+
 
 //	Form.LuaData = &Location;
 
@@ -183,4 +203,43 @@ size_t CopyTransformation(Transformation_t *From, Transformation_t *To) {
 
 
 	return sizeof(Transformation_t);
+}
+
+//typedef Health_t (*GetTransformedAttack_t)(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
+Health_t LuaGetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage) {
+	if (Self->LuaData == NULL) return BaseDamage;
+
+	struct LuaPluginLocation *Form = Self->LuaData;
+	lua_State *L = Form->L;
+
+	GetPluginEntry("transformation", Form);
+	lua_getfield(L, -1, "on_damage");
+
+	lua_pushvalue(L, -2);		// self
+	CreateEntityTable(L, From);	// from
+	lua_pushinteger(L, BaseDamage);	// base
+	
+	lua_call(L, 3, 1);
+
+	int type = lua_type(L, -1);
+	TypeAssert("function on_damage()", LUA_TNUMBER, type);
+
+	Health_t Result = lua_tointeger(L, -1);
+	lua_pop(L, 2);
+
+	return Result;
+}
+
+//typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
+Energy_t LuaMaintain(Transformation_t *Self, Entity_t *Possessor) {
+	if (Self->LuaData == NULL) return Self->Upkeep;
+
+	struct LuaPluginLocation *Form = Self->LuaData;
+	lua_State *L = Form->L;
+
+	GetPluginEntry("transformation", Form);
+	lua_getfield(L, -1, "on_upkeep");
+
+	lua_pushvalue(L, -2);
+	
 }

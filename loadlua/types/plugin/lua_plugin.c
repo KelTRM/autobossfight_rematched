@@ -107,16 +107,16 @@ int AddPluginEntry(lua_State *L) {
 			TypeError(L, RequiredType, ActualType);
 		}
 
-		write_verbose(Debug, "Copying key of %s to table with type %s",
-			lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
+//		write_verbose(Debug, "Copying key of %s to table with type %s",
+//			lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
 		lua_settable(L, -7);
 		ValCount++;
 
 		lua_pop(L, 3);
 	}
 
-	write_verbose(Debug, "Assigned %d values to entry '%s'",
-				ValCount, lua_tostring(L, 2));
+//	write_verbose(Debug, "Assigned %d values to entry '%s'",
+//				ValCount, lua_tostring(L, 2));
 
 	lua_pushvalue(L, 2);
 	lua_setfield(L, -2, "int_name");
