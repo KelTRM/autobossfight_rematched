@@ -1,0 +1,250 @@
+#include <assert.h>
+#include <stdio.h>
+#define USE_STD_STRLEN
+
+// oh fuck this is gonna be a pain.
+#include"lua_attack.h"
+#include"../../attacks/attack_manager.h"
+#include"../../attacks/attacks.h"
+#include"lua_registration.h"
+#include"types/lua_types.h"
+#include"../types/plugin/lua_plugin.h"
+#include"../debug/debug.h"
+#include<stdlib.h>
+#include<string.h>
+#include<lua.h>
+
+void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
+const char *ReadLuaTableString(lua_State *L, const char *Name, char *DefaultValue);
+lua_Number ReadLuaTableNumber(lua_State *L, const char *Name, lua_Number DefaultValue);
+AttackData_t ReadAttackDataTable(lua_State *L);
+int GetAttackPluginsTable(lua_State *L);
+int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Location);
+
+LuaAttackData_t AppendAttackData(lua_State *L);
+
+AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
+	assert(Attack != NULL);
+
+	lua_State *L = Attack->L;
+	assert(L != NULL);
+
+	assert(Attack->AttackPluginKey != NULL);
+
+	if (Target == NULL || Attacker == NULL) {
+		return (AttackData_t){ 0 };
+	}
+
+//	int type;
+
+//	type = GetAttackPluginsTable(L);
+//	assert(type == 1);
+
+	// Get the plugin
+//	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
+//	assert(type == LUA_TTABLE);
+
+//	lua_getfield(L, -1, Attack->AttackPluginKey);
+
+//	lua_remove(L, -2);
+
+	struct LuaPluginLocation Location = {
+		.L=L,
+		.PluginID=Attack->AttackPluginIndex,
+		.PluginKey=Attack->AttackPluginKey
+	};
+	GetPluginEntry("attack", &Location);
+
+	// attack arg
+	lua_newtable(L);
+
+	// attack.target
+	CreateEntityTable(L, Target);
+	lua_setfield(L, -2, "target");
+
+	// attack.attacker
+	CreateEntityTable(L, Attacker);
+	lua_setfield(L, -2, "attacker");
+
+	int type = lua_getfield(L, -2, "attack_handler");
+	if (type != LUA_TFUNCTION) {
+		printf("Not implemented.");
+		write_verbose(LuaAttackManager, "Attempted to call unimplemented lua function '%s'",
+				Attack->AttackPluginKey);
+
+		lua_pop(L, 3);
+		return (AttackData_t){ 0 };
+	}
+
+	lua_pushvalue(L, -3);	// target
+	lua_pushvalue(L, -3);	// attacker
+
+	lua_call(L, 2, 1);
+
+	type = lua_type(L, -1);
+	
+	AttackData_t Result = { 0 };
+	if (type == LUA_TTABLE) {
+		Result = ReadAttackDataTable(L);
+		
+		Target->Attack		= Result.Target->Attack;
+		Target->Energy		= Result.Target->Energy;
+		Target->HealthPoints	= Result.Target->HealthPoints;
+
+		Attacker->Attack	= Result.Attacker->Attack;
+		Attacker->Energy	= Result.Attacker->Energy;
+		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
+
+		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
+
+		LuaAttackData_t AttackData = AppendAttackData(L);
+		memcpy(Result.LuaAttackData, &AttackData, sizeof(LuaAttackData_t));
+//		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
+
+		free(Result.Attacker);
+		free(Result.Target);
+	}
+	
+	Result.Attacker = Attacker;
+	Result.Target = Target;
+
+	lua_pop(L, 2);
+
+	return Result;
+}
+
+int GetRegistryTable(lua_State *L, const char *Location);
+
+LuaAttackData_t AppendAttackData(lua_State *L) {
+	//lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
+	int type;// = lua_getfield(L, -1, "attack_data");
+
+	LuaAttackData_t Data = { L, -1 };
+
+	int result = GetRegistryTable(L, "bossfight.attack_data");
+	if (!result) {
+		write_verbose(Warning, "Registry inproperly configured. "
+				"Could not find table REGISTRY.bossfight.attack_handlers");
+		lua_pop(L, 1);
+
+		return Data;
+
+	}
+
+	int len = lua_rawlen(L, -1);
+
+	Data.ArrayIdx = len+1;
+
+	lua_pushvalue(L, -2);
+
+	type = lua_type(L, -1);
+
+	lua_rawseti(L, -2, Data.ArrayIdx);
+
+	lua_pop(L, 1);
+
+	return Data;
+}
+
+Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t PluginIdx) {
+	idx = lua_absindex(L, idx);
+
+	// read the table
+	AttackID_t ID = ReadLuaTableNumber(L, "id", 0);
+	lua_Number FirstRound = ReadLuaTableNumber(L, "first_round", 0);
+	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
+
+	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
+
+	// validate the data
+	if (DisplayName == NULL) {
+		lua_pushstring(L, "invalid attack name.");
+		lua_error(L);
+	}
+
+	if (MinimumEnergy < 0) {
+		lua_pushstring(L, "Invalid value for minimum energy.");
+		lua_error(L);
+	}
+
+	// define the attack's struct
+	Attack_t LuaAttack = { 0 };
+
+	LuaAttack.ID = ID;
+	LuaAttack.FirstAvailableRound = FirstRound;
+	LuaAttack.MinimumEnergy = MinimumEnergy;
+
+	LuaAttack.Attack = LuaAttackManager;
+	LuaAttack.Available = DefaultCanAttack;
+
+	LuaAttack.AppliesToAllies = 0;
+	LuaAttack.AppliesToEnemies = 1;
+	
+	size_t NameLength = strlen(DisplayName);
+
+	LuaAttack.Identifier = NULL;
+	LuaAttack.AttackName = malloc(NameLength + 1);
+
+	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
+
+	LuaAttack_t AttackData = {
+		.L=L,
+		.AttackPluginIndex=PluginIdx,
+		.AttackPluginKey=Key
+	};
+
+	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttack_t));
+	memcpy(LuaAttack.LuaAttackData, &AttackData, sizeof(LuaAttack_t));
+
+	return LuaAttack;
+}
+
+int GetRegistryTable(lua_State *L, const char *Location);
+
+int RegisterLuaAttacks(lua_State *L) {
+	AssertParameters(L, "plugin.attack:RegisterPlugin(plugin)", 2,
+				LUA_TTABLE, LUA_TTABLE);
+
+	int Result = GetRegistryTable(L, "bossfight.plugins.attack");
+
+	if (!Result) {
+		write_log(Error, "REGISTRY.bossfight.plugins.attack uninitialized.");
+		exit(-1);
+	}
+
+	lua_newtable(L);
+//	lua_getfield(L, 2, "current_entries");
+	lua_getfield(L, 2, "entries");
+
+	size_t RegistrationCount = 0;
+	size_t RegistrationsProvided = lua_rawlen(L, -1);
+
+	int top = lua_gettop(L);
+
+	for (size_t i = 1; i <= RegistrationsProvided; i++) {
+		assert(top == lua_gettop(L));
+		// get the registration
+		lua_rawgeti(L, -1, i);
+
+		// get the identifier
+		const char *Ident = ReadLuaTableString(L, "int_name", NULL);
+		if (Ident == NULL)
+			continue;
+
+		lua_setfield(L, -3, Ident);
+		RegistrationCount++;
+
+		// clear the registration
+		lua_pushnil(L);
+		lua_rawseti(L, -2, i);
+	}
+
+	lua_pop(L, 1);
+
+//	write_debug(RegisterLuaAttacks, "Writing to index %d", lua_absindex(L, -2));
+	PushLuaArray(L, -2);
+
+	lua_pushnumber(L, RegistrationCount);
+	return 1;
+}

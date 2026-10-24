@@ -6,6 +6,7 @@
 #define ATTACK_MINIMUM_ENERGY		10
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
 #define ATTACK_NAME			"Heal"
+#define ATTACK_IDENTIFIER		"heal"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			10
@@ -18,6 +19,7 @@ static void Announcer(AttackData_t *Attack);
 
 const Attack_t HealAttack = {
 	.AttackName=ATTACK_NAME,
+	.Identifier=ATTACK_IDENTIFIER,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,

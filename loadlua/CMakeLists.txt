@@ -1,0 +1,71 @@
+cmake_minimum_required(VERSION 4.0.0)
+project(autobossfight_rematched)
+
+find_package(Lua 5.5 REQUIRED)
+
+add_library(autobossfight_lua_loader)
+
+target_sources(autobossfight_lua_loader
+	PRIVATE
+		entities/load_lua_entities.c
+		entities/init_lua_entity_manager.c
+		entities/validate_entity_tables.c
+		entities/lua_entity_registration.c
+		entities/register_lua_entities.c
+		entities/lua_add_entity.c
+		entities/define_entity_table.c
+		entities/get_temp_c_entity.c
+
+		attacks/define_attack_table.c
+		attacks/define_attack_plugin.c
+		attacks/lua_add_attack.c
+		attacks/register_lua_attack.c
+#		attacks/lua_attack_manager.c
+		attacks/load_lua_attacks.c
+
+		attacks/attack_data/define_attack_data_table.c
+		attacks/attack_data/read_attack_data_table.c
+		attacks/attack_data/lua_announcer_manager.c
+
+		transformations/define_transform_table.c
+		transformations/init_lua_transformations.c
+		transformations/load_lua_transformations.c
+
+		path_handler/split_path.c
+		path_handler/parse_path.c
+		
+		types/lua_entity.c
+		types/plugin/lua_plugin.c
+		types/plugin/register_plugin.c
+		types/plugin/get_lua_plugin_entry.c
+		
+		registry/lua_init_registry.c
+		registry/get_attack_plugins_table.c
+		registry/get_registry_table.c
+
+		transformations/init_lua_transformations.c
+
+		init_lua.c
+		entity_ldr.c
+		push_lua_array.c
+		read_file.c
+		load_bossfight_table.c
+		lua_print.c
+)
+
+target_include_directories(autobossfight_lua_loader
+	PUBLIC .
+)
+
+add_library(Lua::Lua INTERFACE IMPORTED)
+set_target_properties(
+	Lua::Lua
+	PROPERTIES
+		INTERFACE_INCLUDE_DIRECTORIES	"${LUA_INCLUDE_DIR}"
+		INTERFACE_LINK_DIRECTORIES	"${LUA_LIBRARIES}"
+)
+
+target_link_libraries(autobossfight_lua_loader
+	PRIVATE
+		${LUA_LIBRARIES}
+)

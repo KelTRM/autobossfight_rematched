@@ -3,6 +3,7 @@
 #include<stddef.h>
 #include<stdlib.h>
 #include<string.h>
+#include"../debug/debug.h"
 //#include<ui.h>
 
 // How many attacks can be registered at once

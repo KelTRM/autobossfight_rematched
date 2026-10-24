@@ -106,7 +106,8 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 	char *HpStr = IntToStr(Self->HealthPoints);
 
 	char *str = alloca(FormPadding + 3);
-	snprintf(str, FormPadding+3, "[%s]", Self->EntityTransformation->Name);
+	snprintf(str, FormPadding+3, "[%s]",
+			Self->EntityTransformation->TransformationName);
 
 	char *FormStr = PadLeft(str, FormPadding+2, ' ');
 

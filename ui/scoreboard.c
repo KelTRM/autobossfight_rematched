@@ -36,7 +36,7 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		Entity_t *CurrentEntity = Entities + i;
 
 		Transformation_t *EntityForm = CurrentEntity->EntityTransformation;
-		size_t EntityFormNameLength = strlen(EntityForm->Name);
+		size_t EntityFormNameLength = strlen(EntityForm->TransformationName);
 
 		MaximumFormNameLength = max(EntityFormNameLength, MaximumFormNameLength);
 

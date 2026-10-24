@@ -22,6 +22,7 @@ void ClearScreen(void);
 void RefreshScreen(void);
 
 int bprintf(BUFHANDLE b, const char *format, ...);
+int PutsBuffer(BUFHANDLE b, const char *str, size_t StrLen);
 void AttachBufferFile(BUFHANDLE Buffer, FILE *Destination, int CloseOnDeletion);
 
 void FlushBuffer(BUFHANDLE Buffer);

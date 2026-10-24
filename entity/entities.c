@@ -1,6 +1,9 @@
+#include"entity_manager.h"
+#include"../debug/debug.h"
+#include<lua_load.h>
 #include<stdlib.h>
 #include<stddef.h>
-#include"../entity.h"
+#include<assert.h>
 
 size_t PlayerCount = 0;
 size_t BossCount = 0;
@@ -8,41 +11,32 @@ size_t BossCount = 0;
 Entity_t *Entities;
 size_t EntityCount;
 
-#define ArrayLength(array)	(sizeof(array) / sizeof(*array))
+// #define ArrayLength(array)	(sizeof(array) / sizeof(*array))
 
-struct PlayerDefinition {
-	const char *Name;		// name of the player
-	const Health_t HP;		// health of the player
-	const Health_t Heal_Min;	// minimum amount the player may heal another by
-	const Health_t Heal_Max;	// maximum amount the player may heal another by
-	
-	const uint32_t Color;
-} PlayerDefinitions[] = {
-	// players go here
-	{ .Name="TailsKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF6400 },
-	{ .Name="KelTRM",		.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0xFF0000 },
-	{ .Name="SonicKirbo",	.HP=10000,	.Heal_Min=2500,		.Heal_Max=7500,		.Color=0x00FFFF },
-};
+void InitEntities(void *Lua) {
+	DefMgr_t Players;
+	DefMgr_t Bosses;
 
-struct BossDefinition {
-	const char *Name;
-	const Health_t HP;
-	// no healing because boss bad
-} BossDefinitions[] = {
-	// boss(es) go here
-	{ .Name="Cornelius",	.HP=325000 },
-//	{ .Name="Cornelius Jr.",	.HP=100000 }
-};
+//	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
+	size_t LoadedEntities = LoadLuaEntities(Lua, &Players, &Bosses);
+//	LoadLuaEntities(&Players, &Bosses);
+	write_verbose(Info, "Loaded %zu entity definitions from lua.", LoadedEntities);
 
-void InitEntities(void) {
-	PlayerCount = ArrayLength(PlayerDefinitions);
-	BossCount = ArrayLength(BossDefinitions);
+	if (LoadedEntities == 0) {
+		write_log(Error, "No entities loaded. exiting...");
+		exit(-1);
+	}
+
+	PlayerCount = Players.DefinitionCount;
+	BossCount = Bosses.DefinitionCount;
+
+	write_log(Info, "read %zu players & %zu bosses", PlayerCount, BossCount);
 
 	EntityCount = PlayerCount + BossCount;
 	Entities = calloc(EntityCount, sizeof(Entity_t));
 
 	for (size_t i = 0; i < PlayerCount; i++) {
-		struct PlayerDefinition *Player = &PlayerDefinitions[i];
+		struct PlayerDefinition *Player = &Players.PlayerDefinition[i];
 		Entities[i] = CreatePlayer(
 				Player->Name,
 				Player->HP,
@@ -53,7 +47,7 @@ void InitEntities(void) {
 	}
 
 	for (size_t i = 0; i < BossCount; i++) {
-		struct BossDefinition *Boss = &BossDefinitions[i];
+		struct BossDefinition *Boss = &Bosses.BossDefinition[i];
 		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP);
 
 		for (size_t j = 0; j < PlayerCount; j++) {

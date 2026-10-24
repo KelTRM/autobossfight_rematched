@@ -3,7 +3,7 @@
 #include<stdint.h>
 #include<alloca.h>
 #include"entity.h"
-#include "transformation.h"
+#include"transformation.h"
 #include"ui/ui.h"
 #include"ui/strings.h"
 #include"ui/color/color.h"
@@ -38,7 +38,8 @@ static int PlayerDisplay(BUFHANDLE Where,
 	free(HpStr);
 
 	char *str = alloca(FormPadding + 3);
-	snprintf(str, FormPadding+3, "[%s]", Self->EntityTransformation->Name);
+	snprintf(str, FormPadding+3, "[%s]",
+			Self->EntityTransformation->TransformationName);
 
 	char *FormString = PadLeft(str, FormPadding+2, ' ');
 

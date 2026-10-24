@@ -1,10 +1,17 @@
 #include"../attacks.h"
+#include"../../debug/flags.h"
 #include<ui.h>
 
 // easy-to-use attack parameters
 #define ATTACK_MINIMUM_ENERGY		0
+
+#ifndef TRANSFORM_IMMEDIATE
 #define ATTACK_FIRST_AVAILABLE_ROUND	5
+#else
+#define ATTACK_FIRST_AVAILABLE_ROUND	0
+#endif
 #define ATTACK_NAME			"Transform"
+#define ATTACK_IDENTIFIER		"transform"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			13
@@ -19,6 +26,7 @@ static void Announcer(AttackData_t *Attack);
 
 const Attack_t TransformAttack = {
 	.AttackName=ATTACK_NAME,
+	.Identifier=ATTACK_IDENTIFIER,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,
@@ -49,12 +57,13 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	
 	Transformation_t *Transformation = AskTransformation();
 
+	const char *Name = Transformation->TransformationName;
 	if (Transformation->Cost > Target->Energy) {
-		printf("Insufficient energy to use form [%s]\n", Transformation->Name);
+		printf("Insufficient energy to use form [%s]\n", Name);
 		return NothingAttack.Attack(Self, Target, Attacker);
 	}
 	
-	printf("Using transformation %s.\n", Transformation->Name);
+	printf("Using transformation %s.\n", Name);
 
 	Target->EntityTransformation = Transformation;
 	RemoveEnergy(Target, Transformation->Cost);
@@ -63,6 +72,6 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 }
 
 static void Announcer(AttackData_t *d) {
-	printf("%s transformed into %s.\n",
-			d->Target->Name, d->Target->EntityTransformation->Name);
+	printf("%s transformed into %s.\n", d->Target->Name,
+			d->Target->EntityTransformation->TransformationName);
 }

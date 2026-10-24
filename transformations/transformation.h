@@ -14,7 +14,8 @@ typedef Health_t (*GetTransformedAttack_t)(Transformation_t *Self, Entity_t *Fro
 typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
 
 struct Transformation {
-	char *Name;
+	char *TransformationName;
+	char *Identifier;
 
 	Energy_t Cost;
 	Energy_t Upkeep;
@@ -27,6 +28,8 @@ struct Transformation {
 	Maintain_t MaintainTransformation;
 
 	TransformationID_t ID;
+
+	void *LuaData;
 };
 
 Energy_t MaintainTransformation(Transformation_t *Self, Entity_t *Possessor);

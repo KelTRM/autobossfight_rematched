@@ -9,7 +9,7 @@
 //#ifdef __linux__
 //#include<unistd.h>
 //#endif
-
+// char *CleanseFilePath(const char *Filename);
 int Init(void);
 
 int IsGameOngoing(void);
@@ -21,31 +21,33 @@ extern const int BossCount;
 
 uint64_t Round = 0;
 
-void InitPlayers(void);
-int InitAttacks(void);
-size_t InitTransformations(void);
+//void InitPlayers(void);
+int InitAttacks(void *Lua);
+size_t InitTransformations(void *Lua);
 
-void InitEntities(void);
+void *InitLua(void);
+void InitEntities(void *Lua);
 
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
 int main(void) {
-	Init();
-	InitEntities();
-
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
-//	FILE *DebugFile = fopen("DEBUG.txt", "w");
-
 	init_debug();
-	define_debug_flush_location(fopen("DEBUG.txt", "w"));
+	define_debug_flush_location(fopen(LOGFILE_LOCATION, "w"));
 
-	int Attacks = InitAttacks();
+	// should initialize the lua state
+	void *Lua = InitLua();
+
+	Init();
+	InitEntities(Lua);
+
+	int Attacks = InitAttacks(Lua);
 	printf("Initialized %d attacks.\n", Attacks);
 
-	int Transformations = InitTransformations();
+	int Transformations = InitTransformations(Lua);
 	printf("Initialized %d transformations.\n", Transformations);
 
 	int Turn = 0;
