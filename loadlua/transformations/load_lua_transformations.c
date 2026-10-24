@@ -220,10 +220,11 @@ Health_t LuaGetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamag
 	lua_State *L = Form->L;
 
 	GetPluginEntry("transformation", Form);
-	lua_getfield(L, -1, "on_damage");
-
-	lua_pushvalue(L, -2);		// self
 	CreateEntityTable(L, From);	// from
+	lua_getfield(L, -2, "on_damage");
+
+	lua_pushvalue(L, -3);		// self
+	lua_pushvalue(L, -3);		// from
 	lua_pushinteger(L, BaseDamage);	// base
 	
 	lua_call(L, 3, 1);
@@ -231,10 +232,19 @@ Health_t LuaGetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamag
 	int type = lua_type(L, -1);
 	TypeAssert("function on_damage()", LUA_TNUMBER, type);
 
-	Health_t Result = lua_tointeger(L, -1);
+	lua_pushvalue(L, -2);
+
+	Entity_t FromTable = GetEntityFromTable(L);
+	From->Energy = FromTable.Energy;
+	From->Attack = FromTable.Attack;
+	From->HealthPoints = FromTable.HealthPoints;
+
+	lua_pop(L, 1);
+
+	lua_Number Result = lua_tonumber(L, -1);
 	lua_pop(L, 2);
 
-	return Result;
+	return (Health_t)Result;
 }
 
 //typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
@@ -245,16 +255,26 @@ Energy_t LuaMaintain(Transformation_t *Self, Entity_t *Possessor) {
 	lua_State *L = Form->L;
 
 	GetPluginEntry("transformation", Form);
-	lua_getfield(L, -1, "on_upkeep");
+	CreateEntityTable(L, Possessor);
+	lua_getfield(L, -2, "on_upkeep");
 
-	lua_pushvalue(L, -2);			// self
-	CreateEntityTable(L, Possessor);	// user
+	lua_pushvalue(L, -3);	// self
+	lua_pushvalue(L, -3);	// user
 	lua_call(L, 2, 1);	// on_upkeep(self, user)
 	
 	TypeAssert("function on_upkeep()",
 		LUA_TNUMBER, lua_type(L, -1));
 
-	Energy_t Result = lua_tointeger(L, -1);
+	lua_pushvalue(L, -2);
+
+	Entity_t FromTable = GetEntityFromTable(L);
+	Possessor->Energy = FromTable.Energy;
+	Possessor->Attack = FromTable.Attack;
+	Possessor->HealthPoints = FromTable.HealthPoints;
+
+	lua_pop(L, 1);
+
+	Energy_t Result = lua_tonumber(L, -1);
 	lua_pop(L, 2);
 
 	return Result;
