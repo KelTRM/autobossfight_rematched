@@ -40,8 +40,6 @@ size_t InitAttacks(void *Lua) {
 			MaxID = AttacksToRegister[i]->ID;
 	}
 
-	write_verbose(Debug, "MaxID = %lu", MaxID);
-
 	PluginID_t Plugin;
 	BlockID_t BlockCount = AllocatePlugin(&Manager, MaxID, &Plugin);
 	
@@ -50,7 +48,6 @@ size_t InitAttacks(void *Lua) {
 
 	for (size_t i = 0; i < AttackCount; i++) {
 		Attack_t *Attack = (Attack_t*)AttacksToRegister[i];
-		write_verbose(Info, "Registering attack %s @ ID %d", Attack->Identifier, Attack->ID);
 		RegisteredAttacks += AddRegistrationToPlugin(
 			&Manager,
 			Plugin,

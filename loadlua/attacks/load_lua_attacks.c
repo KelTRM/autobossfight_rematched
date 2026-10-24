@@ -66,7 +66,6 @@ size_t RegisterAttackPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t
 	}
 
 	RequiredAttacks = max(MaxID, RequiredAttacks);
-	write_verbose(Debug, "RequiredAttacks=%zu", RequiredAttacks);
 
 	PluginID_t ID;
 	size_t MaxAttacks = AllocatePlugin(Manager, RequiredAttacks, &ID);
@@ -98,7 +97,6 @@ size_t RegisterAttackPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t
 		
 		lua_pop(L, 1);
 
-		write_verbose(Debug, "adding attack from plugin %d @ id=%d", ID, LuaAttack->ID);
 		RegisteredAttacks += AddRegistrationToPlugin(
 			Manager,
 			ID,

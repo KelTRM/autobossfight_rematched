@@ -74,15 +74,11 @@ int ValidatePlugin(RegistrationMgr_t *mgr, PluginID_t ID) {
 }
 
 static Registration_t *IndexManager(RegistrationMgr_t *mgr, RegistreeID_t ID) {
-//	write_verbose(Debug, "Indexing into %d of max=%d", ID, mgr->MaxRegistrationCount);
 	if (ID > mgr->MaxRegistrationCount)
 		return NULL;
 
 	BlockID_t Block = ID / BLOCK_SIZE;
 	RegistreeID_t BlockIdx = ID % BLOCK_SIZE;
-
-//	write_debug(Debug, "Indexing into registration manager @ (%d,%d)", Block, BlockIdx);
-//	write_verbose(Debug, "Indexing %d,%d (of maxblocks=%d)", Block, BlockIdx, mgr->BlockIdCount);
 
 	return &mgr->Blocks[Block].Registration[BlockIdx];
 }
@@ -92,13 +88,10 @@ Registration_t *IndexPluginSpace(RegistrationMgr_t *mgr, PluginID_t ID, Registre
 	if (ValidatePlugin(mgr, ID) == 0) return NULL;
 
 	size_t MaxRegistrations = mgr->Plugins[ID].MaxRegistrations;
-//	write_verbose(Debug, "Reading into ID %zu/%zu", Registration, MaxRegistrations);
 	if (Registration > MaxRegistrations) return NULL;
 
 	BlockID_t PluginBlock = mgr->Plugins[ID].FirstRegisteredBlock;
 	RegistreeID_t GlobalStartingID = PluginBlock * BLOCK_SIZE;
-
-//	write_verbose(Debug, "Indexing %d,%d", PluginBlock, GlobalStartingID);
 
 	return IndexManager(mgr, GlobalStartingID + Registration);
 }
@@ -109,14 +102,11 @@ size_t AddRegistrationToPlugin(RegistrationMgr_t *mgr, PluginID_t ID, void *Regi
 
 	RegistreeID_t *RequestedID = GetDataAtOffset(Registration, OffsetID, RegistreeID_t);
 
-//	write_debug(Debug, "Writing Plugin %d (ID=%d)", ID, RequestedID);
-
 	// confirm registration exists
 	if (Registration == NULL)
 		return 0;
 
 	if (*RequestedID != 0) {
-//		write_verbose(Debug, "ID=%d, RequestedID=%d", ID, *RequestedID);
 		Registration_t *Requested = IndexPluginSpace(mgr, ID, *RequestedID);
 		if (Requested == NULL)
 			goto unallocated;
@@ -213,8 +203,6 @@ size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t Re
 
 		if (Registration == NULL) continue;
 		if (Registration->Registration == NULL) continue;
-
-//		write_debug(Debug, "Registering @ ID %d (req=%d)", ID, Registration->ID);
 
 		void *CopiedRegistration = malloc(Registration->RegistrationSize);
 		memcpy(

@@ -83,7 +83,6 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 	lua_call(L, 2, 1);
 
 	type = lua_type(L, -1);
-	write_verbose(Lua, "type=%s", lua_typename(L, type));
 	
 	AttackData_t Result = { 0 };
 	if (type == LUA_TTABLE) {
@@ -140,7 +139,6 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 	lua_pushvalue(L, -2);
 
 	type = lua_type(L, -1);
-	write_verbose(Debug, "Got type=%s", lua_typename(L, type));
 
 	lua_rawseti(L, -2, Data.ArrayIdx);
 
@@ -169,9 +167,6 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 		lua_pushstring(L, "Invalid value for minimum energy.");
 		lua_error(L);
 	}
-
-	write_verbose(Debug, "Registering attack \"%s\" of { %d, %d, %d }",
-			DisplayName, (int)FirstRound, (int)MinimumEnergy, ID);
 
 	// define the attack's struct
 	Attack_t LuaAttack = { 0 };
@@ -224,7 +219,6 @@ int RegisterLuaAttacks(lua_State *L) {
 
 	size_t RegistrationCount = 0;
 	size_t RegistrationsProvided = lua_rawlen(L, -1);
-	write_verbose(Debug, "RegistrationsProvided=%d", RegistrationsProvided);
 
 	int top = lua_gettop(L);
 

@@ -105,9 +105,7 @@ Entity_t GetEntityFromTable(lua_State *L) {
 
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...) {
 	int top = lua_gettop(L);
-//	write_verbose(Debug, "top=%d; ParamCount=%d", top, ParamCount);
 	if (top != ParamCount) {
-//		write_verbose(Debug, "top(%d)!=ParamCount(%d)", top, ParamCount);
 		lua_pushfstring(L, "expected %s", Prototype);
 		lua_error(L);
 	}

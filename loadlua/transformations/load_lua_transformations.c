@@ -52,7 +52,6 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 		lua_pushnil(L);
 	
 		type = lua_type(L, -2);
-		write_verbose(Debug, "type(-2)=%s", lua_typename(L, type));
 
 		while (lua_next(L, -2) != 0) {
 			type = lua_type(L, -1);
@@ -85,13 +84,7 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 			);
 
 			Transformation_t *t = malloc(sizeof(Transformation_t));
-//			memcpy(t, &tbl, sizeof(tbl));
 			CopyTransformation(&tbl, t);
-
-			write_verbose(Debug, "ptr=%p, got copy of transformation \"%s\" (%s)",
-					t, t->TransformationName, t->Identifier);
-
-//			t->FormDescription = "lua";
 
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
@@ -99,9 +92,6 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 				Offset(Transformation_t, ID),
 				sizeof(tbl)
 			);
-
-			write_verbose(Debug, "Registered %d forms from Transformation %s",
-					Count, tbl.Identifier);
 
 			free(tbl.LuaData);
 			if (Count == 0) {
