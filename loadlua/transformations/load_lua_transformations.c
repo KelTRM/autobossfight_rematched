@@ -124,6 +124,7 @@ int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Lo
 //typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
 
 Health_t LuaGetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage);
+Energy_t LuaMaintain(Transformation_t *Self, Entity_t *Possessor);
 
 Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const char *Name) {
 	struct LuaPluginLocation Location = {
@@ -169,8 +170,7 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 
 	Form.MaintainTransformation = DefaultMaintainTransformation;
 	if (type == LUA_TFUNCTION)
-		Form.GetDamage = LuaGetDamage;
-//	lua_pop(L, 1);
+		Form.MaintainTransformation = LuaMaintain;
 	lua_pop(L, 2);
 
 	write_verbose(Debug, "got entry of { %s,%s,%d,%d,%d }",
@@ -240,6 +240,15 @@ Energy_t LuaMaintain(Transformation_t *Self, Entity_t *Possessor) {
 	GetPluginEntry("transformation", Form);
 	lua_getfield(L, -1, "on_upkeep");
 
-	lua_pushvalue(L, -2);
+	lua_pushvalue(L, -2);			// self
+	CreateEntityTable(L, Possessor);	// user
+	lua_call(L, 2, 1);	// on_upkeep(self, user)
 	
+	TypeAssert("function on_upkeep()",
+		LUA_TNUMBER, lua_type(L, -1));
+
+	Energy_t Result = lua_tointeger(L, -1);
+	lua_pop(L, 2);
+
+	return Result;
 }
