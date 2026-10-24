@@ -5,6 +5,8 @@
 void GetTransformUptable(lua_State *L);
 int RegisterPlugin(lua_State *L);
 
+#define NO_DESC			"No description"
+
 void DefineTransformationTable(lua_State *L) {
 	luaL_Reg Funcs[] = {
 //		{ "NewPlugin", CreateTransformationPlugin },
@@ -30,11 +32,12 @@ void DefineTransformationTable(lua_State *L) {
 void GetTransformUptable(lua_State *L) {
 	lua_newtable(L);
 
-	PluginField(L, "name",	LUA_TSTRING, lua_pushnil(L), 0, "name");
-	PluginField(L, "cost",	LUA_TNUMBER, lua_pushnil(L), 0, "cost");
-	PluginField(L, "upkeep",	LUA_TNUMBER, lua_pushnil(L), 0, "upkeep");
-	PluginField(L, "multiplier",	LUA_TNUMBER, lua_pushnil(L), 0, "multiplier");
-	PluginField(L, "on_damage",	LUA_TFUNCTION, lua_pushnil(L), 1, "on_damage");
-	PluginField(L, "on_upkeep",	LUA_TFUNCTION, lua_pushnil(L), 1, "on_upkeep");
-	PluginField(L, "id",		LUA_TFUNCTION, lua_pushnil(L), 1, "id");
+	PluginField(L, "name",		LUA_TSTRING,	lua_pushnil(L),	0, "name");
+	PluginField(L, "description",	LUA_TSTRING,lua_pushliteral(L, NO_DESC),1, "description");
+	PluginField(L, "cost",		LUA_TNUMBER,	lua_pushnil(L),	0, "cost");
+	PluginField(L, "upkeep",		LUA_TNUMBER,	lua_pushnil(L),	0, "upkeep");
+	PluginField(L, "multiplier",		LUA_TNUMBER,	lua_pushnil(L),	0, "multiplier");
+	PluginField(L, "on_damage",		LUA_TFUNCTION,	lua_pushnil(L),	1, "on_damage");
+	PluginField(L, "on_upkeep",		LUA_TFUNCTION,	lua_pushnil(L),	1, "on_upkeep");
+	PluginField(L, "id",			LUA_TFUNCTION,	lua_pushnil(L),	1, "id");
 }

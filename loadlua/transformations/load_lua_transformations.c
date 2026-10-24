@@ -91,7 +91,7 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 			write_verbose(Debug, "ptr=%p, got copy of transformation \"%s\" (%s)",
 					t, t->TransformationName, t->Identifier);
 
-			t->FormDescription = "lua";
+//			t->FormDescription = "lua";
 
 			size_t Count = AddRegistrationToPlugin(
 				Manager,
@@ -141,6 +141,10 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 
 	GetFieldWithType(L, -1, "name", LUA_TSTRING);
 	Form.TransformationName = (char*)lua_tostring(L, -1);
+	lua_pop(L, 1);
+	
+	GetFieldWithType(L, -1, "description", LUA_TSTRING);
+	Form.FormDescription = lua_tostring(L, -1);
 	lua_pop(L, 1);
 	
 	GetFieldWithType(L, -1, "int_name", LUA_TSTRING);
@@ -194,6 +198,9 @@ size_t CopyTransformation(Transformation_t *From, Transformation_t *To) {
 	
 	To->TransformationName = malloc(strlen(From->TransformationName)+1);
 	strcpy(To->TransformationName, From->TransformationName);
+	
+	To->FormDescription = malloc(strlen(From->FormDescription)+1);
+	strcpy((char*)To->FormDescription, From->FormDescription);
 
 	To->Identifier = malloc(strlen(From->Identifier)+1);
 	strcpy(To->Identifier, From->Identifier);
