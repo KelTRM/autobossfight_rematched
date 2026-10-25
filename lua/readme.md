@@ -1,50 +1,25 @@
 # Lua extensions
 
-WARNING - THIS FEATURE IS INCOMPLETE. EVERYTHING IS A WORK IN PROGRESS AND IS SUBJECT TO CHANGE
+On load, the file `lua/init.lua` gets executed. This script can be used to extend the
+bossfight. This file is required to be loaded, as it specifies the players/bosses.
 
-# Scripts
+This file specifies the API to be used within to extend the bossfight
 
-At load time, the file `lua/script.lua` is loaded. This file is the main script,
-and is responsible for loading all other scripts.
-Think of this file as a place to say what scripts you do and don't want to use.
-
-## Adding scripts
-
-The system for adding and removing scripts acts as a state machine
-
-The state machine contains the following
-
- - A list of all required files for this script
- - The current type of script to add (`attack` or `entity`)
-
-The list, containing the value of the type as of when it was added.
-
-This may be interacted with by the following interface
-```lua
-local dependencies = bossfight:GetDependencyList();
-
-dependencies:SetType("entity")
-dependencies:AddDependency("entity.lua")
-
-dependencies:SetType("attack")
-dependencies:AddDependency("attack.lua")
-```
-
-Note - A dependency list may be created by any lua script,
-but a script may not load one which can do something beyond its permission.
-This means while you could put everything within script.lua,
-it's better to keep everything separate as to keep everything organized.
-
-On top of that, it's best to keep script.lua custom to your game.
-The current iteration of the scripting system has no ability to change what's in a different script,
-but that's not guarenteed to remain the same and it could end up causing damage in the future.
-
+## Table of contents
+- [Entities](#entities)
+ - [Adding/removing entities](#adding-removing-entities)
+ - [Modifying existing entities](#modifying-existing-entities)
+- [Attacks](#attacks)
+ - [Attack plugin](#attackplugin)
+ - [Attack handler](#attackhandler)
+- [Transformations](#transformations)
+- [Types](#types)
+ - [Entity](#entity)
+ - [AttackData](#attackdata)
+  - [Notes](#notes)
 # Entities
 
 ## Adding/removing entities
-
-On load, the file lua/entities.lua is loaded and executed.
-this file is responsible for specifying the players and bosses which will participate in the game.
 
 To add a player, you may use
 ```lua
