@@ -8,7 +8,6 @@ This file specifies the API to be used within to extend the bossfight
 ## Table of contents
 - [Entities](#entities)
  - [Adding/removing entities](#addingremoving-entities)
- - [Modifying existing entities](#modifying-existing-entities)
 - [Attacks](#attacks)
  - [Attack plugin](#attackplugin)
  - [Attack handler](#attackhandler)
@@ -48,18 +47,6 @@ bossfight:AddBoss(
 The boss is missing the elements HealMin/HealMax, and Color, as they are not needed for a boss.
 The heal min/max are unneeded as bosses cannot heal others,
 while all bosses have the same static gray color, which cannot (for now) be changed.
-
-## Modifying existing entities
-
-All entities when created are stored in either `bossfight.Players`, or `bossfight.Bosses` (with an obvious distinction).
-These values both contain arrays storing the tables passed into AddPlayer/AddBoss, which may be modified at any time.
-
-As an effect, you can circumvent the AddBoss/AddPlayer methods alltogether in the following manner
-
-```lua
-bossfight.Players[1] = { Name="foo", HP=10000, HealMin=2500, HealMax=7500, Color=0xF0F0F0 }
-bossfight.Bosses[1] = { Name="bar", HP=325000 }
-```
 
 # Attacks
 
