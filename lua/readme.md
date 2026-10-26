@@ -68,15 +68,29 @@ local AttackTable = {
 	AttackName="example",   -- The name of the attack. This is exclusively for the display name
 	RequiredEnergy=0,       -- The amount of energy the attack consumes
 	EarliestRound=0,        -- The first round in which the attack can be done (nil=0)
-	CanAttack=function(proposed_attack) return true end, -- Tells you whether the attack can be used. use nil for default
-	AttackHandler=function(attack) return { } end,       -- Run on attack. Determines the outcome of the attack
+	CanAttack=function() end, -- Tells you whether the attack can be used. use nil for default
+	AttackHandler=function() end,       -- Run on attack. Determines the outcome of the attack
     id=nil                  -- The ID used to specify the attack. use nil to auto-select
 }
 ```
 
-Most of these are pretty straight forward.
-The only things worth noting are the details of `CanAttack` and `AttackHandler`,
-which will be described in the section below
+While AttackHandler (for the time being) is fully functional.
+attack.CanAttack is currently unimplemented
+
+The definitions for the both functions ae as following
+```lua
+function AttackHandler(self, attack)
+    -- self - The table for the current attack
+    -- attack - A table containing the following
+    --      - ["target"]    -- The entity in which the attack is targetting
+    --      - ["attacker"]  -- THe entity in which is performing the attack
+end
+
+function CanAttack(self, attacker)
+    -- self - The current attack
+    -- attacker - The entity wishing to preform the attack
+end
+```
 
 Once all your attacks have been added to the `AttackPlugin`, you must register the plugin with the bossfight.
 This may be done with `bossfight.attack:RegisterPlugin(AttackPlugin)`
@@ -125,7 +139,8 @@ plugin:AddTransformation({
     ["upkeep"]=10               -- The cost to continue using the transformation
     ["multiplier"]=1            -- A multiplier for attack damage. For use by the default handler
     ["on_damage"]=function()end -- Called apon user's attack. Modifies damage. Use nil for default 
-    ["on_upkeep"]=function()end -- Called apon
+    ["on_upkeep"]=function()end -- Called at the end of a round apon each player with the form.
+    ["description"]="example"   -- The description of the form to be shown on 
 })
 ```
 
@@ -143,7 +158,7 @@ as shown below
 ```lua
 function on_upkeep(self, user)
     -- user: Entity (The entity using the transformation)
-    user:DrainEnergy(self.upkeep)
+    return user:DrainEnergy(self.upkeep)
 end
 
 function on_damage(self, user, base)
