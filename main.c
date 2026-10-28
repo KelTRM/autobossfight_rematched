@@ -1,6 +1,7 @@
 #include<stdio.h>
+#include<stdlib.h>
+#include<signal.h>
 #include"entity.h"
-#include"rng.h"
 //#include"ui/console_manager/buffer.h"
 #include<ui.h>
 #include"utils/sleep.h"
@@ -31,12 +32,20 @@ void InitEntities(void *Lua);
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
+void ANSI_SaveCurrentConsoleBuffer(void);
+void ANSI_RestorePreviousConsoleBuffer(void);
+void OnSigInt(int);
+
 int main(void) {
+	ANSI_SaveCurrentConsoleBuffer();
+
 	BUFHANDLE b = CreateBuffer();
 	SwitchBuffer(b);
 
 	init_debug();
 	define_debug_flush_location(fopen(LOGFILE_LOCATION, "w"));
+
+	signal(SIGINT, OnSigInt);
 
 	// should initialize the lua state
 	void *Lua = InitLua();
@@ -78,6 +87,8 @@ int main(void) {
 	}
 
 	printf("Game over.\n");
+	sleep(2500);
+	ANSI_RestorePreviousConsoleBuffer();
 }
 
 // temporary implementation
@@ -93,4 +104,19 @@ int IsGameOngoing(void) {
 	}
 
 	return 0;
+}
+
+void OnSigInt(int Signal) {
+	(void)Signal;
+	write_log(Info, "Recieved signal. Exiting...");
+	ANSI_RestorePreviousConsoleBuffer();
+	exit(0);
+}
+
+void ANSI_SaveCurrentConsoleBuffer(void) {
+	fprintf(stdout, "\x1b[?1049h");
+}
+
+void ANSI_RestorePreviousConsoleBuffer(void) {
+	fprintf(stdout, "\x1b[?1049l");
 }
