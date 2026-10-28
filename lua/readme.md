@@ -171,6 +171,34 @@ end
 Also, like with attacks: The plugins must be registered.
 A transformation plugin may be registered with `transformation:RegisterPlugin()`
 
+A full example of a transformation is shown below
+```lua
+local plugin = bossfight.transformation:NewPlugin();
+
+plugin:NewEntry("example1", {
+    ["name"]="Example 1",
+    ["cost"]=20,
+    ["upkeep"]=7,
+    ["multiplier"]=1.5,
+    ["on_damage"]=function(self, user, base)
+        print("When someone does damage with this form, You'll see this be printed")
+        return base * self.multiplier;
+    end,
+    ["on_upkeep"]=nil   -- not implemented yet
+});
+
+plugin:NewEntry("example2", {
+    ["name"]="Example 2",
+    ["cost"]=15,
+    ["upkeep"]=10,
+    ["multiplier"]=2,
+    ["on_damage"]=nil   -- on_damage can be set to nil to use default
+    ["on_upkeep"]=nil
+});
+
+bossfight.transformation:RegisterPlugin(plugin);
+```
+
 # Types
 
 All following types are contructed from tables,
@@ -226,5 +254,3 @@ You may also find some additional announcers in bossfight.announcers, such as
 ### Notes
 
 When the attack heals the target, the Damage value is used to indicate the HP given to the target
-
-
