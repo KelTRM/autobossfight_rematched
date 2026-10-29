@@ -16,6 +16,7 @@ This file specifies the API to be used within to extend the bossfight
  - [Entity](#entity)
  - [AttackData](#attackdata)
   - [Notes](#notes)
+ - [Plugin](#plugin)
 # Entities
 
 ## Adding/removing entities
