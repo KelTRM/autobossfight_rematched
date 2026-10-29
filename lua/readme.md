@@ -254,3 +254,25 @@ You may also find some additional announcers in bossfight.announcers, such as
 ### Notes
 
 When the attack heals the target, the Damage value is used to indicate the HP given to the target
+
+## Plugin
+
+A plugin is the way attacks/forms are created.
+A plugin comes with the method `plugin:NewEntry(name, table)`
+
+The `name` parameter isn't the actual name given to the entry,
+but an identifier which may be used to distinguish the entry.
+
+Plugins are obtained through the interface for whichever API you're working with
+The APIs currently using plugins are the following.
+
+- `bossfight.attack`
+- `bossfight.transformation`
+
+All Plugin APIs have the methods `NewPlugin` and `RegisterPlugin`
+`NewPlugin` returns a new plugin for the given API, while
+`RegisterPlugin` takes an existing plugin and registers it with the given API
+
+The `NewEntry` method on the plugin takes in the values `name` and `table` (as stated previously)
+The `name` value is always a string for the identifier. `table` is always a table,
+but the structure of the table varies depending on which API provided the plugin
