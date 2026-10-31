@@ -20,7 +20,8 @@ target_sources(autobossfight_ui_manager
 		strings.c
 		progress_bar.c
 		unicode_strlen.c
-		entity_select_menu.c
+	 	entity_select_menu.c
+		attack_prompt_debug.c
 
 		console_manager/create_buffer.c
 		console_manager/bprintf.c

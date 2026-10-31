@@ -12,6 +12,7 @@
 #define ATTACK_DISPLAY_FORMAT		"To use a %s use %s"
 
 void PrintAttack(Attack_t *Attack, size_t NamePadding, size_t MaxID);
+int ProcessDebugCmd(const char *Cmd);
 
 int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 	ClearScreen();
@@ -75,13 +76,19 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 
 		DeleteBuffer(b);
 
+		int IsCmd = ProcessDebugCmd(Result);
+		if (IsCmd != 0) {
+			write_log(Info, "Recieved command '%s'", Result+1);
+			sleep(1000);
+			continue;
+		}
+
 		if (Result == NULL) {
 			printf("[ERROR] Failed to prompt.\n");
 			break;
 		}
 
 		AttackID_t AttackID = atoi(Result);
-		free(Result);
 
 		Attack = GetAttackAtIndex(AttackID);
 
@@ -89,8 +96,10 @@ int AskAttack(Entity_t *CurrentPlayer, uint64_t Round) {
 			printf("Invalid Attack '%s'. Please choose a valid attack.\n", Result);
 			sleep(1000);
 		
+			free(Result);
 			continue;
 		}
+		free(Result);
 
 		if (Attack->Available(Attack, CurrentPlayer) == 0) {
 			printf("Attack %s is not yet available.\n", Attack->AttackName);
