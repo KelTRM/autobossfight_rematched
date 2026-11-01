@@ -72,3 +72,8 @@ target_link_libraries(autobossfight_registration_manager
 	PUBLIC
 		autobossfight_debug
 )
+
+target_link_libraries(autobossfight_ui_manager
+	PUBLIC
+		autobossfight_debug
+)

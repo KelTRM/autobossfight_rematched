@@ -17,4 +17,5 @@ target_compile_definitions(autobossfight_debug
 		$<$<BOOL:${LOG_VERBOSE}>:VERBOSE_LOG>
 		$<$<BOOL:${IMMEDIATE_TRANSFORM}>:TRANSFORM_IMMEDIATE>
 		$<$<BOOL:${LOG_LINE}>:LOG_LINE_FILE>
+		DEBUG_LINKED
 )

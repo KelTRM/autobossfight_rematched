@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef DEBUG_LINKED
+#error Debug header included without linking debug. Please link debug beforehand
+#endif
+
 #define LOGFILE_LOCATION		"bossfight.log"
 #ifndef NDEBUG
 

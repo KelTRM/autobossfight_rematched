@@ -31,7 +31,7 @@ int DebugWrite(const char *Source, const char *restrict format, ...);
 #ifdef VERBOSE_LOG
 #define write_verbose(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE"<verbose>", __VA_ARGS__)
 #else
-#define write_verbose(DEBUG_MODE, ...)
+#define write_verbose(DEBUG_MODE, ...)	(void)(#DEBUG_MODE,__VA_ARGS__)
 #endif
 
 #define write_log(DEBUG_MODE, ...)	DebugWrite(#DEBUG_MODE, __VA_ARGS__)
