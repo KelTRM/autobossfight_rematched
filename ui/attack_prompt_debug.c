@@ -8,6 +8,9 @@
 #include"console_manager/console.h"
 #include"ui.h"
 
+static int SetHealth(int argc, const char **argv);
+static int SetForm(int argc, const char **argv);
+
 extern Entity_t *Entities;
 extern size_t EntityCount;
 
@@ -26,8 +29,14 @@ struct Command {
 	int Flags;
 };
 
+static const struct Command CommandList[] = {
+	{ .Name="sethealth",.Handler=SetHealth,	.Flags=CMD_DEBUG },
+	{ .Name="transform",.Handler=SetForm,	.Flags=CMD_DEBUG },
+	{ .Name="info",	.Handler=NULL,		.Flags=CMD_INFO }
+};
+
 Entity_t *GetEntityFromName(const char *Name) {
-	Entity_t *Entity;
+	Entity_t *Entity = NULL;
 	for (size_t i = 0; i < EntityCount; i++) {
 		int r = strcmp(Entities[i].Name, Name);
 		if (r != 0) continue;
@@ -109,10 +118,6 @@ static int SetForm(int argc, const char **argv) {
 	return 0;
 }
 
-static const struct Command CommandList[] = {
-	{ .Name="sethealth", .Handler=SetHealth, .Flags=CMD_DEBUG },
-	{ .Name="transform", .Handler=SetForm, .Flags=CMD_DEBUG }
-};
 
 int DetectDebugCommand(const char *IsDbg) {
 	if (IsDbg == NULL) return 0;
@@ -191,8 +196,13 @@ int ProcessDebugCmd(const char *Cmd) {
 	const char **argv = ToTraditionalArgv(argc, args);
 
 	int Result = 0;
-	if (AllowedFlags & CommandList[Index].Flags == CommandList[Index].Flags) {
-		Result = CommandList[Index].Handler(argc, argv);
+	if ((AllowedFlags & CommandList[Index].Flags) == CommandList[Index].Flags) {
+		if (CommandList[Index].Handler != NULL) {
+			Result = CommandList[Index].Handler(argc, argv);
+		} else {
+			Result = 0;
+			printf("not implemented.\n");
+		}
 	} else {
 		printf("Command %s found but not available.\n", argv[0]);
 	}
