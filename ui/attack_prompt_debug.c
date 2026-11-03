@@ -200,7 +200,6 @@ int ProcessDebugCmd(const char *Cmd) {
 		if (CommandList[Index].Handler != NULL) {
 			Result = CommandList[Index].Handler(argc, argv);
 		} else {
-			Result = 0;
 			printf("not implemented.\n");
 		}
 	} else {
