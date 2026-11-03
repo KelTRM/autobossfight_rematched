@@ -30,6 +30,8 @@ struct Attack {
 	const char *AttackName;
 	const char *Identifier;
 
+	const char *Description;
+
 	Energy_t MinimumEnergy;
 	uint64_t FirstAvailableRound;
 

@@ -8,6 +8,7 @@
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
 #define ATTACK_NAME			"70% power attack"
 #define ATTACK_IDENTIFIER		"seventy_percent"
+#define ATTACK_DESCRIPTION		"Does an attack at 70% power. Uses a large amount of energy for a large amount of damage."
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			4
@@ -19,6 +20,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 const Attack_t SeventyPercentPowerAttack = {
 	.AttackName=ATTACK_NAME,
 	.Identifier=ATTACK_IDENTIFIER,
+	.Description=ATTACK_DESCRIPTION,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,

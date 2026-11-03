@@ -6,6 +6,7 @@
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
 #define ATTACK_NAME			"Boost energy"
 #define ATTACK_IDENTIFIER		"nothing"
+#define ATTACK_DESCRIPTION		"Increases your energy. Does no damage"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			12
@@ -19,6 +20,7 @@ static void Announcer(AttackData_t *Attack);
 const Attack_t NothingAttack = {
 	.AttackName=ATTACK_NAME,
 	.Identifier=ATTACK_IDENTIFIER,
+	.Description=ATTACK_DESCRIPTION,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,

@@ -12,6 +12,7 @@
 #endif
 #define ATTACK_NAME			"Transform"
 #define ATTACK_IDENTIFIER		"transform"
+#define ATTACK_DESCRIPTION		"Allows switching transformationss. Uses the form's cost in energy."
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			13
@@ -27,6 +28,7 @@ static void Announcer(AttackData_t *Attack);
 const Attack_t TransformAttack = {
 	.AttackName=ATTACK_NAME,
 	.Identifier=ATTACK_IDENTIFIER,
+	.Description=ATTACK_DESCRIPTION,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,

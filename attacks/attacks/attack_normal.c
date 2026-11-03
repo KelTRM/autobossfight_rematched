@@ -8,6 +8,7 @@
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
 #define ATTACK_NAME			"Normal Attack"
 #define ATTACK_IDENTIFIER		"normal"
+#define ATTACK_DESCRIPTION		"Deals normal damage"
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			1
@@ -19,6 +20,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 const Attack_t NormalAttack = {
 	.AttackName=ATTACK_NAME,
 	.Identifier=ATTACK_IDENTIFIER,
+	.Description=ATTACK_DESCRIPTION,
 
 	.MinimumEnergy=ATTACK_MINIMUM_ENERGY,
 	.FirstAvailableRound=ATTACK_FIRST_AVAILABLE_ROUND,
