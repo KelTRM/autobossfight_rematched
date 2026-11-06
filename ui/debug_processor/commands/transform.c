@@ -1,7 +1,9 @@
+#include<string.h>
 #include<limits.h>
+#include"../transformations/transformation_manager.h"
 #include"../debug_processor.h"
 
-static int SetForm(int argc, const char **argv) {
+int SetForm(int argc, const char **argv) {
 	if (ParamRange(argc, argv, 3, INT_MAX))
 		return 1;
 
