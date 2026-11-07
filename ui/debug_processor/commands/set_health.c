@@ -1,6 +1,8 @@
+#include<limits.h>
+#include"../entity.h"
+#include"../debug_processor.h"
 
-
-static int SetHealth(int argc, const char **argv) {
+int SetHealth(int argc, const char **argv) {
 	if (ParamRange(argc, argv, 3, INT_MAX))
 		return 1;
 
