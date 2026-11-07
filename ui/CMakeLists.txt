@@ -21,7 +21,7 @@ target_sources(autobossfight_ui_manager
 		progress_bar.c
 		unicode_strlen.c
 	 	entity_select_menu.c
-#		attack_prompt_debug.c
+
 		debug_processor/cmd_processor.c
 		debug_processor/get_entity_from_name.c
 		debug_processor/handle_debug.c
