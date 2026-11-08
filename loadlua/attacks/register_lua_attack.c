@@ -153,7 +153,7 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 	// read the table
 	AttackID_t ID = ReadLuaTableNumber(L, "id", 0);
 	lua_Number FirstRound = ReadLuaTableNumber(L, "first_round", 0);
-	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy", -1);
+	lua_Number MinimumEnergy = ReadLuaTableNumber(L, "minimum_energy",-1);
 
 	const char *DisplayName = ReadLuaTableString(L, "disp_name", NULL);
 
@@ -182,11 +182,13 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 	LuaAttack.AppliesToEnemies = 1;
 	
 	size_t NameLength = strlen(DisplayName);
+	size_t IdentLength = strlen(Key);
 
-	LuaAttack.Identifier = NULL;
+	LuaAttack.Identifier = malloc(IdentLength + 1);
 	LuaAttack.AttackName = malloc(NameLength + 1);
 
 	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
+	strncpy((char*)LuaAttack.Identifier, Key, IdentLength + 1);
 
 	LuaAttack_t AttackData = {
 		.L=L,
