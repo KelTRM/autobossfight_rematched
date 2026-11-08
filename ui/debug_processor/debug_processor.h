@@ -6,6 +6,7 @@
 
 int SetHealth(int argc, const char **argv);
 int SetForm(int argc, const char **argv);
+int GetInfo(int argc, const char **argv);
 ssize_t GetCommand(const char *Command, int *argc, char **argv);
 const char **ToTraditionalArgv(int argc, const char *argv);
 int ParamRange(int argc, const char **argv, int min, int max);
@@ -26,10 +27,4 @@ struct Command {
 	int Flags;
 };
 
-static const struct Command CommandList[] = {
-	{ .Name="sethealth",.Handler=SetHealth,	.Flags=CMD_DEBUG },
-	{ .Name="transform",.Handler=SetForm,	.Flags=CMD_DEBUG },
-	{ .Name="info",	.Handler=NULL,		.Flags=CMD_INFO }
-};
-
-
+extern const struct Command CommandList[];

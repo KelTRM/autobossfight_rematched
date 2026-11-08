@@ -91,6 +91,8 @@ RegistrationIter_t OpenRegistrationIterator(Registrar_t *Registrar) {
 
 void *StepRegistrationIterator(RegistrationIter_t *Iterator) {
 	Linked_t Node = *((Linked_t*)Iterator);
+	if (Node == NULL) return NULL;
+
 	void *CurrentRegistration = (void*)Node->Value;
 
 	*Iterator = Node->Next;

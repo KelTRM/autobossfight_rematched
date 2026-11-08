@@ -2,6 +2,12 @@
 #include<string.h>
 #include"debug_processor.h"
 
+const struct Command CommandList[] = {
+	{ .Name="sethealth",.Handler=SetHealth,	.Flags=CMD_DEBUG },
+	{ .Name="transform",.Handler=SetForm,	.Flags=CMD_DEBUG },
+	{ .Name="info",	.Handler=GetInfo,	.Flags=CMD_INFO }
+};
+
 // ssize_t GetCommand(const char *Command, int *argc, const char **argc);
 // Returns an index of CommandList containing the current command,
 // along with the argc/argv for the command

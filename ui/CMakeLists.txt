@@ -28,6 +28,7 @@ target_sources(autobossfight_ui_manager
 		debug_processor/param_range.c
 		debug_processor/commands/set_health.c
 		debug_processor/commands/transform.c
+		debug_processor/commands/info.c
 
 		console_manager/create_buffer.c
 		console_manager/bprintf.c
