@@ -198,6 +198,7 @@ size_t CopyTransformation(Transformation_t *From, Transformation_t *To) {
 	To->LuaData = malloc(sizeof(struct LuaPluginLocation));
 	memcpy(To->LuaData, From->LuaData, sizeof(struct LuaPluginLocation));
 
+	To->FormColor = (Color_t){ .r=100, .g=0, .b=0 };
 
 	return sizeof(Transformation_t);
 }

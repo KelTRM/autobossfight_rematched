@@ -1,6 +1,7 @@
 #pragma once
 
 #include<stdint.h>
+#include"color/color.h"
 
 typedef uint64_t TransformationID_t;
 
@@ -20,6 +21,8 @@ struct Transformation {
 	Energy_t Cost;
 	Energy_t Upkeep;
 
+	Color_t FormColor;
+
 	uint64_t TransformationMultiplier;
 
 	const char *FormDescription;
@@ -33,6 +36,7 @@ struct Transformation {
 };
 
 Energy_t MaintainTransformation(Transformation_t *Self, Entity_t *Possessor);
+char *GetTransformationNameStr(Transformation_t *NameStr);
 
 extern const Transformation_t BaseTransformation;
 extern Transformation_t BossTransformation;

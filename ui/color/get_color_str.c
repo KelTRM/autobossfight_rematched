@@ -10,7 +10,8 @@ char *GetColor(uint8_t Mode, Color_t clr) {
 	memset(Sequence, 0, 22);
 	//size_t CharCount = 0;
 
-	snprintf(Sequence, 22, "\x1b[%d;2;%d;%d;%dm", Mode, clr.r, clr.g, clr.b);
+	snprintf(Sequence, 22, "\x1b[%d;2;%d;%d;%dm",
+			Mode, clr.r, clr.g, clr.b);
 	size_t Length = strnlen(Sequence, 22);
 
 	char *str = malloc(Length+1);

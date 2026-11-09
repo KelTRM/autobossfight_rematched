@@ -10,6 +10,7 @@ target_sources(autobossfight_transformations
 		transformation_menu.c
 		transformation_manager.c
 		register_transformations.c
+		get_transformation_name_str.c
 
 		transformations/transform_base.c
 		transformations/transform_boss.c

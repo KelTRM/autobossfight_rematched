@@ -1,3 +1,6 @@
+#include "transformation.h"
+#define USE_STD_STRLEN
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<alloca.h>
@@ -21,7 +24,7 @@ Transformation_t *AskTransformation(void) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
 		MaxFormLength = max(
 			MaxFormLength,
-			strlen(CurrentTransformation->TransformationName)
+			UTF8_Strlen(CurrentTransformation->TransformationName)
 		);
 
 		MaxID = max(MaxID, CurrentTransformation->ID);
@@ -33,9 +36,10 @@ Transformation_t *AskTransformation(void) {
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
 
+		char *FormName = GetTransformationNameStr(CurrentTransformation);
 		char *FormBuffer = alloca(MaxFormLength+3);
 		snprintf(FormBuffer, MaxFormLength+3,
-				"[%s]", CurrentTransformation->TransformationName);
+				"[%s]", FormName);
 
 		char *FormDisp = PadRight(FormBuffer, MaxFormLength+2, ' ');
 

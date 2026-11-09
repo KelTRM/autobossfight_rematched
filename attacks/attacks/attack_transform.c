@@ -1,3 +1,4 @@
+#include<stdlib.h>
 #include"../attacks.h"
 #include"../../debug/flags.h"
 #include<ui.h>
@@ -59,13 +60,17 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 	
 	Transformation_t *Transformation = AskTransformation();
 
-	const char *Name = Transformation->TransformationName;
+	char *Name = GetTransformationNameStr(Transformation);
+//	const char *Name = Transformation->TransformationName;
 	if (Transformation->Cost > Target->Energy) {
 		printf("Insufficient energy to use form [%s]\n", Name);
+		free(Name);
+
 		return NothingAttack.Attack(Self, Target, Attacker);
 	}
 	
 	printf("Using transformation %s.\n", Name);
+	free(Name);
 
 	Target->EntityTransformation = Transformation;
 	RemoveEnergy(Target, Transformation->Cost);
@@ -74,6 +79,7 @@ static AttackData_t DoAttack(Attack_t *Self, Entity_t *Target, Entity_t *Attacke
 }
 
 static void Announcer(AttackData_t *d) {
-	printf("%s transformed into %s.\n", d->Target->Name,
-			d->Target->EntityTransformation->TransformationName);
+	char *FormName = GetTransformationNameStr(d->Target->EntityTransformation);
+	printf("%s transformed into %s.\n", d->Target->Name, FormName);
+	free(FormName);
 }
