@@ -1,13 +1,16 @@
 #include<stdlib.h>
 #include"list.h"
 
-void ListInsertAfter(Linked_t Node, void *Value) {
+int ListInsertAfter(Linked_t Node, void *Value) {
 	Linked_t NewNode = malloc(sizeof(*NewNode));
+	if (NewNode == NULL) return 0;
 
 	NewNode->Next = Node->Next;
 	NewNode->Value = Value;
 
 	Node->Next = NewNode;
+
+	return 1;
 }
 
 Linked_t ListGetIndex(Linked_t List, size_t Index) {

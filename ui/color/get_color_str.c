@@ -15,6 +15,8 @@ char *GetColor(uint8_t Mode, Color_t clr) {
 	size_t Length = strnlen(Sequence, 22);
 
 	char *str = malloc(Length+1);
+	if (str == NULL) return NULL;
+
 	memcpy(str, Sequence, Length);
 	str[Length] = 0;
 	return str;

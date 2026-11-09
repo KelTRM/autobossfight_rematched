@@ -41,14 +41,11 @@ size_t CalculateDigitsInNumber(uint64_t n) {
 }
 
 char *IntToStr(uint64_t n) {
-	size_t RequiredDigits = CalculateDigitsInNumber(n);//floor(max(log10(n)+1, 1));
+	size_t RequiredDigits = CalculateDigitsInNumber(n);
 
-//	printf("[debug] RequiredDigits for value %llu - %zu\n", n, RequiredDigits);
-//	return NULL;
-
-	char *StringifiedNumber = malloc(RequiredDigits+1);
-//	printf("recieved pointer %p\n", StringifiedNumber);
 	size_t Index = RequiredDigits;
+	char *StringifiedNumber = malloc(++RequiredDigits);
+//	printf("recieved pointer %p\n", StringifiedNumber);
 
 	size_t DigitCount = 0;
 	do {
@@ -66,11 +63,11 @@ char *IntToStr(uint64_t n) {
 			//DigitCount++;
 		}
 
-		if (Index > RequiredDigits)
+		if (Index >= RequiredDigits)
 			break;
 	} while (Index > 0);
 
-	StringifiedNumber[RequiredDigits] = '\0';
+	StringifiedNumber[RequiredDigits-1] = '\0';
 
 	return StringifiedNumber;
 }

@@ -73,6 +73,7 @@ size_t BuildRegistrationList(Registrar_t *Registrar) {
 
 		// define the node
 		*Node = malloc(sizeof(struct List));
+		if (*Node == NULL) continue;
 		memset(*Node, 0, sizeof(struct List));
 
 		// Set value to current registration, step into the next node
