@@ -44,4 +44,5 @@ target_sources(autobossfight_ui_manager
 		color/foreground.c
 		color/color.c
 		color/get_color_str.c
-	)
+)
+

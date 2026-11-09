@@ -2,6 +2,8 @@
 
 #include<stdint.h>
 
+#define StaticColor(hex)	((Color_t){ .r=((hex)>>16)&0xFF, .g=((hex)>>8)&0xFF, .b=(hex)&0xFF })
+
 typedef struct Color {
 	uint8_t r;
 	uint8_t g;
@@ -27,3 +29,4 @@ Color_t GetColorFromHex(uint32_t Color);
 // Returns the actual escape sequence. Must be freed
 char *GetColor(uint8_t Mode, Color_t clr);
 char *GetClearColorStr(void);	// doesn't need to be freed, though
+

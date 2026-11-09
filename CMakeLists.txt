@@ -7,7 +7,7 @@ project(autobossfight_rematched)
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic)
+	add_compile_options(-Wall -Wextra -Wpedantic -fanalyzer)
 endif()
 
 add_executable(autobossfight_rematched)
