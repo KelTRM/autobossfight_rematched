@@ -13,7 +13,7 @@
 
 #define TRANSFORMATION_MULTIPLIER	ToFixed(2)
 
-const Transformation_t SuperTransformation = {
+Transformation_t SuperTransformation = {
 	.TransformationName=TRANSFORMATION_NAME,
 	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,

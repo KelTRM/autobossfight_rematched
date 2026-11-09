@@ -13,7 +13,7 @@
 
 #define TRANSFORMATION_MULTIPLIER	ToFixed(1)
 
-const Transformation_t BaseTransformation = {
+Transformation_t BaseTransformation = {
 	.TransformationName=TRANSFORMATION_NAME,
 	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,

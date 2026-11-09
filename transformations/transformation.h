@@ -19,8 +19,6 @@ struct Transformation {
 	const char *FormDescription;
 	Color_t FormColor;
 
-	char *DisplayString;
-
 	char *Identifier;
 
 	Energy_t Cost;
@@ -34,12 +32,13 @@ struct Transformation {
 	TransformationID_t ID;
 
 	void *LuaData;
+	char *DisplayString;
 };
 
 Energy_t MaintainTransformation(Transformation_t *Self, Entity_t *Possessor);
 char *GetTransformationNameStr(Transformation_t *NameStr);
 
-extern const Transformation_t BaseTransformation;
+extern Transformation_t BaseTransformation;
 extern Transformation_t BossTransformation;
-extern const Transformation_t SuperTransformation;
+extern Transformation_t SuperTransformation;
 
