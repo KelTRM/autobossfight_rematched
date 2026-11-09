@@ -1,4 +1,3 @@
-#include "transformation.h"
 #define USE_STD_STRLEN
 
 #include<stdio.h>
@@ -22,10 +21,15 @@ Transformation_t *AskTransformation(void) {
 	TransformationID_t MaxID = 0;
 	while (Iterator != NULL) {
 		CurrentTransformation = StepTransformationIterator(&Iterator);
+		char *Name = GetTransformationNameStr(CurrentTransformation);
+
 		MaxFormLength = max(
 			MaxFormLength,
-			UTF8_Strlen(CurrentTransformation->TransformationName)
+			//UTF8_Strlen(CurrentTransformation->TransformationName)
+			UTF8_Strlen(Name)
 		);
+
+//		free(Name);
 
 		MaxID = max(MaxID, CurrentTransformation->ID);
 	}
