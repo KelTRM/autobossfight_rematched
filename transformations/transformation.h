@@ -16,16 +16,17 @@ typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
 
 struct Transformation {
 	char *TransformationName;
+	const char *FormDescription;
+	Color_t FormColor;
+
+	char *DisplayString;
+
 	char *Identifier;
 
 	Energy_t Cost;
 	Energy_t Upkeep;
 
-	Color_t FormColor;
-
 	uint64_t TransformationMultiplier;
-
-	const char *FormDescription;
 
 	GetTransformedAttack_t GetDamage;
 	Maintain_t MaintainTransformation;
