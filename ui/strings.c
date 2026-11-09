@@ -11,6 +11,7 @@ char *PadLeft(const char *str, size_t n, char ch) {
 	size_t NewLength = max(n, Length);
 	// add 1 for null terminator
 	char *NewStr = malloc(NewLength+1);
+	if (NewStr == NULL) return NULL;
 
 	size_t StrOffset = NewLength - Length;
 	memset(NewStr, ch, NewLength);
@@ -25,6 +26,8 @@ char *PadRight(const char *str, size_t n, char ch) {
 	size_t NewLength = max(n, Length);
 	// add 1 for null terminator
 	char *NewStr = malloc(NewLength+1);
+	if (NewStr == NULL) return NULL;
+
 	memset(NewStr, ch, NewLength);
 	memcpy(NewStr, str, Length);
 

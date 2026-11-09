@@ -18,7 +18,9 @@ ssize_t GetCommand(const char *Command, int *argc, char **argv) {
 	// start by parsing argv
 	size_t CommandLength = strlen(Command);
 
-	*argv = malloc(CommandLength+1);
+	*argv = NULL;
+	if (*argv == NULL) return -1;
+
 	memcpy(*argv, Command, CommandLength+1);
 
 	size_t BytesAtLast = 0;
@@ -54,6 +56,7 @@ ssize_t GetCommand(const char *Command, int *argc, char **argv) {
 // Must be freed afterwards.
 const char **ToTraditionalArgv(int argc, const char *argv) {
 	const char **ptr = calloc(argc, sizeof(const char*));
+	if (ptr == NULL) return NULL;
 
 	for (int i = 0; i < argc; i++) {
 		ptr[i] = argv;

@@ -15,13 +15,11 @@ size_t AppendStrings(const char *str1, const char *str2, char **buffer, size_t B
 	if (str2 == NULL)
 		return 0;
 
-	size_t Result = 0;
-
 	size_t Strlen1 = strlen(str1);
 	size_t Strlen2 = strlen(str2);
 
-	char *str1cpy = malloc(Strlen1+1);
-	char *str2cpy = malloc(Strlen2+1);
+	char *str1cpy = alloca(Strlen1+1);
+	char *str2cpy = alloca(Strlen2+1);
 
 	strcpy(str1cpy, str1);
 	strcpy(str2cpy, str2);
@@ -35,12 +33,12 @@ size_t AppendStrings(const char *str1, const char *str2, char **buffer, size_t B
 		Buffer = *buffer;
 		if (BufferSize < RequiredBytes) {
 			Buffer = realloc(Buffer, RequiredBytes);
-			if (Buffer == NULL) goto done;
+			if (Buffer == NULL) return 0;
 			*buffer = Buffer;
 		}
 	} else {
 		Buffer = malloc(RequiredBytes);
-		if (Buffer == NULL) goto done;
+		if (Buffer == NULL) return 0;
 	}
 
 //	printf("copy - %s\n", str1cpy);
@@ -48,22 +46,18 @@ size_t AppendStrings(const char *str1, const char *str2, char **buffer, size_t B
 //	printf("concat - %s\n", str2cpy);
 	strcat(Buffer, str2cpy);
 
-	Result = Strlen1+Strlen2;
-
-done:
-	free(str1cpy);
-	free(str2cpy);
-
-	return Result;
+	return Strlen1+Strlen2;
 }
 
 char *ProgressBar(uint8_t Percentage, uint64_t Precision, Color_t ProgressBarColor) {
 	char *str = malloc(1);
+	if (str == NULL) return NULL;
+
 	str[0] = 0;
-	size_t len = 0;
 
 	char *ColorStr = GetColor(38, ProgressBarColor);
 
+	size_t len = 0;
 	len = AppendStrings(str, "[", &str, len);
 	len = AppendStrings(str, ColorStr, &str, len);
 
