@@ -97,10 +97,14 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 		Attacker->HealthPoints	= Result.Attacker->HealthPoints;
 
 		Result.LuaAttackData = malloc(sizeof(LuaAttackData_t));
-
-		LuaAttackData_t AttackData = AppendAttackData(L);
-		memcpy(Result.LuaAttackData, &AttackData, sizeof(LuaAttackData_t));
-//		((LuaAttackData_t*)Result.LuaAttackData)->ArrayIdx = ;
+		if (Result.LuaAttackData != NULL) {
+			LuaAttackData_t AttackData = AppendAttackData(L);
+			memcpy(
+				Result.LuaAttackData,
+				&AttackData,
+				sizeof(LuaAttackData_t)
+			);
+		}
 
 		free(Result.Attacker);
 		free(Result.Target);
@@ -117,8 +121,6 @@ AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attack
 int GetRegistryTable(lua_State *L, const char *Location);
 
 LuaAttackData_t AppendAttackData(lua_State *L) {
-	//lua_getfield(L, LUA_REGISTRYINDEX, "bossfight");
-	int type;// = lua_getfield(L, -1, "attack_data");
 
 	LuaAttackData_t Data = { L, -1 };
 
@@ -137,9 +139,6 @@ LuaAttackData_t AppendAttackData(lua_State *L) {
 	Data.ArrayIdx = len+1;
 
 	lua_pushvalue(L, -2);
-
-	type = lua_type(L, -1);
-
 	lua_rawseti(L, -2, Data.ArrayIdx);
 
 	lua_pop(L, 1);

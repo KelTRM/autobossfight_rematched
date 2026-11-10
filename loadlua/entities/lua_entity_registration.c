@@ -65,7 +65,8 @@ int RegisterLuaBosses(lua_State *L, int ArrayIdx, DefMgr_t *Bosses) {
 		lua_Number HP    = ReadLuaTableNumber(L, "HP", 10000);
 
 		char *NewName = malloc(strlen(Name)+1);
-		strncpy(NewName, Name, strlen(Name)+1);
+		if (NewName != NULL)
+			strncpy(NewName, Name, strlen(Name)+1);
 
 		write_verbose(Lua, "Found boss { %s, %d }", NewName, (int)HP);
 
@@ -98,8 +99,11 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		lua_Number HealMax = ReadLuaTableNumber(L, "HealMax", 7500);
 		lua_Number Color   = ReadLuaTableNumber(L, "Color", 0xFFFFFF);
 
+		// reminder: test NULL return to ensure nothing breaks
 		char *NewName = malloc(strlen(Name)+1);
-		strncpy(NewName, Name, strlen(Name)+1);
+
+		if (NewName != NULL)
+			strncpy(NewName, Name, strlen(Name)+1);
 
 		write_verbose(Lua, "Found player { %s, %d }", NewName, (int)HP);
 

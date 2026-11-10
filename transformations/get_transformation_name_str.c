@@ -12,6 +12,10 @@ char *GetTransformationNameStr(Transformation_t *NameStr) {
 	char *Buffer = malloc(1+strlen(ColorStr) +
 				      strlen(ClearStr) +
 				      strlen(NameStr->TransformationName));
+
+	// would return TransformationName, but could result in accidentally freeing it
+	if (Buffer == NULL) return NULL;
+
 	strcpy(Buffer, ColorStr);
 	strcat(Buffer, NameStr->TransformationName);
 	strcat(Buffer, ClearStr);

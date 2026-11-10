@@ -18,7 +18,6 @@ Transformation_t BaseTransformation = {
 	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,
 
-//	.FormColor={ .r=255, .g=255, .b=255 },
 	.FormColor=StaticColor(0xFFFFFF),
 
 	.Cost=TRANSFORMATION_COST,
@@ -31,11 +30,3 @@ Transformation_t BaseTransformation = {
 	.ID=TRANSFORMATION_ID
 };
 
-//static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage) {
-//	(void)From; // to remove warning
-//	Health_t NewDamage = BaseDamage;
-//	NewDamage *= Self->TransformationMultiplier;
-//	NewDamage /= ATTACK_MULTIPLIER_BASE;
-//
-//	return NewDamage;
-//}

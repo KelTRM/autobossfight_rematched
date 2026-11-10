@@ -2,7 +2,12 @@
 
 #include<stdint.h>
 
-#define StaticColor(hex)	((Color_t){ .r=((hex)>>16)&0xFF, .g=((hex)>>8)&0xFF, .b=(hex)&0xFF })
+#define StaticColor(hex)		\
+	((Color_t){			\
+	 	.r=((hex)>>16)&0xFF,	\
+		.g=((hex)>>8)&0xFF,	\
+		.b=(hex)&0xFF		\
+	})
 
 typedef struct Color {
 	uint8_t r;

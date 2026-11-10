@@ -21,6 +21,9 @@ Entity_t **GetApplicableEntities(Attack_t *AttemptingAttack, Entity_t *Attacker,
 	*ApplicableCount = 0;
 	Entity_t **ApplicableEntities = calloc(1, sizeof(*Entities));
 
+	if (ApplicableEntities == NULL)
+		return NULL;
+
 	if (AttemptingAttack->AppliesToAllies == 0 && AttemptingAttack->AppliesToEnemies == 0) {
 		ApplicableEntities[0] = Attacker;
 		return ApplicableEntities;

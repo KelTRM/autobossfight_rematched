@@ -110,7 +110,7 @@ void OnSigInt(int Signal) {
 	(void)Signal;
 	write_log(Info, "Recieved signal. Exiting...");
 	ANSI_RestorePreviousConsoleBuffer();
-	exit(0);
+	_exit(0);
 }
 
 void ANSI_SaveCurrentConsoleBuffer(void) {

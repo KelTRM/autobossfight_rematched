@@ -39,6 +39,8 @@ void AssertUpvalues(lua_State *L, size_t Count, ...) {
 			exit(-1);
 		}
 	}
+
+	va_end(args);
 }
 
 sagn_noreturn void TypeError(lua_State *L, int Expected, int Required) {
@@ -48,7 +50,9 @@ sagn_noreturn void TypeError(lua_State *L, int Expected, int Required) {
 	lua_error(L);
 
 	// should never be reached. it's for the [[noreturn]] warning
-	while (1) {}
+	while (1) {
+		printf("wtf");
+	}
 }
 
 void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
@@ -56,7 +60,7 @@ void AssertParameters(lua_State *L, const char *Prototype, int ParamCount, ...);
 int AddPluginEntry(lua_State *L) {
 	int top = lua_gettop(L);
 
-	int ValCount = 0;
+//	int ValCount = 0;
 
 	AssertParameters(L, "plugin:NewEntry", 3,
 				LUA_TTABLE, LUA_TSTRING, LUA_TTABLE);
@@ -110,7 +114,7 @@ int AddPluginEntry(lua_State *L) {
 //		write_verbose(Debug, "Copying key of %s to table with type %s",
 //			lua_tostring(L, -2), lua_typename(L, lua_type(L, -1)));
 		lua_settable(L, -7);
-		ValCount++;
+//		ValCount++;
 
 		lua_pop(L, 3);
 	}

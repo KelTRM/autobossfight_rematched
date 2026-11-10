@@ -13,12 +13,10 @@ void InitRegistry(lua_State *L);
 
 void *InitLua(void) {
 	struct BossfightLuaState *State = malloc(sizeof(struct BossfightLuaState));
+	if (State == NULL)
+		return NULL;
+
 	memset(State, 0, sizeof(*State));
-
-//	State->Attacks.mgr = OpenAttackAllocator(0);
-
-//	CreateDefMgr(&State.Entities.Players);
-//	CreateDefMgr(&State.Entities.Bosses);
 
 	lua_State *L = luaL_newstate();
 	InitRegistry(L);

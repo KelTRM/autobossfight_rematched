@@ -9,7 +9,11 @@ int GetRegistryTable(lua_State *L, const char *Location) {
 	int top = lua_gettop(L);
 
 	size_t Length = strlen(Location);
+	
 	char *Text = malloc(Length+1);
+	if (Text == NULL)
+		return LUA_TNONE;
+
 	memcpy(Text, Location, Length+1);
 
 	lua_pushvalue(L, LUA_REGISTRYINDEX);

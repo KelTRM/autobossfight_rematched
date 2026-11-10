@@ -205,6 +205,8 @@ size_t RegisterPlugins(RegistrationMgr_t *mgr, Registrar_t *Registrar, size_t Re
 		if (Registration->Registration == NULL) continue;
 
 		void *CopiedRegistration = malloc(Registration->RegistrationSize);
+		if (CopiedRegistration == NULL) continue;
+
 		memcpy(
 			CopiedRegistration,
 			Registration->Registration,
