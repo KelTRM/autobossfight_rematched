@@ -44,7 +44,8 @@ AttackData_t ReadAttackDataTable(lua_State *L) {
 	if (type == LUA_TTABLE) {
 		Entity_t Attacker = GetEntityFromTable(L);
 		AttackData.Attacker = malloc(sizeof(Entity_t));
-		memcpy(AttackData.Attacker, &Attacker, sizeof(Entity_t));
+		if (AttackData.Attacker != NULL)
+			memcpy(AttackData.Attacker, &Attacker, sizeof(Entity_t));
 	}
 
 	lua_pop(L, 1);

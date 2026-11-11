@@ -93,6 +93,12 @@ size_t RegisterAttackPlugin(RegistrationMgr_t *Manager, lua_State *L, PluginID_t
 		}
 
 		Attack_t *LuaAttack = (Attack_t*)malloc(sizeof(Attack_t));
+		if (LuaAttack == NULL) {
+			write_log(Error, "Failed to allocate memory for attack %s", Identifier);
+			lua_pop(L, 1);
+			break;
+		}
+
 		*LuaAttack = ConvertTableToAttack(L, -1, Identifier, Index);
 		
 		lua_pop(L, 1);

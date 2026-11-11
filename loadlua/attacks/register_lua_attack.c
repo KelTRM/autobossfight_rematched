@@ -183,11 +183,13 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 	size_t NameLength = strlen(DisplayName);
 	size_t IdentLength = strlen(Key);
 
-	LuaAttack.Identifier = malloc(IdentLength + 1);
 	LuaAttack.AttackName = malloc(NameLength + 1);
-
-	strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
-	strncpy((char*)LuaAttack.Identifier, Key, IdentLength + 1);
+	if (LuaAttack.AttackName != NULL)
+		strncpy((char*)LuaAttack.AttackName, DisplayName, NameLength + 1);
+	
+	LuaAttack.Identifier = malloc(IdentLength + 1);
+	if (LuaAttack.Identifier != NULL)
+		strncpy((char*)LuaAttack.Identifier, Key, IdentLength + 1);
 
 	LuaAttack_t AttackData = {
 		.L=L,
@@ -196,7 +198,8 @@ Attack_t ConvertTableToAttack(lua_State *L, int idx, const char *Key, size_t Plu
 	};
 
 	LuaAttack.LuaAttackData = malloc(sizeof(LuaAttack_t));
-	memcpy(LuaAttack.LuaAttackData, &AttackData, sizeof(LuaAttack_t));
+	if (LuaAttack.LuaAttackData != NULL)
+		memcpy(LuaAttack.LuaAttackData, &AttackData, sizeof(LuaAttack_t));
 
 	return LuaAttack;
 }
