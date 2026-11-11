@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 4.0.0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(ANALYZE OFF)
 
 project(autobossfight_rematched)
 
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic -fanalyzer)
+	add_compile_options(-Wall -Wextra -Wpedantic)
+
+	if (ANALYZE)
+		add_compile_options(-fanalyzer)
+	endif()
 endif()
 
 add_executable(autobossfight_rematched)

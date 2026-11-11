@@ -36,8 +36,9 @@ char *PadRight(const char *str, size_t n, char ch) {
 }
 
 size_t CalculateDigitsInNumber(uint64_t n) {
-	size_t f = floor(max(log10(n)+1, 1));
-	return f + ((f-1) / 3);//floor(max(log10(n)+1, 1));
+	size_t Count = 0;
+	do { Count++; } while ((n /= 10) > 0);
+	return Count+((Count-1)/3);
 }
 
 char *IntToStr(uint64_t n) {
