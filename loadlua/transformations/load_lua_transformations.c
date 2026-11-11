@@ -172,8 +172,12 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 		Form.Cost, Form.Upkeep, Form.TransformationMultiplier);
 
 	Form.LuaData = malloc(sizeof(struct LuaPluginLocation));
-	memcpy(Form.LuaData, &Location, sizeof(Location));
 
+	if (Form.LuaData != NULL)
+		memcpy(Form.LuaData, &Location, sizeof(Location));
+	else
+		write_log(Error, "Failed to allocate memory for transformation %s. "
+				"This form may not work as intended.", Form.Identifier);
 
 //	Form.LuaData = &Location;
 
@@ -186,17 +190,33 @@ size_t CopyTransformation(Transformation_t *From, Transformation_t *To) {
 		return 0;
 	memcpy(To, From, sizeof(Transformation_t));
 	
-	To->TransformationName = malloc(strlen(From->TransformationName)+1);
-	strcpy(To->TransformationName, From->TransformationName);
-	
-	To->FormDescription = malloc(strlen(From->FormDescription)+1);
-	strcpy((char*)To->FormDescription, From->FormDescription);
+	if (From->TransformationName != NULL) {
+		To->TransformationName = malloc(strlen(From->TransformationName)+1);
+		if (To->TransformationName != NULL)
+			strcpy(To->TransformationName, From->TransformationName);
+	}
 
-	To->Identifier = malloc(strlen(From->Identifier)+1);
-	strcpy(To->Identifier, From->Identifier);
+	if (From->FormDescription != NULL) {
+		To->FormDescription = malloc(strlen(From->FormDescription)+1);
+		if (To->FormDescription != NULL)
+			strcpy((char*)To->FormDescription, From->FormDescription);
+	}
 
-	To->LuaData = malloc(sizeof(struct LuaPluginLocation));
-	memcpy(To->LuaData, From->LuaData, sizeof(struct LuaPluginLocation));
+	if (To->Identifier != NULL) {
+		To->Identifier = malloc(strlen(From->Identifier)+1);
+		if (To->Identifier != NULL)
+			strcpy(To->Identifier, From->Identifier);
+	}
+
+	if (To->LuaData != NULL) {
+		To->LuaData = malloc(sizeof(struct LuaPluginLocation));
+		if (To->LuaData != NULL)
+			memcpy(
+				To->LuaData,
+				From->LuaData,
+				sizeof(struct LuaPluginLocation)
+			);
+	}
 
 	return sizeof(Transformation_t);
 }

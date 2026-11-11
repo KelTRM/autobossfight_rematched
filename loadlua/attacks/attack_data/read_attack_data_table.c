@@ -2,6 +2,7 @@
 #include<lua.h>
 #include <string.h>
 #include"../../../attacks/attack.h"
+#include"../../../debug/debug.h"
 #include"../../types/lua_types.h"
 
 const char *PrevAnnouncerGlobal = "__last_announcer";
@@ -29,7 +30,11 @@ AttackData_t ReadAttackDataTable(lua_State *L) {
 	if (type == LUA_TTABLE) {
 		Entity_t Target = GetEntityFromTable(L);
 		AttackData.Target = malloc(sizeof(Entity_t));
-		memcpy(AttackData.Target,   &Target,   sizeof(Entity_t));
+		if (AttackData.Target != NULL)
+			memcpy(AttackData.Target,   &Target,   sizeof(Entity_t));
+		else
+			write_log(Error, "Failed to allocate memory for target %s. "
+					"Attack message may not work properly", Target.Name);
 	}
 	
 	lua_pop(L, 1);

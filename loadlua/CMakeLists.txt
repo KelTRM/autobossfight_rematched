@@ -31,8 +31,8 @@ target_sources(autobossfight_lua_loader
 		transformations/init_lua_transformations.c
 		transformations/load_lua_transformations.c
 
-		path_handler/split_path.c
-		path_handler/parse_path.c
+#		path_handler/split_path.c
+#		path_handler/parse_path.c
 		
 		types/lua_entity.c
 		types/plugin/lua_plugin.c
