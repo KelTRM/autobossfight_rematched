@@ -99,7 +99,6 @@ int RegisterLuaPlayers(lua_State *L, int ArrayIdx, DefMgr_t *Players) {
 		lua_Number HealMax = ReadLuaTableNumber(L, "HealMax", 7500);
 		lua_Number Color   = ReadLuaTableNumber(L, "Color", 0xFFFFFF);
 
-		// reminder: test NULL return to ensure nothing breaks
 		char *NewName = malloc(strlen(Name)+1);
 
 		if (NewName != NULL)

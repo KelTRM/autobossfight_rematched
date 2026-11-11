@@ -1,6 +1,9 @@
 #include<stddef.h>
 
 size_t UTF8_Strlen(const char *str) {
+	if (str == NULL)
+		return 0;
+
 	size_t n = 0;
 
 	while (*str != 0) {
