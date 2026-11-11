@@ -18,7 +18,7 @@ ssize_t GetCommand(const char *Command, int *argc, char **argv) {
 	// start by parsing argv
 	size_t CommandLength = strlen(Command);
 
-	*argv = NULL;
+	*argv = malloc(CommandLength+1);
 	if (*argv == NULL) return -1;
 
 	memcpy(*argv, Command, CommandLength+1);
