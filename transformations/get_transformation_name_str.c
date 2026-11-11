@@ -1,12 +1,15 @@
 #include<stdlib.h>
 #include<string.h>
 #include"transformation.h"
+#include"color/color.h"
 
 char *GetTransformationNameStr(Transformation_t *NameStr) {
 	if (NameStr->DisplayString != NULL)
 		return NameStr->DisplayString;
 
-	char *ColorStr = GetColor(38, NameStr->FormColor);
+	Color_t FormColor = GetColorFromHex(NameStr->FormColor);
+
+	char *ColorStr = GetColor(38, FormColor);
 	char *ClearStr = GetClearColorStr();
 
 	char *Buffer = malloc(1+strlen(ColorStr) +
@@ -21,9 +24,9 @@ char *GetTransformationNameStr(Transformation_t *NameStr) {
 	strcat(Buffer, ClearStr);
 
 	printf("%d,%d,%d\n",
-			NameStr->FormColor.r,
-			NameStr->FormColor.g,
-			NameStr->FormColor.b
+			FormColor.r,
+			FormColor.g,
+			FormColor.b
 	);
 
 	free(ColorStr);

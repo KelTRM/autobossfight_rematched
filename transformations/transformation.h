@@ -17,7 +17,8 @@ typedef Energy_t (*Maintain_t)(Transformation_t *Self, Entity_t *Possessor);
 struct Transformation {
 	char *TransformationName;
 	const char *FormDescription;
-	Color_t FormColor;
+//	Color_t FormColor;
+	uint32_t FormColor;
 
 	char *Identifier;
 

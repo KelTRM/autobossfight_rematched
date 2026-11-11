@@ -18,7 +18,7 @@ Transformation_t SuperTransformation = {
 	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,
 
-	.FormColor=StaticColor(0xFFFF00),
+	.FormColor=0xFFFF00,
 
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,
