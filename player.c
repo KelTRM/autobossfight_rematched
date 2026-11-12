@@ -37,11 +37,15 @@ static int PlayerDisplay(BUFHANDLE Where,
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
 
-	char *str = alloca(FormPadding + 3);
-	snprintf(str, FormPadding+3, "[%s]",
-			Self->EntityTransformation->TransformationName);
+	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
+	const char *RegularStr = Self->EntityTransformation->TransformationName;
 
-	char *FormString = PadLeft(str, FormPadding+2, ' ');
+	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
+
+	char *str = alloca(PaddingAmount + 3);
+	snprintf(str, PaddingAmount+3, "[%s]", FormString);
+
+	char *FormStr = PadLeft(str, FormPadding+2, ' ');
 
 	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
 		.r=0,
@@ -51,7 +55,7 @@ static int PlayerDisplay(BUFHANDLE Where,
 
 	PrintedChars += bprintf(Where, "%s %s has %s hp",
 				NameStr,
-				FormString,
+				FormStr,
 				HealthStr);
 
 	if (ShowEnergy)
@@ -60,7 +64,7 @@ static int PlayerDisplay(BUFHANDLE Where,
 	PrintedChars += bprintf(Where, "\n");
 	free(progressbar);
 	free(NameStr);
-	free(FormString);
+	free(FormStr);
 	free(HealthStr);
 
 	return PrintedChars;

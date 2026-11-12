@@ -8,6 +8,7 @@
 #include"entity.h"
 #include"rng.h"
 
+#include "transformation.h"
 #include"ui/console_manager/console.h"
 #include"ui/color/color.h"
 #include"ui/strings.h"
@@ -105,9 +106,15 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
 
-	char *str = alloca(FormPadding + 3);
-	snprintf(str, FormPadding+3, "[%s]",
-			Self->EntityTransformation->TransformationName);
+	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
+	const char *RegularStr = Self->EntityTransformation->TransformationName;
+
+	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
+
+	char *str = alloca(strlen(FormString) + 3);
+//	snprintf(str, FormPadding+3, "[%s]",
+//			Self->EntityTransformation->TransformationName);
+	snprintf(str, PaddingAmount+3, "[%s]", FormString);
 
 	char *FormStr = PadLeft(str, FormPadding+2, ' ');
 
