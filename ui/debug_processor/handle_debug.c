@@ -5,6 +5,12 @@
 
 int DetectDebugCommand(const char *IsDbg);
 
+// ProcessDebugCmd
+//
+// Returns error code
+// ERROR CODE RANGE INT_MIN - -1 RESERVED FOR PROCESSOR ERROR
+// ERROR CODE 0 = SUCCESS
+// ERROR CODE 1 - INT_MAX RESERVED FOR COMMAND ERROR
 int ProcessDebugCmd(const char *Cmd) {
 	int IsDebug = DetectDebugCommand(Cmd);
 	if (IsDebug == 0) return 0;
@@ -15,10 +21,19 @@ int ProcessDebugCmd(const char *Cmd) {
 	char *args;
 	ssize_t Index = GetCommand(Cmd, &argc, &args);
 
+	if (Index < 0) {
+		printf("failed to read command with error %d", Index);
+		return -1;
+	}
+
 	write_verbose(Info, "Running command @ index %d (%s)",
 			Index, CommandList[Index].Name);
 
 	const char **argv = ToTraditionalArgv(argc, args);
+	if (argv == NULL) {
+		printf("argv allocation error.\n");
+		return -2;
+	}
 
 	int Result = 0;
 	if ((AllowedFlags & CommandList[Index].Flags) == CommandList[Index].Flags) {

@@ -55,6 +55,8 @@ ssize_t GetCommand(const char *Command, int *argc, char **argv) {
 //
 // Must be freed afterwards.
 const char **ToTraditionalArgv(int argc, const char *argv) {
+	if (argv == NULL) return NULL;
+
 	const char **ptr = calloc(argc, sizeof(const char*));
 	if (ptr == NULL) return NULL;
 

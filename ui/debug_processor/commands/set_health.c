@@ -18,7 +18,7 @@ int SetHealth(int argc, const char **argv) {
 	Health_t NewHealth = atoll(argv[2]);
 	Target->HealthPoints = NewHealth;
 
-	printf("%s's health set to %d.\n", Entity, NewHealth);
+	printf("%s's health set to %lu.\n", Entity, NewHealth);
 
 	return 0;
 }
