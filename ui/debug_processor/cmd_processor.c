@@ -1,3 +1,5 @@
+#define USE_STD_STRLEN
+
 #include<stdlib.h>
 #include<string.h>
 #include"debug_processor.h"
