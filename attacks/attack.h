@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../entity.h"
+#include<entity.h>
 
 typedef struct AttackData AttackData_t;
 typedef struct Attack Attack_t;

@@ -2,7 +2,7 @@
 
 #include"console_manager/console.h"
 #include"color/color.h"
-#include"../entity.h"
+#include<entity.h>
 
 #define BOX_CHAR		"▅"
 #define ENERGY_DISP_PRECISION	20

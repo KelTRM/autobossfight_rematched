@@ -1,4 +1,4 @@
-#include"entity_manager.h"
+//#include"entity_manager.h"
 #include"../debug/debug.h"
 #include<lua_load.h>
 #include<stdlib.h>

@@ -3,16 +3,16 @@
 #include<alloca.h>
 
 #include"boss.h"
-#include"attacks/attacks.h"
+#include"../attacks/attacks.h"
 #include"attack_manager.h"
 #include"entity.h"
-#include"rng.h"
+#include"../rng.h"
 
 #include "transformation.h"
-#include"ui/console_manager/console.h"
-#include"ui/color/color.h"
-#include"ui/strings.h"
-#include"ui/ui.h"
+#include"../ui/console_manager/console.h"
+#include"../ui/color/color.h"
+#include"../ui/strings.h"
+#include"../ui/ui.h"
 
 #define AttackMultiplierPercent(multiplier)	\
 	multiplier / (ATTACK_MULTIPLIER_MAX / 100)

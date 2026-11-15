@@ -18,7 +18,7 @@ struct LuaData {
 	struct LuaData *DependencyScripts;
 };
 
-#include"../entity.h"
+#include<entity.h>
 #include"entity_ldr.h"
 #include"../registration/registration.h"
 

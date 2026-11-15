@@ -1,6 +1,8 @@
+// THIS FILE IS OBSOLETE. IT IS TO BE DELETED LATER
+
 #pragma once
 
-#include"../entity.h"
+#include"entity.h"
 
 struct PlayerDefinition {
 	const char *Name;		// name of the player

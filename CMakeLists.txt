@@ -22,10 +22,10 @@ target_sources(autobossfight_rematched
 		init.c
 		main.c
 		rng.c
-		player.c
-		boss.c
+#		player.c
+#		boss.c
 		attack.c
-		entity.c
+#		entity.c
 		register_attacks.c
 		energize_entities.c
 
@@ -83,6 +83,8 @@ target_link_libraries(autobossfight_registration_manager
 target_link_libraries(autobossfight_ui_manager
 	PUBLIC
 		autobossfight_debug
+		autobossfight_entity_manager
+		autobossfight_attack_mgr
 )
 
 target_link_libraries(autobossfight_entity_manager
@@ -90,4 +92,5 @@ target_link_libraries(autobossfight_entity_manager
 		autobossfight_debug
 		autobossfight_ui_manager
 		autobossfight_lua_loader
+		autobossfight_transformations
 )
