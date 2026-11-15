@@ -13,7 +13,7 @@
 #endif
 #define ATTACK_NAME			"Transform"
 #define ATTACK_IDENTIFIER		"transform"
-#define ATTACK_DESCRIPTION		"Allows switching transformationss. Uses the form's cost in energy."
+#define ATTACK_DESCRIPTION		"Allows switching transformations. Uses the form's cost in energy."
 
 // Used to identify this attack. Non-unique values may result in undefined behavior
 #define ATTACK_ID			13
