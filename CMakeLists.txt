@@ -29,7 +29,7 @@ target_sources(autobossfight_rematched
 		register_attacks.c
 		energize_entities.c
 
-		entity/entities.c
+#		entity/entities.c
 )
 
 add_subdirectory(loadlua)
@@ -38,6 +38,7 @@ add_subdirectory(ui)
 add_subdirectory(attacks)
 add_subdirectory(transformations)
 add_subdirectory(registration)
+add_subdirectory(entity)
 
 target_link_libraries(autobossfight_lua_loader
 	PUBLIC
@@ -71,6 +72,7 @@ target_link_libraries(autobossfight_rematched
 		autobossfight_ui_manager
 		autobossfight_attack_mgr
 		autobossfight_transformations
+		autobossfight_entity_manager
 )
 
 target_link_libraries(autobossfight_registration_manager
@@ -81,4 +83,11 @@ target_link_libraries(autobossfight_registration_manager
 target_link_libraries(autobossfight_ui_manager
 	PUBLIC
 		autobossfight_debug
+)
+
+target_link_libraries(autobossfight_entity_manager
+	PUBLIC
+		autobossfight_debug
+		autobossfight_ui_manager
+		autobossfight_lua_loader
 )

@@ -17,9 +17,7 @@ void InitEntities(void *Lua) {
 	DefMgr_t Players;
 	DefMgr_t Bosses;
 
-//	size_t LoadedEntities = LoadLuaEntities(&Players, &Bosses);
 	size_t LoadedEntities = LoadLuaEntities(Lua, &Players, &Bosses);
-//	LoadLuaEntities(&Players, &Bosses);
 	write_verbose(Info, "Loaded %zu entity definitions from lua.", LoadedEntities);
 
 	if (LoadedEntities == 0) {
