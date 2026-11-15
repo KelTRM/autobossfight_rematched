@@ -18,8 +18,7 @@ Transformation_t BaseTransformation = {
 	.Identifier=TRANSFORMATION_IDENTIFIER,
 	.FormDescription=TRANSFORMATION_DESCRIPTION,
 
-//	.FormColor=StaticColor(0xFFFFFF),
-	.FormColor=0xFFFFFF,
+	.FormColor=0xAAAAAA,
 
 	.Cost=TRANSFORMATION_COST,
 	.Upkeep=TRANSFORMATION_UPKEEP,
