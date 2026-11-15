@@ -23,12 +23,6 @@ char *GetTransformationNameStr(Transformation_t *NameStr) {
 	strcat(Buffer, NameStr->TransformationName);
 	strcat(Buffer, ClearStr);
 
-	printf("%d,%d,%d\n",
-			FormColor.r,
-			FormColor.g,
-			FormColor.b
-	);
-
 	free(ColorStr);
 	
 	NameStr->DisplayString = Buffer;
