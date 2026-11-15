@@ -36,8 +36,6 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 		Entity_t *CurrentEntity = Entities + i;
 
 		Transformation_t *EntityForm = CurrentEntity->EntityTransformation;
-//		const char *FormName = GetTransformationNameStr(EntityForm);
-//		size_t EntityFormNameLength = strlen(FormName);
 		size_t EntityFormNameLength = strlen(EntityForm->TransformationName);
 
 		MaximumFormNameLength = max(EntityFormNameLength, MaximumFormNameLength);
@@ -47,9 +45,6 @@ int RefreshScoreboard(int PreserveCursorPosition) {
 	}
 
 	size_t MaximumHealthDigits = CalculateDigitsInNumber(MaximumHealth);
-	//printf("MaximumHealthDigits = %zu\n", MaximumHealthDigits);
-
-	//EntityCategory_t EntityType = ENTITY_TYPE_NONE;
 
 	for (size_t i = 0; i < EntityCount; i++) {
 		if (Entities[i].DisplayEntity != NULL) {
