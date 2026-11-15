@@ -1,5 +1,5 @@
 #include<string.h>
-#include"../../entity.h"
+#include<entity.h>
 
 extern Entity_t *Entities;
 extern size_t EntityCount;

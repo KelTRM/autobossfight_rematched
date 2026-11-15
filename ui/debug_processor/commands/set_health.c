@@ -1,5 +1,4 @@
 #include<limits.h>
-#include"../entity.h"
 #include"../debug_processor.h"
 
 int SetHealth(int argc, const char **argv) {

@@ -1,5 +1,5 @@
 #include<lua.h>
-#include"../../entity.h"
+#include<entity.h>
 
 static int pop0(lua_State *L) {
 	lua_pop(L, 1);

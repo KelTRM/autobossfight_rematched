@@ -2,7 +2,7 @@
 
 #include<stdlib.h>
 #include<stddef.h>
-#include"../../entity.h"
+#include<entity.h>
 
 int SetHealth(int argc, const char **argv);
 int SetForm(int argc, const char **argv);

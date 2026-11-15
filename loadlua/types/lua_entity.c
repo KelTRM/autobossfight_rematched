@@ -2,7 +2,7 @@
 #include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
-#include"../../entity.h"
+#include<entity.h>
 #include"../../debug/debug.h"
 
 #define PROTO_GET_HEALTH	"entity:GetHealth()"

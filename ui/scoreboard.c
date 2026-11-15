@@ -4,7 +4,7 @@
 #include<math.h>
 #include "console_manager/console.h"
 #include"ui.h"
-#include"../entity.h"
+#include<entity.h>
 #include"color/color.h"
 #include"strings.h"
 

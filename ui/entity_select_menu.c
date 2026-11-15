@@ -1,6 +1,6 @@
 #include<stdlib.h>
 #include"console_manager/console.h"
-#include"../entity.h"
+#include<entity.h>
 #include"ui.h"
 
 Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount) {
