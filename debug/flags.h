@@ -10,9 +10,9 @@
 // Default flags for debug build
 
 // Allow transforming round 1
-#ifndef TRANSFORM_IMMEDIATE
-#define TRANSFORM_IMMEDIATE			// Enables transformations on round 1
-#endif
+//#ifndef TRANSFORM_IMMEDIATE
+//#define TRANSFORM_IMMEDIATE			// Enables transformations on round 1
+//#endif
 
 // Enable verbose logging
 //#ifndef VERBOSE_LOG
