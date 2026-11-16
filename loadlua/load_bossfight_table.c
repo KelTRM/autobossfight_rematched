@@ -1,4 +1,5 @@
 #include"entities/lua_entities.h"
+#include"libbossfight/lua_rand.h"
 #include"lua_bossfight.h"
 #include<lua.h>
 
@@ -32,6 +33,9 @@ void LoadBossfightTable(lua_State *L) {
 
 	lua_pushcfunction(L, Debug_GetBossfightTable);
 	lua_setfield(L, -2, "get_bossfight_table");
+
+	lua_pushcfunction(L, LuaRandom);
+	lua_setfield(L, -2, "rand");
 
 	lua_setglobal(L, "bossfight");
 }

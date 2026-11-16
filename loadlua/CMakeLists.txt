@@ -46,6 +46,7 @@ target_sources(autobossfight_lua_loader
 		transformations/init_lua_transformations.c
 
 		libbossfight/lua_print.c
+		libbossfight/lua_rand.c
 
 		init_lua.c
 		entity_ldr.c
