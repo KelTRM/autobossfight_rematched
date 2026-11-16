@@ -29,6 +29,7 @@ target_sources(autobossfight_ui_manager
 		debug_processor/commands/set_health.c
 		debug_processor/commands/transform.c
 		debug_processor/commands/info.c
+		debug_processor/commands/color_test.c
 
 		console_manager/create_buffer.c
 		console_manager/bprintf.c
@@ -44,5 +45,6 @@ target_sources(autobossfight_ui_manager
 		color/foreground.c
 		color/color.c
 		color/get_color_str.c
+		color/print_color_test.c
 )
 

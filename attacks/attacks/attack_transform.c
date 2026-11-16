@@ -11,6 +11,7 @@
 #else
 #define ATTACK_FIRST_AVAILABLE_ROUND	0
 #endif
+
 #define ATTACK_NAME			"Transform"
 #define ATTACK_IDENTIFIER		"transform"
 #define ATTACK_DESCRIPTION		"Allows switching transformations. Uses the form's cost in energy."

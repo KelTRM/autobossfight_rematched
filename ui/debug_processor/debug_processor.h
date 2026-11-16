@@ -11,6 +11,7 @@ ssize_t GetCommand(const char *Command, int *argc, char **argv);
 const char **ToTraditionalArgv(int argc, const char *argv);
 int ParamRange(int argc, const char **argv, int min, int max);
 Entity_t *GetEntityFromName(const char *Name);
+int ColorTst(int argc, const char **argv);
 
 enum CommandType {
 	CMD_INFO=0x00,

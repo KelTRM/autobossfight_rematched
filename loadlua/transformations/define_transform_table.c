@@ -6,6 +6,7 @@ void GetTransformUptable(lua_State *L);
 int RegisterPlugin(lua_State *L);
 
 #define NO_DESC			"No description"
+#define DEFAULT_COLOR		0xFFFFFF
 
 void DefineTransformationTable(lua_State *L) {
 	luaL_Reg Funcs[] = {
@@ -33,7 +34,8 @@ void GetTransformUptable(lua_State *L) {
 	lua_newtable(L);
 
 	PluginField(L, "name",		LUA_TSTRING,	lua_pushnil(L),	0, "name");
-	PluginField(L, "description",	LUA_TSTRING,lua_pushliteral(L, NO_DESC),1, "description");
+	PluginField(L, "description",	LUA_TSTRING,	lua_pushliteral(L, NO_DESC),1, "description");
+	PluginField(L, "color",		LUA_TNUMBER,	lua_pushinteger(L, DEFAULT_COLOR),1, "color");
 	PluginField(L, "cost",		LUA_TNUMBER,	lua_pushnil(L),	0, "cost");
 	PluginField(L, "upkeep",		LUA_TNUMBER,	lua_pushnil(L),	0, "upkeep");
 	PluginField(L, "multiplier",		LUA_TNUMBER,	lua_pushnil(L),	0, "multiplier");
