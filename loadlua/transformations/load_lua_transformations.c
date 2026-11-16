@@ -136,7 +136,11 @@ Transformation_t ConvertTableToTransformation(lua_State *L, PluginID_t ID, const
 	GetFieldWithType(L, -1, "description", LUA_TSTRING);
 	Form.FormDescription = lua_tostring(L, -1);
 	lua_pop(L, 1);
-	
+
+	GetFieldWithType(L, -1, "color", LUA_TNUMBER);
+	Form.FormColor = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
 	GetFieldWithType(L, -1, "int_name", LUA_TSTRING);
 	Form.Identifier = (char*)lua_tostring(L, -1);
 	lua_pop(L, 1);
