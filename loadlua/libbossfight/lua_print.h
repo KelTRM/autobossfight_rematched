@@ -1,7 +1,7 @@
 #pragma once
 
 #include<lua.h>
-#include"../ui/console_manager/console.h"
+#include"../../ui/console_manager/console.h"
 
 struct PrintConf {
 	BUFHANDLE Buffer;

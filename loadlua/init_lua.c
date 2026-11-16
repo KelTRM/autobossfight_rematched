@@ -3,7 +3,7 @@
 #include<lua.h>
 #include<lualib.h>
 #include<lauxlib.h>
-#include"lua_print.h"
+#include"libbossfight/lua_print.h"
 #include"lua_bossfight.h"
 #include"../debug/debug.h"
 #include"../utils/sleep.h"

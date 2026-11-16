@@ -45,12 +45,13 @@ target_sources(autobossfight_lua_loader
 
 		transformations/init_lua_transformations.c
 
+		libbossfight/lua_print.c
+
 		init_lua.c
 		entity_ldr.c
 		push_lua_array.c
 		read_file.c
 		load_bossfight_table.c
-		lua_print.c
 )
 
 target_include_directories(autobossfight_lua_loader
