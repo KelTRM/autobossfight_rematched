@@ -116,7 +116,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 //			Self->EntityTransformation->TransformationName);
 	snprintf(str, PaddingAmount+3, "[%s]", FormString);
 
-	char *FormStr = PadLeft(str, FormPadding+2, ' ');
+	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
 
 	free(NameColoredStr);
 

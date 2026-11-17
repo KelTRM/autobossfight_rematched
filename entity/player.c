@@ -45,7 +45,7 @@ static int PlayerDisplay(BUFHANDLE Where,
 	char *str = alloca(PaddingAmount + 3);
 	snprintf(str, PaddingAmount+3, "[%s]", FormString);
 
-	char *FormStr = PadLeft(str, FormPadding+2, ' ');
+	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
 
 	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
 		.r=0,
