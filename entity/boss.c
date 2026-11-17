@@ -111,9 +111,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 
 	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
 
-	char *str = alloca(strlen(FormString) + 3);
-//	snprintf(str, FormPadding+3, "[%s]",
-//			Self->EntityTransformation->TransformationName);
+	char *str = alloca(PaddingAmount + 3);
 	snprintf(str, PaddingAmount+3, "[%s]", FormString);
 
 	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
