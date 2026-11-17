@@ -12,10 +12,9 @@ int LuaRandom(lua_State *L) {
 	lua_Number Upper = lua_tonumber(L, 3);
 
 	uint64_t Random = GetRandomInt64();
-	double RandomDouble = *(double*)&Random;
+//	double RandomDouble = *(double*)&Random;
 
-//	RandomDouble -= Lower;
-//	RandomDouble /= floor(RandomDouble / (Upper-Lower));
+	double RandomDouble = Lower + (Upper-Lower) * Random / UINT64_MAX;
 
 	lua_pushnumber(L, RandomDouble + Lower);
 	return 1;
