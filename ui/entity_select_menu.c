@@ -7,12 +7,24 @@ Entity_t *SelectEntity(Entity_t **Entities, size_t EntityCount) {
 	BUFHANDLE MainBuffer = ActiveBuffer;
 	BUFHANDLE SelectionMenu = CreateBuffer();
 
+	size_t NamePad = 0;
+	size_t FormPad = 0;
+
+	for (size_t i = 0; i < EntityCount; i++) {
+		size_t NameLen = strlen(Entities[i]->Name);
+		if (NameLen > NamePad) NamePad = NameLen;
+
+		size_t FormLen = strlen(Entities[i]->EntityTransformation->TransformationName);
+		if (FormLen > FormPad) FormPad = FormLen;
+	}
+
 	for (size_t i = 0; i < EntityCount; i++) {
 		bprintf(SelectionMenu, "#%zu - ", i+1);
 		Entities[i]->DisplayEntity(
 				SelectionMenu,
 				Entities[i],
-				0, 0, 0, 0
+				0, 0,
+				NamePad, FormPad
 		);
 	}
 
