@@ -46,6 +46,7 @@ int RegisterPlugin(lua_State *L) {
 	// lua API uses 32-bit integers for the lua_rawlen result anyways but better be
 	// safe than sorry I guess.
 	int Entries = lua_rawlen(L, -1);
+	write_verbose(RegisterPlugin, "got %d entries", Entries);
 	for (ssize_t i = 1; i <= Entries; i++) {
 		type = lua_rawgeti(L, -1, i);
 		if (type != LUA_TTABLE) {
@@ -72,6 +73,8 @@ int RegisterPlugin(lua_State *L) {
 	lua_pop(L, 1);
 
 	int PluginIdx = lua_rawlen(L, -2) + 1;
+	write_verbose(register_plugin.c, "Writing idx=%zu={ } -> %s",
+			PluginIdx, lua_tostring(L, lua_upvalueindex(1)));
 	lua_rawseti(L, -2, PluginIdx);
 	lua_pop(L, 1);
 

@@ -35,7 +35,6 @@ void Prompt(const char *Prompt, char **Result, int EchoToBuffer) {
 		CurrentBuffer = NewBuffer;
 	} while (ch != '\n');
 
-
 	if (EchoToBuffer != 0) {
 		RefreshScreen();
 		printf(CurrentBuffer);

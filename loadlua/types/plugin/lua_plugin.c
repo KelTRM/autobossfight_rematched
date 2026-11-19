@@ -67,6 +67,7 @@ int AddPluginEntry(lua_State *L) {
 	AssertUpvalues(L, 1, LUA_TTABLE);
 
 	lua_getfield(L, 1, "entries");
+	size_t Entries = lua_rawlen(L, -1);
 
 	int table = lua_upvalueindex(1);
 	lua_newtable(L);
@@ -119,13 +120,10 @@ int AddPluginEntry(lua_State *L) {
 		lua_pop(L, 3);
 	}
 
-//	write_verbose(Debug, "Assigned %d values to entry '%s'",
-//				ValCount, lua_tostring(L, 2));
-
 	lua_pushvalue(L, 2);
 	lua_setfield(L, -2, "int_name");
 
-	lua_rawseti(L, -2, 1);
+	lua_rawseti(L, -2, Entries+1);
 	lua_pop(L, 1);
 
 	assert(top == lua_gettop(L));

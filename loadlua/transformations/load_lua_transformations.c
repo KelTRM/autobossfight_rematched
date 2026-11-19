@@ -38,12 +38,17 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 
 	GetRegistryTable(L, "bossfight.plugins.transformation");
 	size_t PluginCount = lua_rawlen(L, -1);
+	write_verbose(RegisterLuaTransformations, "found %d transformations", PluginCount);
 
 	size_t Registrations = 0;
 
 	for (size_t i = 1; i <= PluginCount; i++) {
+		int top = lua_gettop(L);
 		int type = lua_rawgeti(L, -1, i);
+		write_verbose(RegisterLuaTransformations, "type %s @ idx %d & top=%d",
+				lua_typename(L, type), i, top);
 		if (type != LUA_TTABLE) {
+			lua_pop(L, 1);
 			continue;
 		}
 
@@ -103,6 +108,8 @@ size_t RegisterLuaTransformations(void *LuaState, RegistrationMgr_t *Manager) {
 			Registrations += Count;
 			lua_pop(L, 1);
 		}
+
+		lua_pop(L, 1);
 	}
 
 	return Registrations;
