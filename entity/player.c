@@ -8,6 +8,8 @@
 #include"../ui/strings.h"
 #include"../ui/color/color.h"
 
+char *GetEntityNameFormDisp(Entity_t *Entity, size_t NamePadding, size_t FormPadding);
+
 const Health_t PlayerAttack = 20000;
 const Energy_t StartingEnergy = 100;
 
@@ -21,31 +23,32 @@ static int PlayerDisplay(BUFHANDLE Where,
 			size_t NamePadding,
 			size_t FormPadding) {
 	size_t PrintedChars = 0;
-
-	char *NameColoredStr = GetEntityNameStr(Self);
-	
-	size_t ColoredLen = strlen(NameColoredStr);
-	size_t NormalLen = strlen(Self->Name);
-
-	size_t ColoredAdditionalChars = ColoredLen - NormalLen;
-
-	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
+//
+//	char *NameColoredStr = GetEntityNameStr(Self);
+//	
+//	size_t ColoredLen = strlen(NameColoredStr);
+//	size_t NormalLen = strlen(Self->Name);
+//
+//	size_t ColoredAdditionalChars = ColoredLen - NormalLen;
+//
+//	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
 
-	free(NameColoredStr);
+//	free(NameColoredStr);
 
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
 
-	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
-	const char *RegularStr = Self->EntityTransformation->TransformationName;
+//	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
+//	const char *RegularStr = Self->EntityTransformation->TransformationName;
 
-	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
+//	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
 
-	char *str = alloca(PaddingAmount + 3);
-	snprintf(str, PaddingAmount+3, "[%s]", FormString);
+//	char *str = alloca(PaddingAmount + 3);
+//	snprintf(str, PaddingAmount+3, "[%s]", FormString);
 
-	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
+//	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
+	char *DispStr = GetEntityNameFormDisp(Self, NamePadding, FormPadding);
 
 	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
 		.r=0,
@@ -53,9 +56,8 @@ static int PlayerDisplay(BUFHANDLE Where,
 		.b=255
 	});
 
-	PrintedChars += bprintf(Where, "%s %s has %s hp",
-				NameStr,
-				FormStr,
+	PrintedChars += bprintf(Where, "%s has %s hp",
+				DispStr,
 				HealthStr);
 
 	if (ShowEnergy)
@@ -63,8 +65,9 @@ static int PlayerDisplay(BUFHANDLE Where,
 
 	PrintedChars += bprintf(Where, "\n");
 	free(progressbar);
-	free(NameStr);
-	free(FormStr);
+//	free(NameStr);
+//	free(FormStr);
+	free(DispStr);
 	free(HealthStr);
 
 	return PrintedChars;
@@ -84,6 +87,7 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.Enemies = NULL;
 
 	e.TakeTurn = AskAttack;
+//	e.DisplayEntity = PlayerDisplay;
 	e.DisplayEntity = PlayerDisplay;
 
 	e.AI_RechargeEnergy = 0;
