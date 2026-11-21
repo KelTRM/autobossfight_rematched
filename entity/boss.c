@@ -92,34 +92,17 @@ int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	return 0;
 }
 
+char *GetEntityNameFormDisp(Entity_t *Entity, size_t NamePadding, size_t FormPadding);
+
 static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 			size_t HealthPadding, size_t NamePadding, size_t FormPadding) {
 	size_t PrintedChars = 0;
 	
-	char *NameColoredStr = GetEntityNameStr(Self);
-	
-	size_t ColoredLen = strlen(NameColoredStr);
-	size_t NormalLen = strlen(Self->Name);
-
-	size_t ColoredAdditionalChars = ColoredLen - NormalLen;
-
-	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
 	char *HpStr = IntToStr(Self->HealthPoints);
-
-	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
-	const char *RegularStr = Self->EntityTransformation->TransformationName;
-
-	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
-
-	char *str = alloca(PaddingAmount + 3);
-	snprintf(str, PaddingAmount+3, "[%s]", FormString);
-
-	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
-
-	free(NameColoredStr);
-
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
+
+	char *DispStr = GetEntityNameFormDisp(Self, NamePadding, FormPadding);
 
 	char *progressbar = ProgressBar(
 		AttackMultiplierPercent(Self->AttackMultiplier),
@@ -133,9 +116,8 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 
 	PrintedChars += bprintf(
 		Where,
-		"%s %s has %s hp",
-		NameStr, FormStr,
-		HealthStr
+		"%s has %s hp",
+		DispStr, HealthStr
 	);
 
 	if (ShowEnergy)
@@ -151,7 +133,7 @@ static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 	bprintf(Where, "\n");
 
 	free(progressbar);
-	free(NameStr);
+	free(DispStr);
 	free(HealthStr);
 
 	return PrintedChars;
