@@ -23,38 +23,22 @@ static int PlayerDisplay(BUFHANDLE Where,
 			size_t NamePadding,
 			size_t FormPadding) {
 	size_t PrintedChars = 0;
-//
-//	char *NameColoredStr = GetEntityNameStr(Self);
-//	
-//	size_t ColoredLen = strlen(NameColoredStr);
-//	size_t NormalLen = strlen(Self->Name);
-//
-//	size_t ColoredAdditionalChars = ColoredLen - NormalLen;
-//
-//	char *NameStr = PadRight(NameColoredStr, NamePadding + ColoredAdditionalChars, ' ');
+
 	char *HpStr = IntToStr(Self->HealthPoints);
-
-//	free(NameColoredStr);
-
 	char *HealthStr = PadLeft(HpStr, HealthPadding, ' ');
 	free(HpStr);
 
-//	const char *FormString = GetTransformationNameStr(Self->EntityTransformation);
-//	const char *RegularStr = Self->EntityTransformation->TransformationName;
-
-//	size_t PaddingAmount = (strlen(FormString) - strlen(RegularStr)) + FormPadding;
-
-//	char *str = alloca(PaddingAmount + 3);
-//	snprintf(str, PaddingAmount+3, "[%s]", FormString);
-
-//	char *FormStr = PadLeft(str, PaddingAmount+2, ' ');
 	char *DispStr = GetEntityNameFormDisp(Self, NamePadding, FormPadding);
 
-	char *progressbar = ProgressBar(Self->Energy, ENERGY_DISP_PRECISION, (Color_t){
-		.r=0,
-		.g=100,
-		.b=255
-	});
+	char *progressbar = ProgressBar(
+		Self->Energy,
+		ENERGY_DISP_PRECISION,
+		(Color_t){
+			.r=0,
+			.g=100,
+			.b=255
+		}
+	);
 
 	PrintedChars += bprintf(Where, "%s has %s hp",
 				DispStr,
@@ -64,9 +48,8 @@ static int PlayerDisplay(BUFHANDLE Where,
 		PrintedChars += bprintf(Where, " %s (%d%%)", progressbar, Self->Energy);
 
 	PrintedChars += bprintf(Where, "\n");
+
 	free(progressbar);
-//	free(NameStr);
-//	free(FormStr);
 	free(DispStr);
 	free(HealthStr);
 
