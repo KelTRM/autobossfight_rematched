@@ -115,8 +115,10 @@ void OnSigInt(int Signal) {
 
 void ANSI_SaveCurrentConsoleBuffer(void) {
 	fprintf(stdout, "\x1b[?1049h");
+	fflush(stdout);
 }
 
 void ANSI_RestorePreviousConsoleBuffer(void) {
 	fprintf(stdout, "\x1b[?1049l");
+	fflush(stdout);
 }
