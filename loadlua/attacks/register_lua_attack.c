@@ -1,9 +1,7 @@
-//#include<stdio.h>
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
 #include"lua_attack.h"
-#include"../../attacks/attack_manager.h"
 #include"../../attacks/attacks.h"
 #include"lua_registration.h"
 #include"types/lua_types.h"
@@ -222,8 +220,6 @@ int RegisterLuaAttacks(lua_State *L) {
 
 	size_t RegistrationCount = 0;
 	size_t RegistrationsProvided = lua_rawlen(L, -1);
-
-	int top = lua_gettop(L);
 
 	for (size_t i = 1; i <= RegistrationsProvided; i++) {
 		// get the registration
