@@ -1,9 +1,7 @@
-//#include"entity_manager.h"
 #include"../debug/debug.h"
 #include<lua_load.h>
 #include<stdlib.h>
 #include<stddef.h>
-#include<assert.h>
 
 size_t PlayerCount = 0;
 size_t BossCount = 0;

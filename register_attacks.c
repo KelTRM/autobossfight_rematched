@@ -5,9 +5,8 @@
 #include<lua_load.h>
 #include<registration.h>
 #include<stddef.h>
-#include<assert.h>
 #include"debug/debug.h"
-#include "utils/offset.h"
+#include"utils/offset.h"
 
 const Attack_t *AttacksToRegister[] = {
 	&NothingAttack,

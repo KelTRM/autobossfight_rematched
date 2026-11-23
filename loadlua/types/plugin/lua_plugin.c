@@ -1,6 +1,5 @@
 #include<stdlib.h>
 #include<stdarg.h>
-#include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
 #include<lua_bossfight.h>

@@ -1,11 +1,10 @@
 #include<stdlib.h>
-#include<assert.h>
 #include<lua.h>
+#include<lua_bossfight.h>
+#include<lua_load.h>
 #include"../../registration/registration_allocator.h"
 #include"../../debug/debug.h"
 #include"../../attacks/attack.h"
-#include<lua_bossfight.h>
-#include<lua_load.h>
 #include"../../utils/offset.h"
 
 #define max(a,b)	((a)>(b)?(a):(b))

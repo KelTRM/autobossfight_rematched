@@ -1,9 +1,7 @@
 #include<stdarg.h>
-#include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
 #include<entity.h>
-#include"../../debug/debug.h"
 
 #define PROTO_GET_HEALTH	"entity:GetHealth()"
 #define PROTO_GET_ENERGY	"entity:GetEnergy()"
@@ -78,7 +76,8 @@ Entity_t GetEntityFromTable(lua_State *L) {
 	Entity_t Entity = { 0 };
 
 	int type = lua_type(L, -1);
-	assert(type == LUA_TTABLE);
+	if (type != LUA_TTABLE)
+		return (Entity_t){ 0 };
 
 	// name
 	lua_getfield(L, -1, "name");

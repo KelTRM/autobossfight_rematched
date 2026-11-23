@@ -1,8 +1,6 @@
-#include <assert.h>
 #include<lua.h>
 #include<lauxlib.h>
 #include"../types/plugin/lua_plugin.h"
-#include"lua_attack.h"
 
 int RegisterLuaAttacks(lua_State *L);
 int DefineAttackDataTable(lua_State *L);

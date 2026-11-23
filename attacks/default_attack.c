@@ -3,7 +3,6 @@
 #include<strings.h>
 #include"../rng.h"
 #include"attacks.h"
-#include<assert.h>
 
 extern uint64_t Round;
 
@@ -25,8 +24,6 @@ void DefaultAnnouncer(AttackData_t *Attack) {
 		AttackerName = Attack->Attacker->Name;	
 	if (Attack->Target != NULL)
 		TargetName = Attack->Target->Name;
-//	assert(Attack->Attacker != NULL);
-//	assert(Attack->Target != NULL);
 
 	char *str = IntToStr(Attack->Damage);
 	printf("%s dealt %s damage to %s\n",

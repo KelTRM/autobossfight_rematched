@@ -1,9 +1,6 @@
-#include <assert.h>
 #include<lua.h>
 #include<lauxlib.h>
-#include"../../debug/debug.h"
 #include"lua_attack.h"
-
 
 /*
  * -- ATTACK TABLE --
@@ -16,6 +13,7 @@
 	id=nil                  -- The ID used to specify the attack. use nil to auto-select
 }
 */
+
 int CreateAttackPlugin(lua_State *L) {
 	int n = lua_gettop(L);
 	if (n != 1) {
@@ -23,9 +21,6 @@ int CreateAttackPlugin(lua_State *L) {
 		lua_error(L);
 	}
 
-//	lua_pushnumber(L, 0);
-//	return 1;
-	
 	luaL_Reg fns[] = {
 		{ .name="AddAttack", .func=AddAttack },
 		{ NULL, NULL }

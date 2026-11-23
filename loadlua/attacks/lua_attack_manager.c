@@ -1,10 +1,8 @@
-#include<assert.h>
 #include<stdlib.h>
 #include<string.h>
 #include"lua_attack_manager.h"
 #include"../../registration/registration.h"
 #include"../../attacks/attack.h"
-#include"../../debug/debug.h"
 
 typedef uint32_t	PluginID_t;
 typedef int64_t		BlockID_t;
@@ -144,7 +142,6 @@ unallocated: //goto unallocated if existing allocated array exists
 
 		Attack_t **IdxAttack = IndexPluginSpace(mgr, ID, i);
 //		write_debug(AddAttackToPlugin, "indexing id=%lu", i);
-//		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
 		if (IdxAttack == NULL) continue;
 		if (*IdxAttack != NULL) continue;
 		// found new attack id to use

@@ -1,9 +1,7 @@
-#include<assert.h>
 #include<stdlib.h>
 #include<string.h>
 #include"registration_allocator.h"
 #include"registration.h"
-#include"../debug/debug.h"
 #include"../utils/offset.h"
 
 typedef uint32_t	PluginID_t;
