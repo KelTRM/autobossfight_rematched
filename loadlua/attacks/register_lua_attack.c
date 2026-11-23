@@ -1,5 +1,4 @@
-#include <assert.h>
-#include <stdio.h>
+//#include<stdio.h>
 #define USE_STD_STRLEN
 
 // oh fuck this is gonna be a pain.
