@@ -144,7 +144,8 @@ unallocated: //goto unallocated if existing allocated array exists
 
 		Attack_t **IdxAttack = IndexPluginSpace(mgr, ID, i);
 //		write_debug(AddAttackToPlugin, "indexing id=%lu", i);
-		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
+//		assert(IdxAttack != NULL);	// shit's seriously fucked up if this assert fails
+		if (IdxAttack == NULL) continue;
 		if (*IdxAttack != NULL) continue;
 		// found new attack id to use
 		

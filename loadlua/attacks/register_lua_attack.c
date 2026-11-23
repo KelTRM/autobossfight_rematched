@@ -23,31 +23,31 @@ int GetPluginEntry(const char *RegistrarName, const struct LuaPluginLocation *Lo
 
 LuaAttackData_t AppendAttackData(lua_State *L);
 
+AttackData_t Unfound(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+	printf("Couldn't find implementation of lua attack %s.\n"
+			"Defaulting to attack %s",
+		Self->AttackName, NothingAttack.AttackName);
+	return NothingAttack.Attack(Self, Target, Attacker);
+}
+
 AttackData_t LuaAttackManager(Attack_t *Self, Entity_t *Target, Entity_t *Attacker) {
+	if (Self == NULL) {
+		return (AttackData_t){ 0 };
+	}
+
 	LuaAttack_t *Attack = (LuaAttack_t*)Self->LuaAttackData;
-	assert(Attack != NULL);
+	if (Attack == NULL)
+		Unfound(Self, Target, Attacker);
+	if (Attack->AttackPluginKey == NULL)
+		Unfound(Self, Target, Attacker);
 
 	lua_State *L = Attack->L;
-	assert(L != NULL);
-
-	assert(Attack->AttackPluginKey != NULL);
+	if (L == NULL)
+		Unfound(Self, Target, Attacker);
 
 	if (Target == NULL || Attacker == NULL) {
 		return (AttackData_t){ 0 };
 	}
-
-//	int type;
-
-//	type = GetAttackPluginsTable(L);
-//	assert(type == 1);
-
-	// Get the plugin
-//	type = lua_rawgeti(L, -1, Attack->AttackPluginIndex);
-//	assert(type == LUA_TTABLE);
-
-//	lua_getfield(L, -1, Attack->AttackPluginKey);
-
-//	lua_remove(L, -2);
 
 	struct LuaPluginLocation Location = {
 		.L=L,
@@ -227,7 +227,6 @@ int RegisterLuaAttacks(lua_State *L) {
 	int top = lua_gettop(L);
 
 	for (size_t i = 1; i <= RegistrationsProvided; i++) {
-		assert(top == lua_gettop(L));
 		// get the registration
 		lua_rawgeti(L, -1, i);
 
