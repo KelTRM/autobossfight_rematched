@@ -3,6 +3,7 @@
 #include<assert.h>
 #include<lua.h>
 #include<lauxlib.h>
+#include<lua_bossfight.h>
 #include"../../../debug/debug.h"
 #include"lua_plugin.h"
 
@@ -126,7 +127,7 @@ int AddPluginEntry(lua_State *L) {
 	lua_rawseti(L, -2, Entries+1);
 	lua_pop(L, 1);
 
-	assert(top == lua_gettop(L));
+	TopWarn(L, top);
 	return 0;
 }
 
@@ -149,7 +150,7 @@ int CreateLuaPlugin(lua_State *L) {
 	lua_newtable(L);
 	lua_setfield(L, -2, "entries");
 
-	assert(top+1 == lua_gettop(L));
+	TopWarn(L, top+1);
 	return 1;
 }
 

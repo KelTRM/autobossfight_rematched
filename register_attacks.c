@@ -42,22 +42,24 @@ size_t InitAttacks(void *Lua) {
 
 	PluginID_t Plugin;
 	BlockID_t BlockCount = AllocatePlugin(&Manager, MaxID, &Plugin);
-	
-	assert(Plugin != INVALID_PLUGIN_ID);
-	assert(BlockCount != 0);
 
-	for (size_t i = 0; i < AttackCount; i++) {
-		Attack_t *Attack = (Attack_t*)AttacksToRegister[i];
-		RegisteredAttacks += AddRegistrationToPlugin(
-			&Manager,
-			Plugin,
-			Attack,
-			Offset(Attack_t, ID),
-			sizeof(Attack_t)
-		);
+	if (Plugin == INVALID_PLUGIN_ID || BlockCount == 0) {
+		write_log(Error, "Failed to allocate vanilla plugin "
+					"of %zu elements. Vanilla attacks WILL be missing.", MaxID);
+	} else {
+		for (size_t i = 0; i < AttackCount; i++) {
+			Attack_t *Attack = (Attack_t*)AttacksToRegister[i];
+			RegisteredAttacks += AddRegistrationToPlugin(
+				&Manager,
+				Plugin,
+				Attack,
+				Offset(Attack_t, ID),
+				sizeof(Attack_t)
+			);
+		}
+
+		write_verbose(Info, "registered %zu builtins", RegisteredAttacks);
 	}
-
-	write_verbose(Info, "registered %zu builtins", RegisteredAttacks);
 
 	LoadLuaAttacks(Lua, &Manager);
 
