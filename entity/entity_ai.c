@@ -35,9 +35,6 @@ int AITurn(Entity_t *CurrentPlayer, uint64_t Round) {
 	}
 
 	AttackEntity((Attack_t*)ChosenAttack, Target, CurrentPlayer);
-
-	// +20% attack multiplier
-	CurrentPlayer->AttackMultiplier += ATTACK_MULTIPLIER_BASE / 5;
 	return 0;
 }
 

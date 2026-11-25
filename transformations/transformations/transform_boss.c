@@ -15,6 +15,8 @@
 
 #define BOSS_MULTIPLIER_ROUND_INCREASE	ToFixed(0.2)
 
+static Energy_t BossMaintainTransformation(Transformation_t *Self, Entity_t *Possessor);
+
 Transformation_t BossTransformation = {
 	.TransformationName=TRANSFORMATION_NAME,
 	.Identifier=TRANSFORMATION_IDENTIFIER,
@@ -27,10 +29,16 @@ Transformation_t BossTransformation = {
 	.TransformationMultiplier=TRANSFORMATION_MULTIPLIER,
 
 	.GetDamage=DefaultGetDamage,
-	.MaintainTransformation=DefaultMaintainTransformation,
+	.MaintainTransformation=BossMaintainTransformation,
 
 	.ID=TRANSFORMATION_ID
 };
+
+static Energy_t BossMaintainTransformation(Transformation_t *Self, Entity_t *Possessor) {
+	// +20% attack multiplier
+	Possessor->AttackMultiplier += ATTACK_MULTIPLIER_BASE / 5;
+	return TRANSFORMATION_UPKEEP;
+}
 
 //static Health_t GetDamage(Transformation_t *Self, Entity_t *From, Health_t BaseDamage) {
 //	(void)From; // to remove warning
