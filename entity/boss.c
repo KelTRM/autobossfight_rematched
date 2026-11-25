@@ -6,6 +6,7 @@
 #include"../attacks/attacks.h"
 #include"attack_manager.h"
 #include"entity.h"
+#include"entity_ai.h"
 #include"../rng.h"
 
 #include "transformation.h"
@@ -17,7 +18,7 @@
 #define AttackMultiplierPercent(multiplier)	\
 	multiplier / (ATTACK_MULTIPLIER_MAX / 100)
 
-int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
+//int BossTurn(Entity_t *CurrentPlayer, uint64_t Round);
 
 extern Entity_t *Entities;
 extern size_t EntityCount;
@@ -39,7 +40,7 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 
 	Boss.Attack = 10000;
 
-	Boss.TakeTurn = BossTurn;
+	Boss.TakeTurn = AITurn;
 	Boss.DisplayEntity = BossDisplay;
 
 	Boss.AI_RechargeEnergy = 0;
@@ -54,43 +55,43 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 	return Boss;
 }
 
-#define BOSS_ENERGY_RECHARGE_THRESHOLD	90
-#define BOSS_ENERGY_RECHARGE_TO		95
+//#define BOSS_ENERGY_RECHARGE_THRESHOLD	90
+//#define BOSS_ENERGY_RECHARGE_TO		95
 
-const Attack_t *BossAI(Entity_t *Boss) {
-	if (Boss->Energy < Boss->AI_RechargeEnergy)
-		return &NothingAttack;
+//const Attack_t *BossAI(Entity_t *Boss) {
+//	if (Boss->Energy < Boss->AI_RechargeEnergy)
+//		return &NothingAttack;
+//
+//	Boss->AI_RechargeEnergy = 0;
+//
+//	if (Boss->Energy < BOSS_ENERGY_RECHARGE_THRESHOLD) {
+//		Boss->AI_RechargeEnergy = BOSS_ENERGY_RECHARGE_TO;
+//	}
+//
+//	return &NormalAttack;
+//}
 
-	Boss->AI_RechargeEnergy = 0;
-
-	if (Boss->Energy < BOSS_ENERGY_RECHARGE_THRESHOLD) {
-		Boss->AI_RechargeEnergy = BOSS_ENERGY_RECHARGE_TO;
-	}
-
-	return &NormalAttack;
-}
-
-int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
-	(void)Round; // get rid of unused parameter error, as it's a function pointer parameter used in another instance
-
-	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
-
-	Entity_t *Target = NULL;
-	while (Target == NULL) {
-		int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
-		Entity_t *CurrentOption = GetEnemyAtIndex(CurrentPlayer, EntityToAttack);
-
-		if (!IsEntityAlive(CurrentOption))
-			continue;
-		Target = CurrentOption;
-	}
-
-	AttackEntity((Attack_t*)ChosenAttack, Target, CurrentPlayer);
-
-	// +20% attack multiplier
-	CurrentPlayer->AttackMultiplier += ATTACK_MULTIPLIER_BASE / 5;
-	return 0;
-}
+//int BossTurn(Entity_t *CurrentPlayer, uint64_t Round) {
+//	(void)Round; // get rid of unused parameter error, as it's a function pointer parameter used in another instance
+//
+//	const Attack_t *ChosenAttack = BossAI(CurrentPlayer);
+//
+//	Entity_t *Target = NULL;
+//	while (Target == NULL) {
+//		int EntityToAttack = GetRandomIntBetween(0, CurrentPlayer->EnemyCount);
+//		Entity_t *CurrentOption = GetEnemyAtIndex(CurrentPlayer, EntityToAttack);
+//
+//		if (!IsEntityAlive(CurrentOption))
+//			continue;
+//		Target = CurrentOption;
+//	}
+//
+//	AttackEntity((Attack_t*)ChosenAttack, Target, CurrentPlayer);
+//
+//	// +20% attack multiplier
+//	CurrentPlayer->AttackMultiplier += ATTACK_MULTIPLIER_BASE / 5;
+//	return 0;
+//}
 
 char *GetEntityNameFormDisp(Entity_t *Entity, size_t NamePadding, size_t FormPadding);
 
