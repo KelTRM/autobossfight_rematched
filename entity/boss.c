@@ -26,7 +26,7 @@ extern size_t EntityCount;
 static int BossDisplay(BUFHANDLE Where, Entity_t *Self, int ShowEnergy,
 			size_t HealthPadding, size_t NamePadding, size_t FormPadding);
 
-Entity_t CreateBoss(const char *Name, Health_t HP) {
+Entity_t CreateBoss(const char *Name, Health_t HP, int IsBot) {
 	Entity_t Boss;
 	Boss.Name = Name;
 	Boss.HealthPoints = HP;
@@ -40,7 +40,9 @@ Entity_t CreateBoss(const char *Name, Health_t HP) {
 
 	Boss.Attack = 10000;
 
-	Boss.TakeTurn = AITurn;
+	if (IsBot)	Boss.TakeTurn = AITurn;
+	else		Boss.TakeTurn = AskAttack;
+
 	Boss.DisplayEntity = BossDisplay;
 
 	Boss.AI_RechargeEnergy = 0;

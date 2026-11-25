@@ -44,7 +44,7 @@ void InitEntities(void *Lua) {
 
 	for (size_t i = 0; i < BossCount; i++) {
 		struct BossDefinition *Boss = &Bosses.BossDefinition[i];
-		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP);
+		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP, 0);
 
 		for (size_t j = 0; j < PlayerCount; j++) {
 			AddEntityEnemy(&Entities[j], &Entities[PlayerCount+i]);

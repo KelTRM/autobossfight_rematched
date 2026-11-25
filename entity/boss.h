@@ -2,4 +2,4 @@
 
 #include"entity.h"
 
-Entity_t CreateBoss(const char *Name, Health_t HP);
+Entity_t CreateBoss(const char *Name, Health_t HP, int IsBot);
