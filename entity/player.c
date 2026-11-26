@@ -56,7 +56,7 @@ static int PlayerDisplay(BUFHANDLE Where,
 	return PrintedChars;
 }
 
-Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal, Color_t PlayerColor) {
+Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health_t MaxHeal, Color_t PlayerColor, int IsBot) {
 	Entity_t e = { 0 };
 
 	e.Attack = PlayerAttack;
@@ -69,8 +69,9 @@ Entity_t CreatePlayer(const char *Name, Health_t MaxHP, Health_t MinHeal, Health
 	e.Name = Name;
 	e.Enemies = NULL;
 
-	e.TakeTurn = AskAttack;
-//	e.DisplayEntity = PlayerDisplay;
+	if (IsBot) e.TakeTurn = AITurn;
+	else e.TakeTurn = AskAttack;
+	
 	e.DisplayEntity = PlayerDisplay;
 
 	e.AI_RechargeEnergy = 0;

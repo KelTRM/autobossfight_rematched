@@ -5,8 +5,12 @@
 Health_t DamageEntity(Entity_t *From, Entity_t *Target, Health_t Damage) {
 	Health_t DamageDealt;// = (Damage * From->AttackMultiplier) / ATTACK_MULTIPLIER_BASE;
 
-	DamageDealt = From->EntityTransformation->GetDamage(From->EntityTransformation, From, Damage);
-//	From->EntityTransformation->TransformationMultiplier(From, Target, Damage);
+	DamageDealt = From->EntityTransformation->GetDamage(
+		From->EntityTransformation, From, Damage
+	);
+
+	DamageDealt *= From->AttackMultiplier;
+	DamageDealt /= ATTACK_MULTIPLIER_BASE;
 
 	if (Target->HealthPoints <= DamageDealt) {
 		DamageDealt = Target->HealthPoints;

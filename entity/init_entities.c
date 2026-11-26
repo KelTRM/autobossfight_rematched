@@ -38,7 +38,8 @@ void InitEntities(void *Lua) {
 				Player->HP,
 				Player->Heal_Min,
 				Player->Heal_Max,
-				GetColorFromHex(Player->Color)
+				GetColorFromHex(Player->Color),
+				1
 		);
 	}
 

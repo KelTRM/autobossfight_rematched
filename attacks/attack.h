@@ -1,6 +1,6 @@
 #pragma once
 
-#include<entity.h>
+#include<stdint.h>
 
 typedef struct AttackData AttackData_t;
 typedef struct Attack Attack_t;
@@ -9,7 +9,9 @@ typedef uint64_t AttackID_t;
 
 typedef void (*AttackAnnouncer)(AttackData_t *Attack);
 
-typedef struct AttackData {
+#include<entity.h>
+
+struct AttackData {
 	Entity_t *Target;
 	Entity_t *Attacker;
 
@@ -20,7 +22,7 @@ typedef struct AttackData {
 
 	AttackAnnouncer Announcer;
 	void *LuaAttackData;
-} AttackData_t;
+};
 
 typedef int (*CanAttack)(Attack_t *Self, Entity_t *Attacker);
 typedef AttackData_t (*OnAttack)(Attack_t *Self, Entity_t *Target, Entity_t *Attacker);

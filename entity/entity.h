@@ -25,6 +25,7 @@ typedef int (*EntityDisplayHandler_t)(BUFHANDLE Where,
 				size_t NamePadding,
 				size_t FormPadding);
 
+#include"entity_ai.h"
 #include"player.h"
 #include"boss.h"
 
