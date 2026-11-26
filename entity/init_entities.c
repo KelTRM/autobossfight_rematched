@@ -39,13 +39,13 @@ void InitEntities(void *Lua) {
 				Player->Heal_Min,
 				Player->Heal_Max,
 				GetColorFromHex(Player->Color),
-				1
+				0
 		);
 	}
 
 	for (size_t i = 0; i < BossCount; i++) {
 		struct BossDefinition *Boss = &Bosses.BossDefinition[i];
-		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP, 0);
+		Entities[PlayerCount+i] = CreateBoss(Boss->Name, Boss->HP, 1);
 
 		for (size_t j = 0; j < PlayerCount; j++) {
 			AddEntityEnemy(&Entities[j], &Entities[PlayerCount+i]);
