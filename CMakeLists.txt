@@ -1,18 +1,17 @@
 cmake_minimum_required(VERSION 4.0.0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(ANALYZE OFF)
 
 project(autobossfight_rematched)
 
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic)
+	add_compile_options(
+		-Wall -Wextra -Wpedantic
+		$<$<BOOL:${ANALYZE}>:-fanalyzer>
+	)
 
-	if (ANALYZE)
-		add_compile_options(-fanalyzer)
-	endif()
 endif()
 
 add_executable(autobossfight_rematched)
@@ -22,16 +21,12 @@ target_sources(autobossfight_rematched
 		init.c
 		main.c
 		rng.c
-#		player.c
-#		boss.c
 		attack.c
-#		entity.c
 		register_attacks.c
 		energize_entities.c
-
-#		entity/entities.c
 )
 
+add_subdirectory(string)
 add_subdirectory(loadlua)
 add_subdirectory(debug)
 add_subdirectory(ui)
@@ -93,4 +88,9 @@ target_link_libraries(autobossfight_entity_manager
 		autobossfight_ui_manager
 		autobossfight_lua_loader
 		autobossfight_transformations
+)
+
+target_link_libraries(autobossfight_string
+	PUBLIC
+		autobossfight_debug
 )
